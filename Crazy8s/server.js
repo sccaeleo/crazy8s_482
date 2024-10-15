@@ -1,9 +1,37 @@
-// Create a new Express application
-var app = express();
+// Backend server side components
 
-// Create an http server with Node's HTTP module. 
-// Pass it the Express application, and listen on port 8080. 
-var server = require('http').createServer(app).listen(8080);
+// Port
+const port = 3000
 
-// Instantiate Socket.IO hand have it listen on the Express/HTTP server
+// Instantiante Express
+const express = require('express')
+const app = express()
+
+// Instantiate MySql
+var mysql = require('mysql');
+
+// Path module from NodeJS
+var path = require('path');
+
+// Create http Server
+var server = require('http').createServer(app).listen(port);
+
+// Instantiate socketio
 var io = require('socket.io').listen(server);
+
+
+// Connect to MySql
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "yourusername",
+    password: "yourpassword"
+});
+
+con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+    con.query("CREATE DATABASE mydb", function (err, result) {
+        if (err) throw err;
+        console.log("Database created");
+    });
+});
