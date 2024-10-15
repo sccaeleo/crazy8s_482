@@ -1,3 +1,6 @@
 C:\Users\SyncthingServiceAcct\School\Software Engineering\Projects\Crazy8s\Game\obj\Debug\Game.njsproj.AssemblyReference.cache
 C:\Users\SyncthingServiceAcct\School\Software Engineering\Projects\Crazy8s\Game\obj\Debug\Game.njsproj.CoreCompileInputs.cache
 C:\Users\SyncthingServiceAcct\School\Software Engineering\Projects\Crazy8s\Game\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\SyncthingServiceAcct\School\Software Engineering\crazy8s_482\Crazy8s\obj\Debug\Game.njsproj.AssemblyReference.cache
+C:\Users\SyncthingServiceAcct\School\Software Engineering\crazy8s_482\Crazy8s\obj\Debug\Game.njsproj.CoreCompileInputs.cache
+C:\Users\SyncthingServiceAcct\School\Software Engineering\crazy8s_482\Crazy8s\bin\Microsoft.NodejsTools.WebRole.dll

@@ -1,10 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\Projects\\Crazy8s\\Game\\",
+  "WorkspaceRootPath": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\Projects\\Crazy8s\\Game\\server.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\server.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:server.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,17 +18,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "package.json",
+              "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\package.json",
+              "RelativeDocumentMoniker": "package.json",
+              "ToolTip": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\package.json",
+              "RelativeToolTip": "package.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-15T18:52:57.609Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "server.js",
-              "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\Projects\\Crazy8s\\Game\\server.js",
+              "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\server.js",
               "RelativeDocumentMoniker": "server.js",
-              "ToolTip": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\Projects\\Crazy8s\\Game\\server.js",
+              "ToolTip": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\server.js",
               "RelativeToolTip": "server.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-10-15T18:23:23.375Z",
               "EditorCaption": ""
