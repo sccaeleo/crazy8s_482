@@ -1,0 +1,17 @@
+{
+  "name": "game",
+  "version": "0.0.0",
+  "description": "Game",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "express": "3.x",
+    "socket.io": "^4.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.21.0"
+  },
+  "eslintConfig": {}
+}
