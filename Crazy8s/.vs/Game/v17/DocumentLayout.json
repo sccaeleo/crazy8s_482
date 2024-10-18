@@ -11,16 +11,16 @@
       "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Game.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:Classes\\Game.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Card.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Classes\\Card.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Card.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:Classes\\Card.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Deck.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Classes\\Deck.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Deck.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{C6489B8B-9EB1-4BE0-87E3-54EA7E562C35}|Game.njsproj|solutionrelative:Classes\\Deck.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Game.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Classes\\Game.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +34,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Card.js",
               "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Card.js",
               "RelativeDocumentMoniker": "Classes\\Card.js",
@@ -42,12 +42,11 @@
               "RelativeToolTip": "Classes\\Card.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-15T23:17:50.698Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-15T23:17:50.698Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Deck.js",
               "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Deck.js",
               "RelativeDocumentMoniker": "Classes\\Deck.js",
@@ -55,12 +54,11 @@
               "RelativeToolTip": "Classes\\Deck.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-15T23:12:05.32Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-15T23:12:05.32Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Game.js",
               "DocumentMoniker": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\Classes\\Game.js",
               "RelativeDocumentMoniker": "Classes\\Game.js",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "Classes\\Game.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-15T23:06:20.904Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-15T23:06:20.904Z"
             },
             {
               "$type": "Document",
@@ -79,7 +76,7 @@
               "RelativeDocumentMoniker": "package.json",
               "ToolTip": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\package.json",
               "RelativeToolTip": "package.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAUAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-10-15T18:52:57.609Z",
               "EditorCaption": ""
@@ -92,7 +89,7 @@
               "RelativeDocumentMoniker": "server.js",
               "ToolTip": "C:\\Users\\SyncthingServiceAcct\\School\\Software Engineering\\crazy8s_482\\Crazy8s\\server.js",
               "RelativeToolTip": "server.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAVAAAA",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAABQAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-10-15T18:23:23.375Z",
               "EditorCaption": ""

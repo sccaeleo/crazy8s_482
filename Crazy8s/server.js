@@ -1,37 +1,27 @@
-// Backend server side components
+// Backend Stuff
 
-// Port
-const port = 3000
-
-// Instantiante Express
+// Import Dependencies
 const express = require('express')
 const app = express()
-
-// Instantiate MySql
+const cors = require("cors");
 var mysql = require('mysql');
-
-// Path module from NodeJS
 var path = require('path');
 
-// Create http Server
-var server = require('http').createServer(app).listen(port);
+// Port number, is flexible
+const port = 3000
 
-// Instantiate socketio
-var io = require('socket.io').listen(server);
-
+// Middleware functions for express
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(express.json());
 
 // Connect to MySql
-var con = mysql.createConnection({
+var db = mysql.createConnection({
     host: "localhost",
-    user: "yourusername",
-    password: "yourpassword"
+    user: "root",
+    password: "",
 });
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-    con.query("CREATE DATABASE mydb", function (err, result) {
-        if (err) throw err;
-        console.log("Database created");
-    });
+app.listen(port, () => {
+    console.log(`listening on port ${port} `);
 });
