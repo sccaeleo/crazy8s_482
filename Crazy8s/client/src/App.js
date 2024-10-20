@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/Home"
 import CreateGame from "./pages/CreateGame"
 import JoinGame from "./pages/JoinGame"
+import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
 
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateGame />} />
         <Route path="/join" element={<JoinGame />} />
+        <Route path="/game" element={<Game />} />
         <Route path="/accountsettings" element={<AccountSettings />} />
         
       </Routes>
