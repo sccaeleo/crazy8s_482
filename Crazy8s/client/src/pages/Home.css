@@ -1,0 +1,17 @@
+body {
+    background-color: rgb(25, 133, 77);
+}
+
+.account-button {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+.main-buttons {
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    text-align: center;
+    
+}
