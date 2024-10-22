@@ -20,6 +20,9 @@ function Homepage(){
         <Link to="/join">
         <button class="btn btn-success">Join Game</button>
         </Link>
+        <Link to="/createaccount">
+        <button class="btn btn-success">Create Account</button>
+        </Link>
         <button class="btn btn-success">Tutorial</button>
     </div>
     

@@ -9,6 +9,7 @@ import CreateGame from "./pages/CreateGame"
 import JoinGame from "./pages/JoinGame"
 import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
+import CreateAccount from "./pages/CreateAccount"
 
 
 // App determines page routing and loads Home as homepage
@@ -21,7 +22,7 @@ function App() {
         <Route path="/join" element={<JoinGame />} />
         <Route path="/game" element={<Game />} />
         <Route path="/accountsettings" element={<AccountSettings />} />
-        
+        <Route path="/createaccount" element={<CreateAccount />} />
       </Routes>
     </BrowserRouter>
   )
