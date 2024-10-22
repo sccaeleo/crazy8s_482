@@ -26,7 +26,7 @@ function Homepage(){
         <button class="btn btn-lg btn-light">Join Game</button>
         </Link>
         <Link to="/createaccount">
-        <button class="btn btn-success">Create Account</button>
+        <button class="btn btn-lg btn-light">Create Account</button>
         </Link>
         <button class="btn btn-lg btn-light">Tutorial</button>
     </div>
