@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Outlet, Link } from "react-router-dom";
-import Card from ".../classes/Card.js";
+
 
 
 function Game(){
