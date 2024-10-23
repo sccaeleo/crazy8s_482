@@ -13,24 +13,24 @@ function Homepage(){
     </div>
 
   <div class="main-card">
-    <img src={require('./Cards/cardClubs8.png')}></img>
+    <img width="15%" src={require('./Cards/cardClubs8.png')}></img>
   </div>
 
-    <div class="account-button">
+    <div>
       <Link to="/accountsettings">
-        <button class="btn btn-lg btn-light rounded-5 float-end">A</button>
+        <button class="btn btn-lg btn-light rounded-5 float-end account-button">A</button>
       </Link>
     </div>
     
     <div class="main-buttons">
         <Link to="/create">
-        <button class="btn btn-lg btn-light">Create Game</button>
+        <button class="btn btn-lg btn-light btn-padding">Create Game</button>
         </Link>
         <Link to="/join">
-        <button class="btn btn-lg btn-light">Join Game</button>
+        <button class="btn btn-lg btn-light btn-padding">Join Game</button>
         </Link>
         <Link to="/createaccount">
-        <button class="btn btn-lg btn-light">Create Account</button>
+        <button class="btn btn-lg btn-light btn-padding">Create Account</button>
         </Link>
     </div>
     

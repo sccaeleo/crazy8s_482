@@ -10,8 +10,6 @@ import JoinGame from "./pages/JoinGame"
 import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
 import CreateAccount from "./pages/CreateAccount"
-import Cards from "./pages/Cards/cardClubs2.png"
-
 
 // App determines page routing and loads Home as homepage
 function App() {
