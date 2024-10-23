@@ -1,7 +1,7 @@
 class Deck {
 
     //suits and ranks to easily create the deck
-    #suits = ['C','D','H','S'];
+    #suits = ["Clubs",'Diamonds','Hearts','Spades'];
     #ranks = ['A','2','3','4','5','6','7','8','9','T','J','Q','K'];
     #cards = [];
 

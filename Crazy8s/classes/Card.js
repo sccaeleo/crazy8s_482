@@ -26,6 +26,6 @@ class Card {
     }
 
     toString() {
-        return this.#suit + "-" + this.#rank;
+        return "card" + this.#suit + "-" + this.#rank;
     }
 }
