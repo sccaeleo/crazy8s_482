@@ -24,4 +24,8 @@ class Card {
     {
         return other.checkSuitRank(this.#suit, this.#rank);
     }
+
+    toString() {
+        return this.#suit + "-" + this.#rank;
+    }
 }
