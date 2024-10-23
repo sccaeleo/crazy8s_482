@@ -2,10 +2,23 @@ body {
     background-color: rgb(25, 133, 77);
 }
 
+.main-title {
+    text-align: center;
+    color: white;
+}
+
+.main-card {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+}
+
 .account-button {
     position: absolute;
-    top: 8px;
-    right: 16px;
+    width: 100%;
+    top: 3%;
+    right: 3%;
 }
 
 .main-buttons {

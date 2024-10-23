@@ -3,14 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, Link } from "react-router-dom";
 import './Home.css'
 
+
 function Homepage(){
   return(
     <div>
 
-    <div class="text-white text-center">
+    <div class="main-title">
         <h1><b>Crazy 8s</b></h1>
-        <img src='logo512.png'></img>
     </div>
+
+  <div class="main-card">
+    <img src={require('./Cards/cardClubs8.png')}></img>
+  </div>
 
     <div class="account-button">
       <Link to="/accountsettings">
@@ -28,7 +32,6 @@ function Homepage(){
         <Link to="/createaccount">
         <button class="btn btn-lg btn-light">Create Account</button>
         </Link>
-        <button class="btn btn-lg btn-light">Tutorial</button>
     </div>
     
 
