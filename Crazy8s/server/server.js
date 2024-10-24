@@ -44,3 +44,20 @@ app.post("/add_user", (req, res) => {
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
+
+// ---------------------------------------- Socket ----------------------------------------
+
+
+const io = require('socket.io')(3030, {
+  cors: {
+    origin: ['http://localhost:3000'],
+  },
+})
+
+io.on("connection", socket => {
+  console.log('Connected ' + socket.id)
+
+  socket.on("test", data => {
+    console.log(data);
+  })
+})
