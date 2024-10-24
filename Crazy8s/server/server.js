@@ -32,6 +32,12 @@ db.connect((err) => {
 });
 
 app.post("/add_user", (req, res) => {
+
+    console.log(req.body)
+    console.log('Request Headers:', req.headers);
+    console.log('Request Body:', req.body);        
+    console.log('Button pressed');
+
     const sql ="INSERT INTO account_information (`name`,`email`,`password`) VALUES (?, ?, ?)";
     const values = [req.body.name, req.body.email, req.body.password];
     db.query(sql, values, (err, result) => {
