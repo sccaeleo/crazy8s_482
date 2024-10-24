@@ -6,14 +6,15 @@ function CreateAccount() {
     const [values, setValues] = useState({
         name: '',
         email: '',
-        age: '',
-        gender: ''
+        password: ''
     })
 
     const navigate = useNavigate()
 
     function handleSubmit(e){
         e.preventDefault()
+
+        console.log(values)
 
         axios.post('/add_user', values)
         .then((res)=>{
@@ -41,7 +42,7 @@ function CreateAccount() {
                 </div>
                 <div className='form-group my-3'>
                     <label htmlFor='password'>Password</label>
-                    <input type='text' name='password' required onChange={(e)=> setValues({...values, gender: e.target.value})} />
+                    <input type='text' name='password' required onChange={(e)=> setValues({...values, password: e.target.value})} />
                 </div>
                 <div className='form-group my-3'>
                     <button type='submit' className='btn btn-success'>Save</button>
