@@ -1,8 +1,8 @@
 class Deck {
 
     //suits and ranks to easily create the deck
-    #suits = ["Clubs",'Diamonds','Hearts','Spades'];
-    #ranks = ['A','2','3','4','5','6','7','8','9','T','J','Q','K'];
+    #suits = ['Clubs','Diamonds','Hearts','Spades'];
+    #ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     #cards = [];
 
     constructor() {

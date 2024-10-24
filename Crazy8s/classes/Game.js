@@ -6,11 +6,13 @@ class Game {
     #players = [];
     #bet;
     #password;
+    #host;
 
     //initialize a deck, add the host and set room settings
     constructor(host, bet, password) {
         this.#deck = new Deck();
-        this.#players.push(new Host(1, host));
+        this.#host = new Player(1, host);
+        this.#players.push(this.#host);
         this.#bet = bet;
         this.#password = password;
     }

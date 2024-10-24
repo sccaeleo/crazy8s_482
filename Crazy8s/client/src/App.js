@@ -2,6 +2,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { io } from 'socket.io-client'
 
 // Import webpages from the pages folder
 import Home from "./pages/Home"
@@ -11,12 +12,14 @@ import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
 import CreateAccount from "./pages/CreateAccount"
 
+const socket = io('http://localhost:3030')
+
 // App determines page routing and loads Home as homepage
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home socket={socket}/>} />
         <Route path="/create" element={<CreateGame />} />
         <Route path="/join" element={<JoinGame />} />
         <Route path="/game" element={<Game />} />
