@@ -48,8 +48,8 @@ return (
                           <td>{account.email}</td>
                           <td>{account.password}</td>
                           <td>
-                              <Link className='btn mx-2 btn-light' to={`/ViewAccount/${account.id}`}>View</Link>
-                              <Link className='btn mx-2 btn-light' to={`/edit/${account.id}`}>Edit</Link>
+                              <Link className='btn mx-2 btn-light' to={`/viewaccount/${account.id}`}>View</Link>
+                              <Link className='btn mx-2 btn-light' to={`/editaccount/${account.id}`}>Edit</Link>
                               <button onClick={()=>handleDelete(account.id)} className='btn mx-2 btn-danger'>Delete</button>
                           </td>
                       </tr>)

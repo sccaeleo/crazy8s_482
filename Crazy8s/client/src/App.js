@@ -12,6 +12,7 @@ import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
 import CreateAccount from "./pages/CreateAccount"
 import ViewAccount from "./pages/ViewAccount"
+import EditAccount from "./pages/EditAccount"
 
 
 const socket = io('http://localhost:3030')
@@ -28,6 +29,7 @@ function App() {
         <Route path="/accountsettings" element={<AccountSettings />} />
         <Route path="/createaccount" element={<CreateAccount />} />
         <Route path="/viewaccount/:id" element={<ViewAccount />} />
+        <Route path="/editaccount/:id" element={<EditAccount />} />
       </Routes>
     </BrowserRouter>
   )

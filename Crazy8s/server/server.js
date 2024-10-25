@@ -65,6 +65,22 @@ app.get("/get_account/:id", (req, res) => {
   });
 });
 
+app.post("/edit_account/:id", (req, res) => {
+  const id = req.params.id;
+  const sql ="UPDATE account_information SET `name`=?, `email`=?, `password`=? WHERE id=?";
+  const values = [
+    req.body.name,
+    req.body.email,
+    req.body.password,
+    id
+  ];
+  db.query(sql, values, (err, result) => {
+    if (err)
+      return res.json({ message: "Something unexpected has occured" + err });
+    return res.json({ success: "Student updated successfully" });
+  });
+});
+
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
