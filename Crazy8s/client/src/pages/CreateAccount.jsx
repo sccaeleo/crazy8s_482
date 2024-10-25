@@ -27,7 +27,6 @@ function CreateAccount() {
   return (
     <div className='container vh-100 vw-100 bg-success'>
         <div className='row'>
-            <h3>Add Student</h3>
             <div className='d-flex justify-content-end'>
                 <Link to='/' class='btn btn-success'>Home</Link>
             </div>

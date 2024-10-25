@@ -23,4 +23,10 @@ class Player {
     isEmpty() {
         return this.#hand.length == 0;
     }
+
+    displayCards() {
+        console.log(this.#hand)
+    }
 }
+
+export default Player;
