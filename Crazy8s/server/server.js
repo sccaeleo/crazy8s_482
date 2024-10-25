@@ -43,17 +43,27 @@ app.post("/add_user", (req, res) => {
     db.query(sql, values, (err, result) => {
       if (err)
         return res.json({ message: "Something unexpected has occured" + err });
-      return res.json({ success: "Student added successfully" });
+      return res.json({ success: "user added successfully" });
     });
   });
 
-  app.get("/accounts", (req, res) => {
-    const sql = "SELECT * FROM account_information";
-    db.query(sql, (err, result) => {
-      if (err) res.json({ message: "Server error" });
-      return res.json(result);
-    });
+app.get("/accounts", (req, res) => {
+  const sql = "SELECT * FROM account_information";
+  db.query(sql, (err, result) => {
+    if (err) res.json({ message: "Server error" });
+    return res.json(result);
   });
+});
+
+app.get("/get_account/:id", (req, res) => {
+  console.log("im here")
+  const id = req.params.id;
+  const sql = "SELECT * FROM account_information WHERE `id`= ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) res.json({ message: "Server error" });
+    return res.json(result);
+  });
+});
 
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
