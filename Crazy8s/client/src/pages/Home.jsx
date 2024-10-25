@@ -13,7 +13,6 @@ function Homepage({socket}){
       setSocketId(socket.id);
     }
     
-    // Optional: log when connected
     socket.on('connect', () => {
       console.log('Connected with socket ID:', socket.id);
       setSocketId(socket.id);

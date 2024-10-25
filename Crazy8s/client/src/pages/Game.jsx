@@ -9,27 +9,29 @@ export const playerHand = [
   'cardDiamonds9.png',
 ];
 
-function Game({socket}){
+function Game({socket}) {
 
   const [socketId, setSocketId] = useState('');
+  const [hand, setHand] = useState([]);
 
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
+      startGame();
     }
-    
-    // Optional: log when connected
-    socket.on('connect', () => {
-      console.log('Connected with socket ID:', socket.id);
-      setSocketId(socket.id);
-    });
 
     // Cleanup on unmount
     return () => {
       socket.off('connect');
     };
   }, [socket]);
+
+  const startGame = () => {
+    socket.emit("startGame", cb => {
+      setHand(cb)
+    })
+  }
 
     // The html of the page
     return(
@@ -52,7 +54,7 @@ function Game({socket}){
 
           {/* Creates the player's hand */}
           <div class="player-hand">
-            {playerHand.map((card, index) => (
+            {hand.map((card, index) => (
               <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
             ))}
           </div>

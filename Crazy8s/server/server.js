@@ -100,6 +100,12 @@ app.listen(port, () => {
 
 var games = []
 
+function createNewGame(host, room) {
+  const g = new Game(host, room, 10, '');
+  games.push(g)
+  return g
+}
+
 const io = require('socket.io')(3030, {
   cors: {
     origin: ['http://localhost:3000'],
@@ -107,8 +113,8 @@ const io = require('socket.io')(3030, {
 })
 
 io.on("connection", socket => {
-  var currGame;
-  var player;
+  // var currGame;
+  // var player;
   console.log('Connected ' + socket.id)
 
   socket.on("test", data => {
@@ -117,25 +123,22 @@ io.on("connection", socket => {
 
   socket.on("createGame", room => {
     socket.join(room)
-    player = new Player()
-    currGame = createNewGame(player, room)
+    socket.player = new Player()
+    socket.currGame = createNewGame(socket.player, room)
     console.log("WE DID IT")
   })
 
-  socket.on("startGame", game => {
-    currGame.startGame();
-    console.log("Game Started: " + player.displayCards)
+  socket.on("startGame", (cb) => {
+    socket.currGame.startGame();
+    cb(socket.player.displayCards());
   })
 })
-
-function createNewGame(host, room) {
-  games.push(new Game(host, room))
-}
 
 
 
 
 // ---------------------------------------- Classes ----------------------------------------
+// For time purposes classes are in this file. Next sprint we will figure out how to import
 
 class Game {
 
@@ -176,7 +179,7 @@ class Game {
       this.deal();
       var firstPlayer = this.#getFirstPlayer();
       this.turn(firstPlayer);
-      this.#pile = deck.drawCard();
+      this.#pile = this.#deck.drawCard();
   }
 
   //get a random integer 0-3 for index of a player
@@ -188,8 +191,8 @@ class Game {
   //give each player 5 cards
   deal() {
       for(var i = 0; i < 5; i++) {
-          for(player of this.#players) {
-              card = this.#deck.drawCard();
+          for(const player of this.#players) {
+              const card = this.#deck.drawCard();
               player.drawCard(card);
           }
       }
@@ -231,7 +234,12 @@ class Player {
   }
 
   displayCards() {
-      console.log(this.#hand)
+    const pngs = []
+    for(const card of this.#hand) {
+      const png = card.getStringPNG()
+
+    }
+    return pngs
   }
 }
 

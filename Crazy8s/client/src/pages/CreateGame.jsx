@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
+  const [gameMade, setGameMade] = useState(false);
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -13,7 +14,6 @@ function CreateGame({ socket }){
       setSocketId(socket.id);
     }
     
-    // Optional: log when connected
     socket.on('connect', () => {
       console.log('Connected with socket ID:', socket.id);
       setSocketId(socket.id);
@@ -31,31 +31,54 @@ function CreateGame({ socket }){
   const bet = 0;
 
   const createGameObject = () => {
-    socket.emit("createGame", roomName)
+    if(gameMade == false) {
+      socket.emit("createGame", roomName)
+      setGameMade(true);
+    }
   }
+  
+  // const startGame = () => {
+  //   const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
+  //   var count;
+  //   socket.emit("startGame", cb => {
+  //     for(const png of cb) {
+  //       if(test[count] != png)
+  //         alert("WRONG")
+  //       count++
+  //     }
+  //   })
+  // }
 
-// The html of the page room name password bet bots
+// The html of the page (room name password bet bots)
   return(
     <>
-    <div>
-      <h1>Create Game</h1>
-    </div>
-    <div>
+    
+    {/* Left Lobby Settings Box*/}
 
-      <button class="btn btn-lg btn-light">Start Lobby</button>
+    <div class="lobby-settings">
+      <h1><b>Settings</b></h1>
+    </div>
+
+    <div class = "start-buttons">
+
+
+      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
-      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Game</button>
+      {gameMade && (<button class="btn btn-lg btn-light" >Start Game</button>)}
       </Link>
 
     </div>
 
+    {/* Right Player Lobby Box*/}
     <div class = "lobby-box">
-      <h1 class = ""><b>Players</b></h1>
+      <h1><b>Players</b></h1>
 
-      <div class = "lobby-list">
-        <p class = "player">Player</p>
-      <button class="btn-success">Allow</button>
+    <div class = "lobby-list">
+      <div class = "player-entry">
+        <p>Player</p>
+        <button class="btn btn-success">Allow</button>
+      </div>
     </div>
 
     </div>
