@@ -49,13 +49,12 @@ function CreateGame({ socket }){
   //   })
   // }
 
-// The html of the page room name password bet bots
+// The html of the page (room name password bet bots)
   return(
     <>
-    <div>
-      <h1>Create Game</h1>
-    </div>
-    <div>
+    
+    <div class = "start-buttons">
+
 
       <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Lobby</button>
       
@@ -68,9 +67,11 @@ function CreateGame({ socket }){
     <div class = "lobby-box">
       <h1 class = ""><b>Players</b></h1>
 
-      <div class = "lobby-list">
-        <p class = "player">Player</p>
-      <button class="btn-success">Allow</button>
+    <div class = "lobby-list">
+      <div class = "player-entry">
+        <p>Player</p>
+        <button class="btn btn-success">Allow</button>
+      </div>
     </div>
 
     </div>

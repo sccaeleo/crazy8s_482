@@ -47,8 +47,7 @@ function Game({socket}){
         </div>
       
         <div class="game">
-          
-          <div class="game-center">
+        <div>
             <button class="deck card-button"><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
             <button class="pile card-button"><img class="pile" src={require('./Cards/cardSpades5.png')}></img></button>
           </div>
@@ -60,10 +59,13 @@ function Game({socket}){
           {/* Creates the player's hand */}
           <div class="player-hand">
             {playerHand.map((card, index) => (
-              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
+              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} /></button>
             ))}
           </div>
+          
         </div>
+
+        
 
       </div>
     )

@@ -1,12 +1,24 @@
 :root {
     --deckpileWidth: 100px;
     --cardWidth: 80px;
+    --lightGreen: rgb(25, 133, 77);
+    --darkGreen: rgb(20, 104, 61);
+    --darkerGreen: rgb(14, 73, 43);
 }
 
 body {
     background-color: rgb(25, 133, 77);
     font-family: Tahoma, sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
     
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
 }
 
 /* Main Page */
@@ -50,74 +62,93 @@ body {
 
 /* Lobby Page */
 
+.start-buttons{
+    bottom: 10%;
+}
+
 .lobby-box {
     width: 45%;
     height: 90%;
     background-color: rgb(20, 104, 61);
     display: flex;
+    flex-direction: column;
     color: white;
     box-sizing: border-box;
     position: absolute;
-    
     right: 3%;
     top: 3%;
     border-radius: 8px;
+    padding: 20px;
 }
 
 .lobby-list {
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
     
-   background-color: #333;
-   position: absolute;
-   top: 10%;
-   margin-left: 10px;
-   width: 90%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.player-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--darkerGreen);
+    border-radius: 5px;
+    
+
 }
 
 /* Game Page */
 
-.game {
-    display: flex;
-}
-.game-center {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
 
-.deck, .pile {
-    width: var(--deckpileWidth); 
-    height: auto;
-    margin: 0 10px;
-    transition: transform 0.2s;
-}
 
-.card-button {
-    background-color: rgb(60, 60, 60);
-    border-radius: 5px;
-    border: 2px solid #333;
-    width: var(--deckpileWidth);
-    height: auto;
-}
 
-.deck:hover, .pile:hover {
-    transform: scale(1.05);
-}
 
 .game {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    
+    background-color: var(--darkGreen);
+    border-radius: 10px;
+    width: 90%;
+    height: 80vh;
+    
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.game-center {
-    display: flex;
-    justify-content: center;
+.card-button {
+    background-color: rgba(255, 255, 255, 0);
+    border: 0px solid #333;
+    width: var(--cardWidth);
+    height: auto;
+}
+
+
+.deck, .pile {
+    width: var(--deckpileWidth); 
+    height: auto;
+    margin: 2px 2px;
+    transition: transform 0.2s;
+}
+
+
+.deck:hover, .pile:hover {
+    transform: scale(1.05);
 }
 
 .player-hand {
+    padding-top: 10%;
     display: flex;
-    flex-wrap: wrap;
+    width: 15%;
     justify-content: center;
+
 }
 
 .player-hand img {
@@ -129,6 +160,8 @@ body {
 .player-hand img:hover {
     transform: scale(1.1);
 }
+
+/* Test */
 
 .connected-message {
     position: absolute;
