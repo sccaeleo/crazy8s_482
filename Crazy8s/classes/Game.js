@@ -7,14 +7,16 @@ class Game {
     #bet;
     #password;
     #host;
+    #room;
 
     //initialize a deck, add the host and set room settings
-    constructor(host, bet, password) {
+    constructor(host, room, bet, password) {
         this.#deck = new Deck();
-        this.#host = new Player(1, host);
+        this.#host = host;
         this.#players.push(this.#host);
         this.#bet = bet;
         this.#password = password;
+        this.#room = room;
     }
 
     //player joins a game
@@ -35,6 +37,7 @@ class Game {
         this.deal();
         var firstPlayer = this.#getFirstPlayer();
         this.turn(firstPlayer);
+        this.#pile = deck.drawCard();
     }
 
     //get a random integer 0-3 for index of a player
@@ -61,3 +64,5 @@ class Game {
 
     }
 }
+
+export default Game;

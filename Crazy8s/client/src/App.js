@@ -20,9 +20,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home socket={socket}/>} />
-        <Route path="/create" element={<CreateGame />} />
+        <Route path="/create" element={<CreateGame socket={socket}/>} />
         <Route path="/join" element={<JoinGame />} />
-        <Route path="/game" element={<Game />} />
+        <Route path="/game" element={<Game socket={socket}/>} />
         <Route path="/accountsettings" element={<AccountSettings />} />
         <Route path="/createaccount" element={<CreateAccount />} />
       </Routes>
