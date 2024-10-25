@@ -5,7 +5,7 @@
 
 body {
     background-color: rgb(25, 133, 77);
-    font-family: Arial, sans-serif;
+    font-family: Tahoma, sans-serif;
     
 }
 
@@ -46,6 +46,30 @@ body {
     width: 300px;
     height: 80px;
     
+}
+
+/* Lobby Page */
+
+.lobby-box {
+    width: 45%;
+    height: 90%;
+    background-color: rgb(20, 104, 61);
+    display: flex;
+    color: white;
+    box-sizing: border-box;
+    position: absolute;
+    right: 3%;
+    top: 3%;
+    border-radius: 8px;
+}
+
+.lobby-list {
+    
+   background-color: #333;
+   position: absolute;
+   top: 10%;
+   margin-left: 10px;
+   width: 90%;
 }
 
 /* Game Page */
