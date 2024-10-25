@@ -25,7 +25,7 @@ class Card {
         return other.checkSuitRank(this.#suit, this.#rank);
     }
 
-    toString() {
-        return "card" + this.#suit + "-" + this.#rank;
+    getPNGString() {
+        return "card" + this.#suit + this.#rank + ".png";
     }
 }
