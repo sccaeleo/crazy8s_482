@@ -47,6 +47,7 @@
     "babel-jest": "^29.7.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
-    "jest-css-modules-transform": "^4.4.2"
+    "jest-css-modules-transform": "^4.4.2",
+    "jest-html-reporters": "^3.1.7"
   }
 }

@@ -33,15 +33,15 @@ function CreateAccount() {
             <form onSubmit={handleSubmit}>
                 <div className='form-group my-3'>
                     <label htmlFor='name'>Name</label>
-                    <input type='text' name='name' required onChange={(e)=> setValues({...values, name: e.target.value})} />
+                    <input id='name' type='text' name='name' required onChange={(e)=> setValues({...values, name: e.target.value})} />
                 </div>
                 <div className='form-group my-3'>
                     <label htmlFor='email'>Email</label>
-                    <input type='email' name='email' required onChange={(e)=> setValues({...values, email: e.target.value})} />
+                    <input id='email'type='email' name='email' required onChange={(e)=> setValues({...values, email: e.target.value})} />
                 </div>
                 <div className='form-group my-3'>
                     <label htmlFor='password'>Password</label>
-                    <input type='text' name='password' required onChange={(e)=> setValues({...values, password: e.target.value})} />
+                    <input id='password'type='text' name='password' required onChange={(e)=> setValues({...values, password: e.target.value})} />
                 </div>
                 <div className='form-group my-3'>
                     <button type='submit' className='btn btn-success'>Save</button>
