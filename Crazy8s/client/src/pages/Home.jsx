@@ -29,7 +29,7 @@ function Homepage({socket}){
   };
   
   return(
-    <div>
+    <div data-testid="home-page">
 
     <div class="main-title">
         <h1><b>Crazy 8s</b></h1>
@@ -40,8 +40,8 @@ function Homepage({socket}){
   </div>
 
     <div>
-      <Link to="/accountsettings">
-        <button class="btn btn-lg btn-light rounded-5 float-end account-button">A</button>
+      <Link to="/accountsettings" data-testid="account-settings-link">
+        <button class="btn btn-lg btn-light rounded-5 float-end account-button">account settings</button>
       </Link>
     </div>
     
