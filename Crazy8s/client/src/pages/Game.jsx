@@ -18,9 +18,6 @@ function Game({socket}){
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      alert("work")
-    }else{
-      alert("no work")
     }
     
     // Optional: log when connected
