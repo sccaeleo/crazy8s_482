@@ -13,12 +13,16 @@ function Game({socket}) {
 
   const [socketId, setSocketId] = useState('');
   const [hand, setHand] = useState([]);
+  const [pileCard, setPileCard] = useState('')
 
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      startGame();
+      //socket.emit("test", "Working")
+      //startGame();
+      setPileCard('cardSpades5.png')
+
     }
 
     // Cleanup on unmount
@@ -30,8 +34,30 @@ function Game({socket}) {
   const startGame = () => {
     socket.emit("startGame", cb => {
       setHand(cb)
+      // socket.emit("test", cb)
     })
   }
+
+  const playCard = (index) => {
+    socket.emit("playCard", index, cb => {
+      if(cb == true) {
+        var temp = [...hand]
+        const newPile = temp.splice(index, 1)
+        setHand(temp)
+        setPileCard(newPile)
+      }
+    })
+  }
+
+  const drawCard = () => {
+    socket.emit("drawCard", cb => {
+      var temp = [...hand]
+      temp.push(cb)
+      setHand(temp)
+    })
+  }
+
+  // const playCard = () =>
 
     // The html of the page
     return(
@@ -42,9 +68,12 @@ function Game({socket}) {
         </div>
       
         <div class="game">
+          <div>
+          <button class="btn btn-lg btn-light" onClick={startGame}>Deal</button>
+          </div>
           
           <div class="game-center">
-            <button class="deck card-button"><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
+            <button class="deck card-button" onClick={drawCard}><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
             <button class="pile card-button"><img class="pile" src={require('./Cards/cardSpades5.png')}></img></button>
           </div>
 
@@ -54,8 +83,8 @@ function Game({socket}) {
 
           {/* Creates the player's hand */}
           <div class="player-hand">
-            {playerHand.map((card, index) => (
-              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
+            {hand.map((card, index) => (
+              <button class="player-hand card-button" onClick={() => playCard(index)}><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
             ))}
           </div>
         </div>
