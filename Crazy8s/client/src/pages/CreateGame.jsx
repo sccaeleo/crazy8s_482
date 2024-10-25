@@ -34,20 +34,24 @@ function CreateGame({ socket }){
     socket.emit("createGame", roomName)
   }
 
-// The html of the page
+// The html of the page room name password bet bots
   return(
     <>
     <div>
       <h1>Create Game</h1>
     </div>
     <div>
+
+      <button class="btn btn-lg btn-light">Start Lobby</button>
+      
       <Link to="/game">
-      <button class="btn btn-lg btn-light" onClick={createGameObject}>Create Game</button>
+      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Game</button>
       </Link>
+
     </div>
 
     <div class = "lobby-box">
-      <h1><b>Players</b></h1>
+      <h1 class = ""><b>Players</b></h1>
 
       <div class = "lobby-list">
         <p class = "player">Player</p>
