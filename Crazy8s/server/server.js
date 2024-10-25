@@ -81,6 +81,17 @@ app.post("/edit_account/:id", (req, res) => {
   });
 });
 
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE FROM account_information WHERE id=?";
+  const values = [id];
+  db.query(sql, values, (err, result) => {
+    if (err)
+      return res.json({ message: "Something unexpected has occured" + err });
+    return res.json({ success: "Student updated successfully" });
+  });
+});
+
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
