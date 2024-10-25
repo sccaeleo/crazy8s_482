@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
+  const [gameMade, setGameMade] = useState(false);
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -13,7 +14,6 @@ function CreateGame({ socket }){
       setSocketId(socket.id);
     }
     
-    // Optional: log when connected
     socket.on('connect', () => {
       console.log('Connected with socket ID:', socket.id);
       setSocketId(socket.id);
@@ -31,8 +31,23 @@ function CreateGame({ socket }){
   const bet = 0;
 
   const createGameObject = () => {
-    socket.emit("createGame", roomName)
+    if(gameMade == false) {
+      socket.emit("createGame", roomName)
+      setGameMade(true);
+    }
   }
+  
+  // const startGame = () => {
+  //   const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
+  //   var count;
+  //   socket.emit("startGame", cb => {
+  //     for(const png of cb) {
+  //       if(test[count] != png)
+  //         alert("WRONG")
+  //       count++
+  //     }
+  //   })
+  // }
 
 // The html of the page room name password bet bots
   return(
@@ -42,10 +57,10 @@ function CreateGame({ socket }){
     </div>
     <div>
 
-      <button class="btn btn-lg btn-light">Start Lobby</button>
+      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
-      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Game</button>
+      {gameMade && (<button class="btn btn-lg btn-light" >Start Game</button>)}
       </Link>
 
     </div>

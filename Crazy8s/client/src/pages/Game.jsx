@@ -17,19 +17,26 @@ function Game({socket}){
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
+      startGame();
     }
-    
-    // Optional: log when connected
-    socket.on('connect', () => {
-      console.log('Connected with socket ID:', socket.id);
-      setSocketId(socket.id);
-    });
 
     // Cleanup on unmount
     return () => {
       socket.off('connect');
     };
   }, [socket]);
+
+  const startGame = () => {
+    const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
+    var count;
+    socket.emit("startGame", cb => {
+      for(const png of cb) {
+        if(test[count] == png)
+          alert("RIGHT")
+        count++
+      }
+    })
+  }
 
     // The html of the page
     return(
