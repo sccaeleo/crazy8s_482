@@ -47,6 +47,14 @@ app.post("/add_user", (req, res) => {
     });
   });
 
+  app.get("/accounts", (req, res) => {
+    const sql = "SELECT * FROM account_information";
+    db.query(sql, (err, result) => {
+      if (err) res.json({ message: "Server error" });
+      return res.json(result);
+    });
+  });
+
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
