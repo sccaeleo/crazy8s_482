@@ -30,7 +30,7 @@ function Homepage({socket}){
   };
   
   return(
-    <div>
+    <div data-testid="home-page">
 
     <div class="main-title">
         <h1><b>Crazy 8s</b></h1>
