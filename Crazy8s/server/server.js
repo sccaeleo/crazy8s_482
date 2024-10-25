@@ -47,8 +47,6 @@ app.post("/add_user", (req, res) => {
     });
   });
 
-<<<<<<< HEAD
-=======
 app.get("/accounts", (req, res) => {
   const sql = "SELECT * FROM account_information";
   db.query(sql, (err, result) => {
@@ -67,7 +65,6 @@ app.get("/get_account/:id", (req, res) => {
   });
 });
 
->>>>>>> 1a3f950e89c80ccacd52f2becaa4d2c124268158
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
