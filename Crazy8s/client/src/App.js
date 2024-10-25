@@ -11,6 +11,8 @@ import JoinGame from "./pages/JoinGame"
 import Game from "./pages/Game"
 import AccountSettings from "./pages/AccountSettings"
 import CreateAccount from "./pages/CreateAccount"
+import ViewAccount from "./pages/ViewAccount"
+
 
 const socket = io('http://localhost:3030')
 
@@ -25,6 +27,7 @@ function App() {
         <Route path="/game" element={<Game socket={socket}/>} />
         <Route path="/accountsettings" element={<AccountSettings />} />
         <Route path="/createaccount" element={<CreateAccount />} />
+        <Route path="/viewaccount/:id" element={<ViewAccount />} />
       </Routes>
     </BrowserRouter>
   )

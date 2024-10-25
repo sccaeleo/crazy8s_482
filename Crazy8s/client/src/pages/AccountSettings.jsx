@@ -24,10 +24,10 @@ function AccountSettings() {
       .catch((err)=> console.log(err))
   }
 return (
-  <div className='container-fluid bg-primary vh-100 vw-100'>
+  <div className='container-fluid bg-success vh-100 vw-100'>
       <h3>Accounts</h3>
       <div className='d-flex justify-content-end'>
-          <Link className='btn btn-success' to='/CreateAccount'>Add Account</Link>
+          <Link className='btn btn-light' to='/CreateAccount'>Add Account</Link>
       </div>
       <table>
           <thead>
@@ -48,8 +48,8 @@ return (
                           <td>{account.email}</td>
                           <td>{account.password}</td>
                           <td>
-                              <Link className='btn mx-2 btn-success' to={`/read/${account.id}`}>Read</Link>
-                              <Link className='btn mx-2 btn-success' to={`/edit/${account.id}`}>Edit</Link>
+                              <Link className='btn mx-2 btn-light' to={`/ViewAccount/${account.id}`}>View</Link>
+                              <Link className='btn mx-2 btn-light' to={`/edit/${account.id}`}>Edit</Link>
                               <button onClick={()=>handleDelete(account.id)} className='btn mx-2 btn-danger'>Delete</button>
                           </td>
                       </tr>)
