@@ -7,7 +7,6 @@ export const playerHand = [
   'cardSpades5.png',
   'cardHearts2.png',
   'cardDiamonds9.png',
-  // Add more card filenames here
 ];
 
 function Game({socket}){
@@ -18,9 +17,6 @@ function Game({socket}){
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      alert("work")
-    }else{
-      alert("no work")
     }
     
     // Optional: log when connected
@@ -34,7 +30,8 @@ function Game({socket}){
       socket.off('connect');
     };
   }, [socket]);
-  
+
+    // The html of the page
     return(
       <div>
         <div class="main-title">
@@ -43,7 +40,7 @@ function Game({socket}){
         </div>
       
         <div class="game">
-
+          
           <div class="game-center">
             <button class="deck card-button"><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
             <button class="pile card-button"><img class="pile" src={require('./Cards/cardSpades5.png')}></img></button>
@@ -53,6 +50,7 @@ function Game({socket}){
 
           </div>
 
+          {/* Creates the player's hand */}
           <div class="player-hand">
             {playerHand.map((card, index) => (
               <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
