@@ -1,10 +1,20 @@
+:root {
+    --deckpileWidth: 100px;
+    --cardWidth: 80px;
+}
+
 body {
     background-color: rgb(25, 133, 77);
+    font-family: Arial, sans-serif;
+    
 }
+
+/* Main Page */
 
 .main-title {
     text-align: center;
     color: white;
+    margin-top: 10px;
 }
 
 .main-card {
@@ -38,22 +48,61 @@ body {
     
 }
 
+/* Game Page */
+
 .game {
-    position: absolute;
-    border-color: blue;
-    width: 100%;
-    top: 10%;
-    text-align: center;
+    display: flex;
 }
 .game-center {
-    position: relative;
-    
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
+.deck, .pile {
+    width: var(--deckpileWidth); 
+    height: auto;
+    margin: 0 10px;
+    transition: transform 0.2s;
+}
+
+.card-button {
+    background-color: rgb(60, 60, 60);
+    border-radius: 5px;
+    border: 2px solid #333;
+    width: var(--deckpileWidth);
+    height: auto;
+}
+
+.deck:hover, .pile:hover {
+    transform: scale(1.05);
+}
+
+.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-center {
+    display: flex;
+    justify-content: center;
 }
 
 .player-hand {
-    position: relative;
-    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.player-hand img {
+    width: var(--cardWidth); /* Adjust size as needed */
+    height: auto;
+    transition: transform 0.2s;
+}
+
+.player-hand img:hover {
+    transform: scale(1.1);
 }
 
 .connected-message {
