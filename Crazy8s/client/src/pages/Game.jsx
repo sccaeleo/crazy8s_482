@@ -11,6 +11,7 @@ export const playerHand = [
 
 function Game({socket}) {
 
+  // useStates in order to update them on the UI
   const [socketId, setSocketId] = useState('');
   const [hand, setHand] = useState([]);
   const [pileCard, setPileCard] = useState('')
@@ -19,8 +20,6 @@ function Game({socket}) {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      //socket.emit("test", "Working")
-      //startGame();
       setPileCard('cardSpades5.png')
 
     }
@@ -31,15 +30,17 @@ function Game({socket}) {
     };
   }, [socket]);
 
+  // tell server to start the game
   const startGame = () => {
     socket.emit("startGame", cb => {
       setHand(cb)
-      // socket.emit("test", cb)
     })
   }
 
+  // tell the server what card you want to play
   const playCard = (index) => {
     socket.emit("playCard", index, cb => {
+      // make sure that it is your turn and the card is playable
       if(cb == true) {
         var temp = [...hand]
         const newPile = temp.splice(index, 1)
@@ -49,6 +50,7 @@ function Game({socket}) {
     })
   }
 
+  // tell server to give you a card
   const drawCard = () => {
     socket.emit("drawCard", cb => {
       var temp = [...hand]
@@ -56,8 +58,6 @@ function Game({socket}) {
       setHand(temp)
     })
   }
-
-  // const playCard = () =>
 
     // The html of the page
     return(
@@ -84,7 +84,7 @@ function Game({socket}) {
           {/* Creates the player's hand */}
           <div class="player-hand">
             {hand.map((card, index) => (
-              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
+              <button class="player-hand card-button" onClick={() => playCard(index)}><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
             ))}
           </div>
         </div>
