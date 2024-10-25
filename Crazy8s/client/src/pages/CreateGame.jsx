@@ -53,6 +53,12 @@ function CreateGame({ socket }){
   return(
     <>
     
+    {/* Left Lobby Settings Box*/}
+
+    <div class="lobby-settings">
+
+    </div>
+
     <div class = "start-buttons">
 
 
@@ -64,6 +70,7 @@ function CreateGame({ socket }){
 
     </div>
 
+    {/* Right Player Lobby Box*/}
     <div class = "lobby-box">
       <h1 class = ""><b>Players</b></h1>
 

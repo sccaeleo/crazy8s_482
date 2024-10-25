@@ -63,7 +63,24 @@ h1 {
 /* Lobby Page */
 
 .start-buttons{
-    bottom: 10%;
+    position:absolute;
+    bottom:1%;
+    left: 3%;
+}
+
+.lobby-settings{
+    width: 45%;
+    height: 90%;
+    background-color: rgb(20, 104, 61);
+    display: flex;
+    flex-direction: column;
+    color: white;
+    box-sizing: border-box;
+    position: absolute;
+    left: 3%;
+    top: 3%;
+    border-radius: 8px;
+    padding: 20px;
 }
 
 .lobby-box {
