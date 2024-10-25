@@ -34,6 +34,7 @@ function CreateGame({ socket }){
     socket.emit("createGame", roomName)
   }
 
+// The html of the page
   return(
     <>
     <div>
@@ -44,6 +45,17 @@ function CreateGame({ socket }){
       <button class="btn btn-lg btn-light" onClick={createGameObject}>Create Game</button>
       </Link>
     </div>
+
+    <div class = "lobby-box">
+      <h1><b>Players</b></h1>
+
+      <div class = "lobby-list">
+        <p class = "player">Player</p>
+      <button class="btn-success">Allow</button>
+    </div>
+
+    </div>
+    
     <div class="connected-message">{socketId}</div>
     </>
   )
