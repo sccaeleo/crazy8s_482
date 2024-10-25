@@ -9,9 +9,10 @@ export const playerHand = [
   'cardDiamonds9.png',
 ];
 
-function Game({socket}){
+function Game({socket}) {
 
   const [socketId, setSocketId] = useState('');
+  const [hand, setHand] = useState([]);
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -27,14 +28,8 @@ function Game({socket}){
   }, [socket]);
 
   const startGame = () => {
-    const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
-    var count;
     socket.emit("startGame", cb => {
-      for(const png of cb) {
-        if(test[count] == png)
-          alert("RIGHT")
-        count++
-      }
+      setHand(cb)
     })
   }
 
@@ -47,7 +42,8 @@ function Game({socket}){
         </div>
       
         <div class="game">
-        <div>
+          
+          <div class="game-center">
             <button class="deck card-button"><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
             <button class="pile card-button"><img class="pile" src={require('./Cards/cardSpades5.png')}></img></button>
           </div>
@@ -59,13 +55,10 @@ function Game({socket}){
           {/* Creates the player's hand */}
           <div class="player-hand">
             {playerHand.map((card, index) => (
-              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} /></button>
+              <button class="player-hand card-button"><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
             ))}
           </div>
-          
         </div>
-
-        
 
       </div>
     )
