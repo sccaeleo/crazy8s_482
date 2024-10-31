@@ -124,7 +124,9 @@ io.on("connection", socket => {
   socket.on("createGame", room => {
     //socket.join(room)
     socket.gameId = 1
-    socket.currGame = createNewGame(1, room)
+    const game = createNewGame(1, room)
+    socket.currGame = game
+    games.push(game)
   })
 
   socket.on("startGame", (cb) => {
