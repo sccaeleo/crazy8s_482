@@ -60,6 +60,23 @@ h1 {
     
 }
 
+/* Create Lobby Page */
+
+.create-lobby-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: var(--darkGreen);
+    border-radius: 10px;
+    width: 50%;
+    height: 50vh;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Lobby Page */
 
 .start-buttons{
