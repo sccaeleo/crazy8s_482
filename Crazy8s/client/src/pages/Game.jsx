@@ -3,25 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
-export const playerHand = [
-  'cardSpades5.png',
-  'cardHearts2.png',
-  'cardDiamonds9.png',
-];
-
 function Game({socket}) {
 
   // useStates in order to update them on the UI
   const [socketId, setSocketId] = useState('');
   const [hand, setHand] = useState([]);
-  const [pileCard, setPileCard] = useState('')
+  var [pileCard, setPileCard] = useState("cardSpadesQ.png")
+  //setPileCard("./Cards/cardSpadesQ.png")
+  
 
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      setPileCard('cardSpades5.png')
-
     }
 
     // Cleanup on unmount
@@ -34,6 +28,7 @@ function Game({socket}) {
   const startGame = () => {
     socket.emit("startGame", cb => {
       setHand(cb)
+      setPileCard("cardSpadesQ.png")
     })
   }
 
@@ -41,16 +36,17 @@ function Game({socket}) {
   const playCard = (index) => {
     socket.emit("playCard", index, cb => {
       // make sure that it is your turn and the card is playable
-      if(cb == true) {
+      if(cb === true) {
         var temp = [...hand]
-        const newPile = temp.splice(index, 1)
+        const [topCard] = temp.splice(index, 1)
         setHand(temp)
-        setPileCard(newPile)
+        
+        setPileCard(topCard)
       }
     })
   }
 
-  // tell server to give you a card
+  // tell server to give you a card `./Cards/${pileCard}`
   const drawCard = () => {
     socket.emit("drawCard", cb => {
       var temp = [...hand]
@@ -73,8 +69,12 @@ function Game({socket}) {
           </div>
           
           <div class="game-center">
-            <button class="deck card-button" onClick={drawCard}><img class="deck" src={require('./Cards/cardBack_red1.png')}></img></button>
-            <button class="pile card-button"><img class="pile" src={require('./Cards/cardSpades5.png')}></img></button>
+            <button class="deck card-button" onClick={drawCard}>
+              <img class="deck" src={require('./Cards/cardBack_red1.png')} alt={'Deck'}></img>
+            </button>
+            <button class="pile card-button" onClick={() => drawCard}>
+              <img class="pile" src={require(`./Cards/${pileCard}`)} alt={`Test: ${pileCard}`}></img>
+            </button>
           </div>
 
           <div class="other-players">
@@ -84,7 +84,9 @@ function Game({socket}) {
           {/* Creates the player's hand */}
           <div class="player-hand">
             {hand.map((card, index) => (
-              <button class="player-hand card-button" onClick={() => playCard(index)}><img key={index} src={require(`./Cards/${card}`)} alt={`Card ${index}`} /></button>
+              <button class="player-hand card-button" onClick={() => playCard(index)}>
+                <img key={index} src={require(`./Cards/${card}`)} alt={`Card ${card}`} />
+              </button>
             ))}
           </div>
         </div>

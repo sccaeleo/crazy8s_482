@@ -8,6 +8,7 @@ function CreateLobby(){
           <h1>Create Lobby</h1>
           {/* Room Name */}
           {/* Set Password (If left blank, anyone will be able to join your game!*/}
+          {/*  */}
       </div>
     )
   }
