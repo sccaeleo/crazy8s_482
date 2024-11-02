@@ -9,7 +9,6 @@ function Game({socket}) {
   const [socketId, setSocketId] = useState('');
   const [hand, setHand] = useState([]);
   var [pileCard, setPileCard] = useState("cardSpadesQ.png")
-  //setPileCard("./Cards/cardSpadesQ.png")
   
 
   useEffect(() => {
@@ -40,7 +39,6 @@ function Game({socket}) {
         var temp = [...hand]
         const [topCard] = temp.splice(index, 1)
         setHand(temp)
-        
         setPileCard(topCard)
       }
     })
