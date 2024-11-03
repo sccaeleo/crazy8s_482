@@ -16,20 +16,20 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MySql
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "accounts"
-});
+// var db = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "accounts"
+// });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to MySQL:', err);
-    } else {
-        console.log('Connected to MySQL');
-    }
-});
+// db.connect((err) => {
+//     if (err) {
+//         console.error('Error connecting to MySQL:', err);
+//     } else {
+//         console.log('Connected to MySQL');
+//     }
+// });
 
 app.post("/add_user", (req, res) => {
 
