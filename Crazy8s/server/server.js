@@ -122,15 +122,27 @@ io.on("connection", socket => {
   })
 
   socket.on("createGame", room => {
-    socket.join(room)
-    socket.player = new Player()
-    socket.currGame = createNewGame(socket.player, room)
-    console.log("WE DID IT")
+    //socket.join(room)
+    socket.gameId = 1
+    const game = createNewGame(1, room)
+    socket.currGame = game
+    games.push(game)
   })
 
   socket.on("startGame", (cb) => {
     socket.currGame.startGame();
+    socket.player = socket.currGame.players[socket.gameId-1]
     cb(socket.player.displayCards());
+  })
+
+  socket.on("playCard", (index, cb) => {
+    const played = socket.currGame.turn(socket.player, index)
+    cb(played)
+  })
+
+  socket.on("drawCard", (cb) => {
+    const card = socket.currGame.drawCard(socket.player)
+    cb(card)
   })
 })
 
@@ -143,31 +155,32 @@ io.on("connection", socket => {
 class Game {
 
   //establish vars
-  #deck;
-  #pile = [];
-  #players = [];
-  #bet;
-  #password;
-  #host;
-  #room;
+  deck;
+  pile = [];
+  players = [];
+  bet;
+  password;
+  host;
+  room;
+  currTurn;
 
   //initialize a deck, add the host and set room settings
   constructor(host, room, bet, password) {
-      this.#deck = new Deck();
-      this.#host = host;
-      this.#players.push(this.#host);
-      this.#bet = bet;
-      this.#password = password;
-      this.#room = room;
+      this.deck = new Deck();
+      this.host = host;
+      this.players.push(new Player(1));
+      this.bet = bet;
+      this.password = password;
+      this.room = room;
   }
 
   //player joins a game
   addPlayer(user) {
-      size = this.#players.length;
+      size = this.players.length;
 
       //check if there is room in the lobby
       if(size < 4) {
-          this.#players.push(new Player(size+1, user));
+          this.players.push(new Player(size+1, user));
           return true;
       }else{
           return false;
@@ -177,13 +190,13 @@ class Game {
   //deal, pick the first player and then give first player a turn
   startGame() {
       this.deal();
-      var firstPlayer = this.#getFirstPlayer();
-      this.turn(firstPlayer);
-      this.#pile = this.#deck.drawCard();
+      // this.currTurn = this.getFirstPlayer();
+      this.currTurn = 1;
+      this.pile.push(this.deck.drawCard());
   }
 
   //get a random integer 0-3 for index of a player
-  #getFirstPlayer() {
+  getFirstPlayer() {
       var random = Math.random()*4;
       return Math.floor(random);
   }
@@ -191,15 +204,35 @@ class Game {
   //give each player 5 cards
   deal() {
       for(var i = 0; i < 5; i++) {
-          for(const player of this.#players) {
-              const card = this.#deck.drawCard();
+          for(const player of this.players) {
+              const card = this.deck.drawCard();
               player.drawCard(card);
           }
       }
   }
 
-  turn(player) {
+  getPlayer(gameId) {
+    return this.players[gameId-1]
+  }
 
+  turn(player, index) {
+    if(this.currTurn == player.playerId) {
+      console.log("if complete")
+      // bad practice since low on time will be fixed
+      const card = player.hand[index]
+      const played = player.playCard(index, this.pile[this.pile.length-1])
+      if(played) {
+        this.pile.push(card)
+        return true;
+      }
+    }
+    return false;
+  }
+
+  drawCard(player) {
+    const newCard = this.deck.drawCard()
+    player.drawCard(newCard)
+    return newCard.getStringPNG()
   }
 
   endGame(winner) {
@@ -209,35 +242,43 @@ class Game {
 
 class Player {
 
-  #hand = [];
-  #playerId;
-  #user;
+  hand = [];
+  playerId;
+  user;
 
-  constructor(id, user) {
-      this.#playerId = id;
-      this.#user = user;
+  constructor(id) {
+      this.playerId = id;
+      //this.user = user;
   }
 
   //This will be called Client side, when picking a card
-  playCard(cardIndex) {
-      r1 = this.#hand.splice(cardIndex, 1);
+  playCard(cardIndex, pileCard) {
+      const card = this.hand[cardIndex];
+
+      // is the card playable?
+      if(this.hand[cardIndex].compare(pileCard)) {
+        const r1 = this.hand.splice(cardIndex, 1);
+        return true;
+      }else{
+        return false;
+      }
   }
 
   //draw a card
   drawCard(card) {
-      this.#hand.push(card);
+      this.hand.push(card);
   }
 
   //check if won
   isEmpty() {
-      return this.#hand.length == 0;
+      return this.hand.length == 0;
   }
 
   displayCards() {
     const pngs = []
-    for(const card of this.#hand) {
+    for(const card of this.hand) {
       const png = card.getStringPNG()
-
+      pngs.push(png)
     }
     return pngs
   }
@@ -246,15 +287,15 @@ class Player {
 class Deck {
 
   //suits and ranks to easily create the deck
-  #suits = ['Clubs','Diamonds','Hearts','Spades'];
-  #ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-  #cards = [];
+  suits = ['Clubs','Diamonds','Hearts','Spades'];
+  ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  cards = [];
 
   constructor() {
       //for each suit and rank make a card
-      for(const suit of this.#suits)
-          for(const rank of this.#ranks)
-              this.#cards.push(new Card(suit, rank));
+      for(const suit of this.suits)
+          for(const rank of this.ranks)
+              this.cards.push(new Card(suit, rank));
   }
 
   shuffle()
@@ -263,38 +304,44 @@ class Deck {
       for(var i = 0; i < 52; i++) {
           var newIndex = Math.random()*52;
           
-          let temp = this.#cards[i];
-          this.#cards[i] = this.#cards[newIndex];
-          this.#cards[newIndex] = temp;
+          let temp = this.cards[i];
+          this.cards[i] = this.cards[newIndex];
+          this.cards[newIndex] = temp;
       }
   }
 
   drawCard() {
-      return this.#cards.pop();
+    const info = this.cards.pop()
+    return info
   }
 
   isEmpty() {
-      return this.#cards.length == 0;
+      return this.cards.length == 0;
+  }
+
+  printCards() {
+    for(const card of this.cards)
+      console.log(card.getStringPNG())
   }
 }
 
 class Card {
 
-  #suit;
-  #rank;
+  suit;
+  rank;
 
   constructor(suit, rank)
   {
-      this.#suit = suit;
-      this.#rank = rank;
+      this.suit = suit;
+      this.rank = rank;
   }
 
   //check if playable
   checkSuitRank(suit, rank)
   {
-      if(this.#suit == suit)
+      if(this.suit == suit)
           return true;
-      if(this.#rank == rank)
+      if(this.rank == rank)
           return true;
       return false;
   }
@@ -302,10 +349,12 @@ class Card {
   //compare to another card to see if playable
   compare(other)
   {
-      return other.checkSuitRank(this.#suit, this.#rank);
+      if(this.rank == '8')
+        return true
+      return other.checkSuitRank(this.suit, this.rank);
   }
 
   getStringPNG() {
-      return "card" + this.#suit + this.#rank + ".png";
+      return "card" + this.suit + this.rank + ".png";
   }
 }

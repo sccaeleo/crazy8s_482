@@ -49,7 +49,7 @@ function CreateGame({ socket }){
   //   })
   // }
 
-// The html of the page (room name password bet bots)
+// The html of the page
   return(
     <>
     

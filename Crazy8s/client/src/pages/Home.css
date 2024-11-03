@@ -60,6 +60,23 @@ h1 {
     
 }
 
+/* Create Lobby Page */
+
+.create-lobby-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: var(--darkGreen);
+    border-radius: 10px;
+    width: 50%;
+    height: 50vh;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Lobby Page */
 
 .start-buttons{
@@ -117,6 +134,35 @@ h1 {
     border-radius: 5px;
     
 
+}
+
+/* Join Game Page */
+
+.game-list{
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+    background-color: var(--darkGreen);
+    border-radius: 10px;
+    width: 90%;
+    height: 80vh;
+
+    margin-top: 5vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-entry{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 /* Game Page */
