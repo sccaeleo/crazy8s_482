@@ -1,25 +1,19 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// var admin = require("firebase-admin");
-
-var serviceAccount = require('creds.json');
+// Import Firebase Admin SDK for server-side
+// const admin = require("firebase-admin");
+const {initializeApp, cert} = require('firebase-admin/app')
+const {getFirestore} = require('firebase-admin/firestore')
+const serviceAccount = require('./creds.json');
 
 initializeApp({
   credential: cert(serviceAccount)
-})
+});
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-
+// Import Firebase Client SDK for frontend usage (if applicable)
+// const { initializeApp } = require("firebase/app");
+// const { getAnalytics } = require("firebase/analytics");
+// const { getFirestore } = require("firebase/firestore");
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBE0flNoSmM-tgnzk2lKYSS2H5xziWXflo",
   authDomain: "gofishtest-59fbf.firebaseapp.com",
@@ -30,9 +24,9 @@ const firebaseConfig = {
   measurementId: "G-L6STC0NP85"
 };
 
-const db = getFirestore()
+// Initialize Firebase Client SDK for Firestore and Analytics
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+// const db = getFirestore(app);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
