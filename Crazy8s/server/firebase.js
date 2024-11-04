@@ -14,15 +14,15 @@ initializeApp({
 // const { getFirestore } = require("firebase/firestore");
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBE0flNoSmM-tgnzk2lKYSS2H5xziWXflo",
-  authDomain: "gofishtest-59fbf.firebaseapp.com",
-  projectId: "gofishtest-59fbf",
-  storageBucket: "gofishtest-59fbf.firebasestorage.app",
-  messagingSenderId: "472988457314",
-  appId: "1:472988457314:web:f6bdd07f672e0398c1f43b",
-  measurementId: "G-L6STC0NP85"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBE0flNoSmM-tgnzk2lKYSS2H5xziWXflo",
+//   authDomain: "gofishtest-59fbf.firebaseapp.com",
+//   projectId: "gofishtest-59fbf",
+//   storageBucket: "gofishtest-59fbf.firebasestorage.app",
+//   messagingSenderId: "472988457314",
+//   appId: "1:472988457314:web:f6bdd07f672e0398c1f43b",
+//   measurementId: "G-L6STC0NP85"
+// };
 
 // Initialize Firebase Client SDK for Firestore and Analytics
 // const app = initializeApp(firebaseConfig);
