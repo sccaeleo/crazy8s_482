@@ -51,6 +51,7 @@ h1 {
     bottom: 15%;
     width: 100%;
     text-align: center;    
+    
 }
 
 .btn-padding {
@@ -58,7 +59,8 @@ h1 {
     margin-left: 10px;
     width: 300px;
     height: 80px;
-    
+    color:white;
+    background-color: var(--lighterGreen);
 }
 
 /* Lobby Page */
@@ -104,10 +106,12 @@ h1 {
 .lobby-list {
     display:grid;
     grid-template-columns: 1fr 2;
+    grid-auto-rows: 23%;
     gap: 10px;
     margin-top: 10px;
     padding: 10px;
     border-radius: 4px;
+    height: 100%;
 }
 
 .player-entry {
@@ -139,7 +143,7 @@ h1 {
 
 .game-entry{
     display:grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-row-gap: 1px; 
     grid-auto-columns: auto;
     align-items: center;
@@ -157,10 +161,28 @@ h1 {
     align-items: center;
 }
 
+.password-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .password-enter {
+    color: white;
+    background: var(--lightGreen);
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+  }
+
 /* Game Page */
-
-
-
 
 
 .game {

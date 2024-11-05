@@ -83,12 +83,6 @@ app.listen(port, () => {
 
 var games = []
 
-function createNewGame(host, room) {
-  const g = new Game(host, room, 10, '');
-  games.push(g)
-  return g
-}
-
 const io = require('socket.io')(3030, {
   cors: {
     origin: ['http://localhost:3000'],
@@ -104,16 +98,18 @@ io.on("connection", socket => {
     console.log(data);
   })
 
-  socket.on("createGame", room => {
+  socket.on("createGame", (data) => {
     //socket.join(room)
+    const { host, room, bet, password, isPublic } = data;
     socket.gameId = 1
-    const game = createNewGame(1, room)
-    socket.currGame = game
-    games.push(game)
+    const game = new Game(host, room, bet, password, isPublic);
+    socket.currGame = game;
+    games.push(game);
   })
 
   socket.on("startGame", (cb) => {
     socket.currGame.startGame();
+
     socket.player = socket.currGame.players[socket.gameId-1]
     cb(socket.player.displayCards());
   })
@@ -158,19 +154,14 @@ class Game {
   isPublic;
 
   //initialize a deck, add the host and set room settings
-  constructor(host, room, bet, password) {
+  constructor(host, room, bet, password, isPublic) {
       this.deck = new Deck();
       this.host = host;
       this.players.push(new Player(1));
       this.bet = bet;
       this.password = password;
       this.room = room;
-
-      if (password.length == 0){
-        this.isPublic = true;
-      } else {
-        this.isPublic = false;
-      }
+      this.isPublic = isPublic;
   }
 
 

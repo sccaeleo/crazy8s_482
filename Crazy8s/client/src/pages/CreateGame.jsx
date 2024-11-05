@@ -9,6 +9,11 @@ function CreateGame({ socket }){
   const [gameMade, setGameMade] = useState(false);
   const [playerList, setPlayerList] = useState(['a','b','c'])
 
+  const [room, setRoom] = useState('');
+  const [bet, setBet] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
+
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
@@ -26,15 +31,18 @@ function CreateGame({ socket }){
     };
   }, [socket]);
 
-  //Get these values when creating game and then pass them to the game
-  const roomName = 'testRoom';
-  const isPrivate = false;
-  const password = '';
-  const bet = 0;
+  const host = 'testHost';
+
 
   const createGameObject = () => {
     if(gameMade === false) {
-      socket.emit("createGame", roomName)
+      socket.emit("createGame", {
+        host: socketId,
+        room,
+        bet: parseFloat(bet),
+        password,
+        isPublic
+      });
       setGameMade(true);
     }
   }
@@ -47,11 +55,49 @@ function CreateGame({ socket }){
 
     <div class="lobby-settings">
       <h1><b>Settings</b></h1>
+      
+      <div>
+        <label>Room Name:</label>
+        <input 
+          type="text" 
+          value={room} 
+          onChange={(i) => setRoom(i.target.value)} 
+          placeholder="Enter Room Name" 
+        />
+      </div>
+
+      <div>
+        <label>Buy-In:</label>
+        <input 
+          type="number" 
+          value={bet} 
+          onChange={(i) => setBet(i.target.value)} 
+          placeholder="Enter Buy-In" 
+        />
+      </div>
+
+      <input 
+        type="checkbox" 
+        checked={isPublic === false} 
+        onChange={() => setIsPublic(!isPublic)} 
+        />
+      <p>{"Private"}</p>
+
+      <div>
+        <label>Password:</label>
+        <input 
+          type="password" 
+          value={password} 
+          onChange={(i) => setPassword(i.target.value)} 
+          placeholder="Enter Password" 
+          disabled={isPublic === true}
+        />
+      </div>
+
+
     </div>
 
     <div>
-
-
       <button class="btn start-buttons" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
