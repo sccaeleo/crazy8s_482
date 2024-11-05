@@ -11,12 +11,21 @@ class Game {
   currTurn;
   tempSuit = false;
 
+  roomName;
+  bet;
+  password;
+  isPublic;
+
   /**
    * Create a Game
    * @param {Player} host - the host of the game
    */
-  constructor(host) {
+  constructor(host, roomName, bet, password, isPublic) {
     this.players.push(host);
+    this.roomName = roomName;
+    this.bet = bet;
+    this.password = password;
+    this.isPublic = isPublic;
     this.deck = new Deck();
   }
 

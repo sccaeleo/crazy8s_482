@@ -129,11 +129,10 @@ app.listen(port, () => {
 
 var games = [];
 
-function createNewGame(host, room) {
-  //const g = new Game(host, room, 10, '');
-  const g = new Game(host);
-  games.push(g);
-  return g;
+function createNewGame(host, roomName, bet, password, isPublic) {
+  const game = new Game(host, roomName, bet, password, isPublic);
+  games.push(game);
+  return game;
 }
 
 const io = require('socket.io')(3030, {
@@ -143,8 +142,6 @@ const io = require('socket.io')(3030, {
 })
 
 io.on("connection", socket => {
-  // var currGame;
-  // var player;
   console.log('Connected ' + socket.id);
 
   socket.on("test", data => {
@@ -152,16 +149,9 @@ io.on("connection", socket => {
   })
 
   socket.on("createGame", (data) => {
-    //socket.join(room)
-
-    //socket.gameId = 1
     socket.player = new Player();
-    const game = createNewGame(socket.player, room);
-
-    // const { host, room, bet, password, isPublic } = data;
-    // socket.gameId = 1
-    // const game = new Game(host, room, bet, password, isPublic);
-
+    const { roomName, bet, password, isPublic } = data;
+    const game = createNewGame(socket.player, roomName, bet, password, isPublic);
     socket.currGame = game;
     games.push(game);
   })
