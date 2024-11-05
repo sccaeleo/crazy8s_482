@@ -7,6 +7,7 @@ function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
   const [gameMade, setGameMade] = useState(false);
+  const [playerList, setPlayerList] = useState(['a','b','c'])
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -27,27 +28,16 @@ function CreateGame({ socket }){
 
   //Get these values when creating game and then pass them to the game
   const roomName = 'testRoom';
+  const isPrivate = false;
   const password = '';
   const bet = 0;
 
   const createGameObject = () => {
-    if(gameMade == false) {
+    if(gameMade === false) {
       socket.emit("createGame", roomName)
       setGameMade(true);
     }
   }
-  
-  // const startGame = () => {
-  //   const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
-  //   var count;
-  //   socket.emit("startGame", cb => {
-  //     for(const png of cb) {
-  //       if(test[count] != png)
-  //         alert("WRONG")
-  //       count++
-  //     }
-  //   })
-  // }
 
 // The html of the page
   return(
@@ -59,13 +49,13 @@ function CreateGame({ socket }){
       <h1><b>Settings</b></h1>
     </div>
 
-    <div class = "start-buttons">
+    <div>
 
 
-      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Lobby</button>
+      <button class="btn start-buttons" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
-      {gameMade && (<button class="btn btn-lg btn-light" >Start Game</button>)}
+      {gameMade && (<button class="btn start-buttons" >Start Game</button>)}
       </Link>
 
     </div>
@@ -75,10 +65,12 @@ function CreateGame({ socket }){
       <h1><b>Players</b></h1>
 
     <div class = "lobby-list">
+    {playerList.map((player, index) => (
       <div class = "player-entry">
-        <p>Player</p>
+        <p>{player}</p>
         <button class="btn btn-success">Allow</button>
       </div>
+    ))}
     </div>
 
     </div>

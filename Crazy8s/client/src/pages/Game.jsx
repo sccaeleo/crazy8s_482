@@ -44,7 +44,7 @@ function Game({socket}) {
     })
   }
 
-  // tell server to give you a card `./Cards/${pileCard}`
+  // tell server to give you a card
   const drawCard = () => {
     socket.emit("drawCard", cb => {
       var temp = [...hand]
@@ -71,7 +71,7 @@ function Game({socket}) {
               <img class="deck" src={require('./Cards/cardBack_red1.png')} alt={'Deck'}></img>
             </button>
             <button class="pile card-button" onClick={() => drawCard}>
-              <img class="pile" src={require(`./Cards/${pileCard}`)} alt={`Test: ${pileCard}`}></img>
+              <img class="pile" src={require(`./Cards/${pileCard}`)} alt={`${pileCard}`}></img>
             </button>
           </div>
 

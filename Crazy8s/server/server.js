@@ -127,6 +127,15 @@ io.on("connection", socket => {
     const card = socket.currGame.drawCard(socket.player)
     cb(card)
   })
+
+  socket.on("listGames", (cb) => {
+    cb(games)
+  })
+
+  socket.on("joinGame", (cb) => {
+    // yeah
+  })
+
 })
 
 
