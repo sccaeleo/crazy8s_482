@@ -1,68 +1,126 @@
+const Player = require('../classes/Player.js')
+const Deck = require('../classes/Deck.js')
+const Card = require('../classes/Card.js')
+
+/** A class representing a Game */
 class Game {
 
-    //establish vars
-    #deck;
-    #pile = [];
-    #players = [];
-    #bet;
-    #password;
-    #host;
-    #room;
+  pile = [];
+  deck;
+  players = [];
+  currTurn;
+  tempSuit = false;
 
-    //initialize a deck, add the host and set room settings
-    constructor(host, room, bet, password) {
-        this.#deck = new Deck();
-        this.#host = host;
-        this.#players.push(this.#host);
-        this.#bet = bet;
-        this.#password = password;
-        this.#room = room;
+  /**
+   * Create a Game
+   * @param {Player} host - the host of the game
+   */
+  constructor(host) {
+    this.players.push(host);
+    this.deck = new Deck();
+  }
+
+  /**
+   * Start the Game
+   */
+  startGame() {
+    this.deck.shuffle();
+    this.deal();
+    this.currTurn = this.players[0];
+  }
+
+  /**
+   * Deal cards to each player
+   */
+  deal() {
+    for(var i = 0; i < 5; i++) {
+      for(const player of this.players) {
+        const card = this.deck.drawCard();
+        player.drawCard(card);
+      }
     }
 
-    //player joins a game
-    addPlayer(user) {
-        size = this.#players.length;
+    this.pile.push(this.deck.drawCard());
+  }
 
-        //check if there is room in the lobby
-        if(size < 4) {
-            this.#players.push(new Player(size+1, user));
-            return true;
-        }else{
-            return false;
-        }
+  /**
+   * Add a player to the game
+   * @param {Player} player - the new player to add 
+   * @returns {boolean} - true if player joined, false if full
+   */
+  addPlayer(player) {
+    if(this.players.length < 5) {
+      this.players.push(player);
+      return true;
     }
 
-    //deal, pick the first player and then give first player a turn
-    startGame() {
-        this.deal();
-        var firstPlayer = this.#getFirstPlayer();
-        this.turn(firstPlayer);
-        this.#pile = deck.drawCard();
+    return false;
+  }
+
+  /**
+   * Play a card
+   * @param {Player} player - the player playing a card
+   * @param {number} index - the index of the card in the players hand
+   * @returns {boolean} - true if played, false if not
+   */
+  playCard(player, index) {
+    if(this.currTurn === player) {
+      var card = false;
+      if(this.tempSuit) {
+        console.log(this.tempSuit);
+        card = player.playCard(index, new Card(this.tempSuit, "8"));
+        if(card)
+          this.tempSuit = false;
+      }else{
+        card = player.playCard(index, this.pile[this.pile.length-1]);
+      }
+
+      if(!card)
+        return false;
+
+      this.pile.push(card)
+      if(card === 8)
+        return 8;
+      
+      return true;
     }
+    return false;
+  }
 
-    //get a random integer 0-3 for index of a player
-    #getFirstPlayer() {
-        var random = Math.random()*4;
-        return Math.floor(random);
+  /**
+   * Update the current suit of the pile, after an 8 is played
+   * @param {string} suit - the new suit
+   * @returns {string} - new card to be displayed
+   */
+  updateSuit(suit) {
+    this.tempSuit = suit;
+    return "card" + suit + "8.png";
+  }
+
+  /**
+   * Draw a card
+   * @param {Player} player - the player drawing a card
+   * @returns - false if not players turn, the png file of the new card to be displayed
+   */
+  drawCard(player) {
+    if(this.currTurn === player) {
+      const newCard = this.deck.drawCard();
+      if(!newCard)
+        return false;
+      
+      player.drawCard(newCard);
+      return newCard.getStringPNG();
     }
+    return false;
+  }
 
-    //give each player 5 cards
-    deal() {
-        for(var i = 0; i < 5; i++) {
-            for(player of this.#players) {
-                card = this.#deck.drawCard();
-                player.drawCard(card);
-            }
-        }
-    }
-
-    turn(player) {
-
-    }
-
-    endGame(winner) {
-
-    }
+  /**
+   * Get the file for the pile card
+   * @returns The png file for the pile card
+   */
+  getTopCard() {
+    return this.pile[0].getStringPNG();
+  }
 }
 
-export default Game;
+module.exports = Game;

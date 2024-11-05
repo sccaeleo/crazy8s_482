@@ -23,10 +23,6 @@ function Homepage({socket}){
       socket.off('connect');
     };
   }, [socket]);
-
-  const test = () => {
-    socket.emit("test", "TEST");
-  };
   
   return(
     <div data-testid="home-page">
@@ -47,7 +43,7 @@ function Homepage({socket}){
     
     <div class="main-buttons">
         <Link to="/create">
-        <button class="btn btn-lg btn-light btn-padding" onClick={test}>Create Game</button>
+        <button class="btn btn-lg btn-light btn-padding">Create Game</button>
         </Link>
         <Link to="/join">
         <button class="btn btn-lg btn-light btn-padding">Join Game</button>

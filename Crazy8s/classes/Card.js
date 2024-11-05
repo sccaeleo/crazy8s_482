@@ -1,31 +1,44 @@
+/** A class representing a Card */
 class Card {
 
-    #suit;
-    #rank;
-
+    suit;
+    rank;
+  
+    /**
+     * A constructor for a Card
+     * @param {string} suit - the suit of the card
+     * @param {string} rank - the rank of the card
+     */
     constructor(suit, rank)
     {
-        this.#suit = suit;
-        this.#rank = rank;
+        this.suit = suit;
+        this.rank = rank;
     }
-
-    //check if playable
-    checkSuitRank(suit, rank)
-    {
-        if(this.#suit == suit)
-            return true;
-        if(this.#rank == rank)
-            return true;
-        return false;
-    }
-
-    //compare to another card to see if playable
+  
+    /**
+     * Check if the card is of the same suit or rank of other, or is an 8
+     * @param {Card} other - the card to compare to
+     * @returns - 8 if this card is an 8, true if suit or rank is the same as other's or false if not
+     */
     compare(other)
     {
-        return other.checkSuitRank(this.#suit, this.#rank);
+        if(this.rank == "8")
+            return 8;
+        else if(this.rank == other.rank)
+            return true;
+        else if(this.suit == other.suit)
+            return true;
+        else
+            return false;
     }
-
-    getPNGString() {
-        return "card" + this.#suit + this.#rank + ".png";
+  
+    /**
+     * Get the address to the png of the card
+     * @returns {string} - the file address of the card's png
+     */
+    getStringPNG() {
+        return "card" + this.suit + this.rank + ".png";
     }
 }
+
+module.exports = Card;

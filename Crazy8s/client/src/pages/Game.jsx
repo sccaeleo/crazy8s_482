@@ -7,8 +7,10 @@ function Game({socket}) {
 
   // useStates in order to update them on the UI
   const [socketId, setSocketId] = useState('');
-  const [hand, setHand] = useState([]);
+  var [hand, setHand] = useState([]);
   var [pileCard, setPileCard] = useState("cardSpadesQ.png")
+  var [started, setStarted] = useState(false);
+  var [pickSuit, setPickSuit] = useState(false);
   
 
   useEffect(() => {
@@ -25,9 +27,10 @@ function Game({socket}) {
 
   // tell server to start the game
   const startGame = () => {
+    setStarted(true)
     socket.emit("startGame", cb => {
       setHand(cb)
-      setPileCard("cardSpadesQ.png")
+      // setPileCard("cardSpadesQ.png")
     })
   }
 
@@ -35,22 +38,36 @@ function Game({socket}) {
   const playCard = (index) => {
     socket.emit("playCard", index, cb => {
       // make sure that it is your turn and the card is playable
-      if(cb === true) {
+      if(cb) {
         var temp = [...hand]
-        const [topCard] = temp.splice(index, 1)
+        const topCard = temp.splice(index, 1)
         setHand(temp)
         setPileCard(topCard)
       }
+
+      if(cb === 8)
+        setPickSuit(true);
     })
   }
+
 
   // tell server to give you a card `./Cards/${pileCard}`
   const drawCard = () => {
     socket.emit("drawCard", cb => {
+      if(cb === false)
+        return
       var temp = [...hand]
       temp.push(cb)
       setHand(temp)
     })
+  }
+
+  socket.on("updatePile", (card) => {
+    setPileCard(card);
+  })
+
+  const pickSuitCall = (suit) => {
+    socket.emit("pickSuit", suit);
   }
 
     // The html of the page
@@ -63,7 +80,7 @@ function Game({socket}) {
       
         <div class="game">
           <div>
-          <button class="btn btn-lg btn-light" onClick={startGame}>Deal</button>
+          {!started && (<button class="btn btn-lg btn-light" onClick={startGame}>Deal</button>)}
           </div>
           
           <div class="game-center">

@@ -6,7 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
-  const [gameMade, setGameMade] = useState(false);
+  var [gameMade, setGameMade] = useState(false);
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -31,7 +31,7 @@ function CreateGame({ socket }){
   const bet = 0;
 
   const createGameObject = () => {
-    if(gameMade == false) {
+    if(gameMade === false) {
       socket.emit("createGame", roomName)
       setGameMade(true);
     }
