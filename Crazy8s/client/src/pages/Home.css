@@ -127,15 +127,14 @@ h1 {
     
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     background-color: var(--darkGreen);
     border-radius: 10px;
     width: 90%;
     height: 80vh;
 
-    margin-top: 5vh;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 5vh auto 0 auto;
 }
 
 .game-entry{
@@ -143,9 +142,9 @@ h1 {
     grid-template-columns: repeat(5, 1fr);
     grid-row-gap: 1px; 
     grid-auto-columns: auto;
-
-    
-
+    align-items: center;
+    justify-items: center;
+    width: 100%;
     color: white;
 }
 
@@ -153,6 +152,9 @@ h1 {
     width: 30%;
     color:white;
     background-color: var(--lighterGreen);
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Game Page */

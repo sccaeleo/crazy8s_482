@@ -155,6 +155,7 @@ class Game {
   host;
   room;
   currTurn;
+  isPublic;
 
   //initialize a deck, add the host and set room settings
   constructor(host, room, bet, password) {
@@ -164,7 +165,14 @@ class Game {
       this.bet = bet;
       this.password = password;
       this.room = room;
+
+      if (password.length == 0){
+        this.isPublic = true;
+      } else {
+        this.isPublic = false;
+      }
   }
+
 
   //player joins a game
   addPlayer(user) {
