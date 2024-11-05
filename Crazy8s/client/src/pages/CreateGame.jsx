@@ -6,7 +6,15 @@ import { Outlet, Link } from "react-router-dom";
 function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
-  var [gameMade, setGameMade] = useState(false);
+
+  const [gameMade, setGameMade] = useState(false);
+  const [playerList, setPlayerList] = useState(['a','b','c'])
+
+  const [room, setRoom] = useState('');
+  const [bet, setBet] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
+
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -25,29 +33,25 @@ function CreateGame({ socket }){
     };
   }, [socket]);
 
-  //Get these values when creating game and then pass them to the game
-  const roomName = 'testRoom';
-  const password = '';
-  const bet = 0;
+  const host = 'testHost';
+
 
   const createGameObject = () => {
     if(gameMade === false) {
-      socket.emit("createGame", roomName)
+
+      // socket.emit("createGame", roomName)
+
+      socket.emit("createGame", {
+        host: socketId,
+        room,
+        bet: parseFloat(bet),
+        password,
+        isPublic
+      });
+
       setGameMade(true);
     }
   }
-  
-  // const startGame = () => {
-  //   const test = ["cardSpadesK.png","cardSpadesQ.png","cardSpadesJ.png","cardSpades10.png","cardSpades9.png"]
-  //   var count;
-  //   socket.emit("startGame", cb => {
-  //     for(const png of cb) {
-  //       if(test[count] != png)
-  //         alert("WRONG")
-  //       count++
-  //     }
-  //   })
-  // }
 
 // The html of the page
   return(
@@ -57,15 +61,53 @@ function CreateGame({ socket }){
 
     <div class="lobby-settings">
       <h1><b>Settings</b></h1>
+      
+      <div>
+        <label>Room Name:</label>
+        <input 
+          type="text" 
+          value={room} 
+          onChange={(i) => setRoom(i.target.value)} 
+          placeholder="Enter Room Name" 
+        />
+      </div>
+
+      <div>
+        <label>Buy-In:</label>
+        <input 
+          type="number" 
+          value={bet} 
+          onChange={(i) => setBet(i.target.value)} 
+          placeholder="Enter Buy-In" 
+        />
+      </div>
+
+      <input 
+        type="checkbox" 
+        checked={isPublic === false} 
+        onChange={() => setIsPublic(!isPublic)} 
+        />
+      <p>{"Private"}</p>
+
+      <div>
+        <label>Password:</label>
+        <input 
+          type="password" 
+          value={password} 
+          onChange={(i) => setPassword(i.target.value)} 
+          placeholder="Enter Password" 
+          disabled={isPublic === true}
+        />
+      </div>
+
+
     </div>
 
-    <div class = "start-buttons">
-
-
-      <button class="btn btn-lg btn-light" onClick={createGameObject}>Start Lobby</button>
+    <div>
+      <button class="btn start-buttons" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
-      {gameMade && (<button class="btn btn-lg btn-light" >Start Game</button>)}
+      {gameMade && (<button class="btn start-buttons" >Start Game</button>)}
       </Link>
 
     </div>
@@ -75,10 +117,12 @@ function CreateGame({ socket }){
       <h1><b>Players</b></h1>
 
     <div class = "lobby-list">
+    {playerList.map((player, index) => (
       <div class = "player-entry">
-        <p>Player</p>
+        <p>{player}</p>
         <button class="btn btn-success">Allow</button>
       </div>
+    ))}
     </div>
 
     </div>
