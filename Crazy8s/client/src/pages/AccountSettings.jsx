@@ -17,7 +17,7 @@ function AccountSettings() {
   }, [deleted])
 
   function handleDelete(id){
-      axios.delete(`/delete/${id}`)
+      axios.delete(`/delete_user/${id}`)
       .then((res)=>{
           setDeleted(true)
       })

@@ -20,59 +20,99 @@ app.use(express.json());
 
 
 
-app.post("/add_user", (req, res) => {
-    const sql ="INSERT INTO account_information (`name`,`email`,`password`) VALUES (?, ?, ?)";
-    const values = [req.body.name, req.body.email, req.body.password];
-    db.query(sql, values, (err, result) => {
-      if (err)
-        return res.json({ message: "Something unexpected has occured" + err });
-      return res.json({ success: "user added successfully" });
-    });
-  });
+// app.post("/add_user", (req, res) => {
+//     const sql ="INSERT INTO account_information (`name`,`email`,`password`) VALUES (?, ?, ?)";
+//     const values = [req.body.name, req.body.email, req.body.password];
+//     db.query(sql, values, (err, result) => {
+//       if (err)
+//         return res.json({ message: "Something unexpected has occured" + err });
+//       return res.json({ success: "user added successfully" });
+//     });
+//   });
 
-app.get("/accounts", (req, res) => {
-  const sql = "SELECT * FROM account_information";
-  db.query(sql, (err, result) => {
-    if (err) res.json({ message: "Server error" });
-    return res.json(result);
-  });
+app.post('/add_user', async (req, res) => {
+    const { name, email, password } = req.body;
+    //const usersRef = db.collection('users').doc(name);
+    try {
+      const newUserRef = await db.collection('users').add({
+          email,
+          name,
+          password
+      });
+        res.status(200).json({ success: 'user added successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Something unexpected has occurred' + err });
+    }
+});  
+
+// app.get("/accounts", (req, res) => {
+//   const sql = "SELECT * FROM account_information";
+//   db.query(sql, (err, result) => {
+//     if (err) res.json({ message: "Server error" });
+//     return res.json(result);
+//   });
+// });
+
+app.get('/accounts', async (req, res) => {
+  try {
+    const usersSnapshot = await db.collection('users').get();
+    const users = usersSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
-app.get("/get_account/:id", (req, res) => {
-  console.log("im here")
-  const id = req.params.id;
-  const sql = "SELECT * FROM account_information WHERE `id`= ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) res.json({ message: "Server error" });
-    return res.json(result);
-  });
+// app.get("/get_account/:id", (req, res) => {
+//   console.log("im here")
+//   const id = req.params.id;
+//   const sql = "SELECT * FROM account_information WHERE `id`= ?";
+//   db.query(sql, [id], (err, result) => {
+//     if (err) res.json({ message: "Server error" });
+//     return res.json(result);
+//   });
+// });
+
+app.get('/get_user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+      const userDoc = await db.collection('users').doc(userId).get();
+      if (!userDoc.exists) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json(userDoc.data());
+  } catch (err) {
+      console.error('Error getting user:', err);
+      res.status(500).json({ message: 'Server error' });
+  }
 });
 
-app.post("/edit_account/:id", (req, res) => {
-  const id = req.params.id;
-  const sql ="UPDATE account_information SET `name`=?, `email`=?, `password`=? WHERE id=?";
-  const values = [
-    req.body.name,
-    req.body.email,
-    req.body.password,
-    id
-  ];
-  db.query(sql, values, (err, result) => {
-    if (err)
-      return res.json({ message: "Something unexpected has occured" + err });
-    return res.json({ success: "Student updated successfully" });
-  });
+app.post('/edit_user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const { name, email, password } = req.body;
+  try {
+      await db.collection('users').doc(userId).update({
+          name,
+          email,
+          password
+      });
+      res.status(200).json({ success: 'User updated successfully' });
+  } catch (err) {
+      res.status(500).json({ message: 'Something unexpected has occurred' + err });
+  }
 });
 
-app.delete("/delete/:id", (req, res) => {
-  const id = req.params.id;
-  const sql = "DELETE FROM account_information WHERE id=?";
-  const values = [id];
-  db.query(sql, values, (err, result) => {
-    if (err)
-      return res.json({ message: "Something unexpected has occured" + err });
-    return res.json({ success: "Student updated successfully" });
-  });
+app.delete('/delete_user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+      await db.collection('users').doc(userId).delete();
+      res.status(200).json({ success: 'User deleted successfully' });
+  } catch (err) {
+      res.status(500).json({ message: 'Something unexpected has occurred' + err });
+  }
 });
 
 app.listen(port, () => {
