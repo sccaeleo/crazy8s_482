@@ -42,8 +42,8 @@ function CreateGame({ socket }){
       // socket.emit("createGame", roomName)
 
       socket.emit("createGame", {
-        host: socketId,
-        room,
+        // host: socketId,
+        roomName,
         bet: parseFloat(bet),
         password,
         isPublic
