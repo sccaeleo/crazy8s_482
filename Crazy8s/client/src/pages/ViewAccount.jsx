@@ -7,6 +7,9 @@ function ViewAccount() {
   const [friendData, setFriendData] = useState([]);
   const [requestData, setRequestData] = useState([]);
   const [friendAdd, setFriendAdd] = useState("");
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [messageText, setMessageText] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -81,6 +84,11 @@ function ViewAccount() {
       .catch((err) => console.error("Error accepting friend:", err));
   }
 
+  function openMessageModal(friend) {
+    setSelectedFriend(friend);
+    setShowMessageModal(true);
+  }
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -119,6 +127,12 @@ function ViewAccount() {
           {friendData.map((friend) => (
             <div className="player-entry" key={friend.id}>
               <p>{friend.name}</p>
+              <button 
+                className="btn btn-primary"
+                onClick={() => openMessageModal(friend)}
+              >
+                Send Message
+              </button>
             </div>
           ))}
         </div>
@@ -154,6 +168,84 @@ function ViewAccount() {
           </button>
         </div>
       </div>
+
+      {/* Message Modal */}
+      {showMessageModal && selectedFriend && (
+        <div className="modal-overlay" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div className="modal-content" style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '80%',
+            maxWidth: '500px',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <div className="modal-header">
+              <h2>Message {selectedFriend.name}</h2>
+              <button 
+                className="btn btn-danger"
+                style={{ float: 'right' }}
+                onClick={() => {
+                  setShowMessageModal(false);
+                  setSelectedFriend(null);
+                  setMessageText("");
+                }}
+              >
+                Close
+              </button>
+            </div>
+            
+            <div className="modal-body" style={{ marginTop: '20px' }}>
+              <div className="message-history" style={{
+                height: '300px',
+                border: '1px solid #ccc',
+                padding: '10px',
+                marginBottom: '10px',
+                overflow: 'auto'
+              }}>
+                {/* Message history would go here */}
+                <p>Message history will appear here</p>
+              </div>
+              
+              <div className="message-input">
+                <textarea
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Type your message here..."
+                  style={{
+                    width: '100%',
+                    height: '100px',
+                    marginBottom: '10px',
+                    padding: '10px'
+                  }}
+                />
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => {
+                    // Message sending logic would go here
+                    console.log(`Sending message to ${selectedFriend.name}: ${messageText}`);
+                    setMessageText("");
+                  }}
+                >
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="message">
       </div>
