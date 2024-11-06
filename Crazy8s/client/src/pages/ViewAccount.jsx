@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ViewAccount() {
@@ -11,6 +11,7 @@ function ViewAccount() {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [messageText, setMessageText] = useState("");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -89,6 +90,15 @@ function ViewAccount() {
     setShowMessageModal(true);
   }
 
+  const handleLogout = async () => {
+    try {
+      await axios.post("/logout");
+      navigate("/"); // Redirect to homepage or login page after logout
+    } catch (err) {
+      console.error("Error logging out:", err);
+    }
+  };
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -99,6 +109,10 @@ function ViewAccount() {
       <Link to="/accountsettings" className="btn btn-back">
         Back
       </Link>
+
+      <button className="btn btn-danger" style={{ position: "absolute", top: "10px", right: "10px" }} onClick={handleLogout}>
+        Logout
+      </button>
       
       <div className="account-view">
         <ul className="list-group">
