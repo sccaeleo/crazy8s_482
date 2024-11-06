@@ -137,7 +137,17 @@ function createNewGame(host, roomName, bet, password, isPublic) {
 
 const io = require('socket.io')(3030, {
   cors: {
-    origin: ['http://localhost:3000'],
+    // origin: ['http://localhost:3000'],
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http//localhost:3003','http://localhost:3004'];
+
+      // Check if the origin of the request is allowed
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);  // Allow the connection
+      } else {
+        callback(new Error('Not allowed by CORS'));  // Reject the connection
+      }
+    },
   },
 })
 
@@ -153,22 +163,15 @@ io.on("connection", socket => {
     const { roomName, bet, password, isPublic } = data;
     const game = createNewGame(socket.player, roomName, bet, password, isPublic);
     socket.currGame = game;
-    games.push(game);
   })
 
   socket.on("startGame", (cb) => {
     socket.currGame.startGame();
-    //socket.player = socket.currGame.players[socket.gameId-1]
     io.emit("updatePile", socket.currGame.getTopCard());
-
-
-    // socket.player = socket.currGame.players[socket.gameId-1]
-
     cb(socket.player.displayCards());
   })
 
   socket.on("playCard", (index, cb) => {
-    // const played = socket.currGame.turn(socket.player, index)
     const played = socket.currGame.playCard(socket.player, index);
     if(played)
       io.emit("updatePile", socket.currGame.getTopCard());
@@ -181,12 +184,12 @@ io.on("connection", socket => {
   })
 
   socket.on("pickSuit", suit => {
-    const suitCard = socket.currGame.updateSuit();
+    const suitCard = socket.currGame.updateSuit(suit);
     io.emit("updatePile", suitCard);
   })
 
   socket.on("listGames", (cb) => {
-    cb(games)
+    cb(games);
   })
 
   socket.on("joinGame", (cb) => {
