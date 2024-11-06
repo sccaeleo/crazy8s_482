@@ -1,0 +1,14 @@
+{
+  "name": "classes",
+  "version": "1.0.0",
+  "main": "Card.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

@@ -17,8 +17,10 @@ class Player {
    * @returns - 8 if it is an 8, the card if it is playable and false if not playable
    */
   playCard(index, pileCard) {
-    const card = this.hand[index];
+    if(index > this.hand.length-1)
+      return false;
 
+    const card = this.hand[index];
     const play = card.compare(pileCard);
     if(play === 8) {
       this.hand.splice(index, 1);
@@ -49,6 +51,17 @@ class Player {
       pngs.push(card.getStringPNG());   // CHANGE TO getFileName Maybe
 
     return pngs;
+  }
+
+  /**
+   * Check if player has a card left
+   * @returns {boolean} - true if no cards, false if the player still has a card
+   */
+  isHandEmpty() {
+    if(this.hand.length == 0)
+      return true;
+
+    return false;
   }
 }
 
