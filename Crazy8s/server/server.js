@@ -17,7 +17,7 @@ const Player = require('../classes/Player.js')
 const Deck = require('../classes/Deck.js')
 const Card = require('../classes/Card.js')
 
-// Port number, is flexible
+// Port number, can change if needed
 const port = 5000
 
 // Middleware functions for express
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(express.json());
 
-// set up permanent secret in .env as long term solution
+// TODO: set up permanent secret in .env as long term solution
 const sessionSecret = crypto.randomBytes(32).toString('hex'); 
 
 app.use(
@@ -43,7 +43,6 @@ app.use(
  */
 app.post('/add_user', async (req, res) => {
     const { name, email, password } = req.body;
-    //const usersRef = db.collection('users').doc(name);
     try {
       const newUserRef = await db.collection('users').add({
           email,
@@ -64,9 +63,9 @@ app.post('/add_user', async (req, res) => {
  */
 app.get('/current-user', (req, res) => {
   if (req.session.user) {
-    res.json(req.session.user); // Send the user info stored in the session
+    res.json(req.session.user);
   } else {
-    res.status(401).json({ message: 'Not authenticated' }); // No session found
+    res.status(401).json({ message: 'Not authenticated' }); 
   }
 });
 
@@ -77,7 +76,7 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Retrieve user data from Firebase (assuming you have a "users" collection)
+    
     const userSnapshot = await db.collection('users').where('email', '==', email).get();
     
     if (userSnapshot.empty) {
@@ -86,14 +85,14 @@ app.post('/login', async (req, res) => {
 
     const userData = userSnapshot.docs[0].data();
 
-    // Here you would check if the password is correct
+    
     if (userData.password !== password) {
       return res.status(401).send('Incorrect password');
     }
 
-    // Save user details to the session after successful login
+    
     req.session.user = {
-      id: userSnapshot.docs[0].id,     // Firebase document ID
+      id: userSnapshot.docs[0].id,
       name: userData.name,
       balance: userData.balance
     };
@@ -278,24 +277,25 @@ app.post('/accept_friend/:userId', async (req, res) => {
       })
     });
 
-    // Step 1: Generate a unique conversation ID
+    //create converstion on friend request accept
+    //create conversation id
     const conversationId = [userId, friendId].sort().join('_');
     const conversationRef = db.collection('conversations').doc(conversationId);
 
-    // Step 2: Check if the conversation already exists
     const conversationDoc = await conversationRef.get();
 
+    //check if conversation exists, proceed with message collection
     if (!conversationDoc.exists) {
-      // Step 3: Create a new conversation document if it doesn’t exist
+      
       batch.set(conversationRef, {
         participants: [
           db.collection('users').doc(userId),
           db.collection('users').doc(friendId)
         ],
-        lastMessage: null // Placeholder for the last message info
+        lastMessage: null 
       });
 
-      // Step 4: Optionally add an initial message in the messages subcollection
+      //
       const messagesRef = conversationRef.collection('messages');
       batch.set(messagesRef.doc(), {
         senderId: userId,
@@ -304,7 +304,6 @@ app.post('/accept_friend/:userId', async (req, res) => {
       });
     }
 
-    // Commit the batch
     await batch.commit();
 
     res.status(200).json({ success: 'Friend added and conversation created successfully' });
@@ -315,6 +314,9 @@ app.post('/accept_friend/:userId', async (req, res) => {
   }
 });
 
+/**
+ * gets conversation 
+ */
 app.get('/conversations/:conversationId/messages', async (req, res) => {
   const { conversationId } = req.params;
 

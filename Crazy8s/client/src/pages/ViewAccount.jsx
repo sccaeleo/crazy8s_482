@@ -16,6 +16,10 @@ function ViewAccount() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  /**
+   * Gets data of current user from current session 
+   */
+
   const fetchUserData = async () => {
     try {
       const res = await axios.get(`/get_user/${id}`);
@@ -98,6 +102,10 @@ function ViewAccount() {
       console.error("Error loading message history:", error);
     }
   };
+
+  /**
+   * axios to logout function, nav to home after logout
+   */
 
   const handleLogout = async () => {
     try {

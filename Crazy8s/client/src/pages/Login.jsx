@@ -13,19 +13,20 @@ const Login = () => {
    * @param {*} e - form submitted
    */
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form from refreshing the page
+    // stops form from refreshing the page
+    e.preventDefault(); 
 
+    //post request and nav to home
     try {
-      // Make the POST request to the /login endpoint
+      
       const response = await axios.post('/login', { email, password });
 
       if (response.status === 200) {
-        // Clear any error messages and navigate to the dashboard or home
         setError(null);
-        navigate('/'); // Adjust this path as needed
+        navigate('/'); 
       }
     } catch (err) {
-      // Handle errors and display a message
+      
       setError('Invalid email or password');
     }
   };
