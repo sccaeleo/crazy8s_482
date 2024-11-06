@@ -37,8 +37,9 @@ function CreateGame({ socket }){
 
 
   const createGameObject = () => {
+    socket.emit("test", "CREATEGAME");
     if(gameMade === false) {
-
+      setGameMade(true);
       // socket.emit("createGame", roomName)
 
       socket.emit("createGame", {
@@ -48,8 +49,6 @@ function CreateGame({ socket }){
         password,
         isPublic
       });
-
-      setGameMade(true);
     }
   }
 

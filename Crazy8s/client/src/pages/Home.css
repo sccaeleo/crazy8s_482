@@ -215,6 +215,22 @@ h1 {
     transition: transform 0.2s;
 }
 
+.suits{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    right:0;
+    left:0;
+    margin-bottom: 10px;
+}
+
+
+.icon{
+    width:60%;
+}
+
 
 .deck:hover, .pile:hover {
     transform: scale(1.05);

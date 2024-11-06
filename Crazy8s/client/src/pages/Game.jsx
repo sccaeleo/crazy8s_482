@@ -96,6 +96,13 @@ function Game({socket}) {
 
           </div>
 
+          {/* Suit icons */}
+          <div class="suits">
+            <button class="pile card-button" onClick={() => pickSuit}>
+              <img class="icon" src={require(`./Cards/clubs.png`)} alt={"clubs"}></img>
+            </button>
+          </div>
+
           {/* Creates the player's hand */}
           <div class="player-hand">
             {hand.map((card, index) => (
