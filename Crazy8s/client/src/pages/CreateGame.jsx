@@ -16,6 +16,9 @@ function CreateGame({ socket }){
   const [isPublic, setIsPublic] = useState(true);
 
 
+  /**
+   * Initial Setup
+   */
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
@@ -36,6 +39,9 @@ function CreateGame({ socket }){
   const host = 'testHost';
 
 
+  /**
+   * Creates the game
+   */
   const createGameObject = () => {
     socket.emit("test", "CREATEGAME");
     if(gameMade === false) {

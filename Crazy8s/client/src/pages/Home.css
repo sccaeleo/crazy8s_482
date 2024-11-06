@@ -1,3 +1,9 @@
+/* 
+This is the CSS for all of the pages. Edit as needed.
+Variables are provided for the website's main colors
+Big fan of CSS when it works -Victoria 
+*/
+
 :root {
     --deckpileWidth: 100px;
     --cardWidth: 80px;

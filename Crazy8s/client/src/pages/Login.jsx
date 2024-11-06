@@ -8,6 +8,10 @@ const Login = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  /**
+   * Attempt Log in to page
+   * @param {*} e - form submitted
+   */
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent form from refreshing the page
 

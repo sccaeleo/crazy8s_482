@@ -13,78 +13,69 @@ function ViewAccount() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(`/get_user/${id}`);
-        setUser(res.data);
-
-        // Handle friends array
-        if (res.data.friends && res.data.friends.length > 0) {
-          const friendPromises = res.data.friends.map(async (friendRef) => {
-            try {
-              const friendId = friendRef._path.segments[1];
-              const friendRes = await axios.get(`/get_user/${friendId}`);
-              return {
-                id: friendId,
-                name: friendRes.data.name,
-                ref: friendRef
-              };
-            } catch (err) {
-              console.error("Error fetching friend data:", err);
-              return null;
-            }
-          });
-
-          const resolvedFriends = await Promise.all(friendPromises);
-          setFriendData(resolvedFriends.filter(friend => friend !== null));
-        }
-
-        // Handle friend requests array
-        if (res.data.friend_requests && res.data.friend_requests.length > 0) {
-          const requestPromises = res.data.friend_requests.map(async (requestRef) => {
-            try {
-              const requesterId = requestRef._path.segments[1];
-              const requesterRes = await axios.get(`/get_user/${requesterId}`);
-              return {
-                id: requesterId,
-                name: requesterRes.data.name,
-                ref: requestRef
-              };
-            } catch (err) {
-              console.error("Error fetching requester data:", err);
-              return null;
-            }
-          });
-
-          const resolvedRequests = await Promise.all(requestPromises);
-          setRequestData(resolvedRequests.filter(request => request !== null));
-        }
-      } catch (err) {
-        console.error("Error fetching user data:", err);
+  const fetchUserData = async () => {
+    try {
+      const res = await axios.get(`/get_user/${id}`);
+      setUser(res.data);
+      
+      // Set friend data directly from the user object
+      if (res.data.friends && Array.isArray(res.data.friends)) {
+        setFriendData(res.data.friends);
       }
-    };
-    fetchUser();
+
+      // Set request data directly from the user object
+      if (res.data.friend_requests && Array.isArray(res.data.friend_requests)) {
+        setRequestData(res.data.friend_requests);
+      }
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
   }, [id]);
 
-  function addFriend(e) {
-    e.preventDefault();
+  /**
+   * Send a friend request
+   * @param {*} friendId - Id of user to be added
+   */
+  function addFriend(friendId) {
+    friendId.preventDefault();
     
-    axios.post(`/add_friend/${id}`, { friendName: friendAdd })
-      .then(() => {
-        window.location.reload();
-      })
-      .catch((err) => console.error("Error adding friend:", err));
+    try {
+      axios.post(`/add_friend/${id}`, { friendId: friendAdd })
+        .then(response => {
+          alert('Friend request sent successfully');
+          setFriendAdd('');
+        })
+        .catch(error => {
+          alert(error.response.data.message || 'Error sending friend request');
+        });
+    } catch (err) {
+      alert('Error sending friend request');
+    }
   }
 
+  /**
+   * Accept a friend request
+   * @param {*} friendId - Id of user to be added
+   */
   function acceptFriend(friendId) {
     axios.post(`/accept_friend/${id}`, { friendId })
-      .then(() => {
-        window.location.reload();
+      .then(response => {
+        fetchUserData();
+        alert('Friend added successfully');
       })
-      .catch((err) => console.error("Error accepting friend:", err));
+      .catch(error => {
+        alert(error.response.data.message || 'Error accepting friend request');
+      });
   }
 
+  /**
+   * Opens the messaging window
+   * @param {*} friend - selected friend to message
+   */
   function openMessageModal(friend) {
     setSelectedFriend(friend);
     setShowMessageModal(true);
@@ -147,6 +138,7 @@ function ViewAccount() {
               >
                 Send Message
               </button>
+              
             </div>
           ))}
         </div>
@@ -162,6 +154,7 @@ function ViewAccount() {
               >
                 Accept
               </button>
+              
             </div>
           ))}
         </div>
@@ -171,8 +164,8 @@ function ViewAccount() {
           <input 
             type="text" 
             value={friendAdd}
-            onChange={(e) => setFriendAdd(e.target.value)} 
-            placeholder="Enter Friend Name" 
+            onChange={(i) => setFriendAdd(i.target.value)} 
+            placeholder="Enter ID of a Player" 
           />
           <button 
             className="btn btn-success" 
