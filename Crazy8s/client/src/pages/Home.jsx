@@ -6,6 +6,7 @@ import './Home.css';
 function Homepage({socket}){
 
   const [socketId, setSocketId] = useState('');
+  const [userName, setUserName] = useState(''); // State to store the user's name
 
   useEffect(() => {
     // Set socket ID when the component mounts
@@ -17,6 +18,16 @@ function Homepage({socket}){
       console.log('Connected with socket ID:', socket.id);
       setSocketId(socket.id);
     });
+
+    // Fetch user session data on mount
+    const fetchUserSession = async () => {
+      try {
+        const response = await axios.get('/current-user'); // Send request to get session data
+        setUserName(response.data.name); // Store the user's name if authenticated
+      } catch (error) {
+        console.log('User not authenticated', error);
+      }
+    };
 
     // Cleanup on unmount
     return () => {
@@ -50,6 +61,9 @@ function Homepage({socket}){
         </Link>
         <Link to="/createaccount">
         <button class="btn btn-lg btn-light btn-padding">Create Account</button>
+        </Link>
+        <Link to="/login">
+        <button class="btn btn-lg btn-light btn-padding">Login</button>
         </Link>
     </div>
     <div class="connected-message">{socketId}</div>

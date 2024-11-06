@@ -2,6 +2,8 @@
 
 // Import Dependencies
 const express = require('express')
+const crypto = require('crypto');
+const session = require('express-session')
 const app = express()
 const {db} = require('./firebase.js')
 const cors = require("cors");
@@ -22,19 +24,19 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(express.json());
 
-// Connect to MySql
+// set up permanent secret in .env as long term solution
+const sessionSecret = crypto.randomBytes(32).toString('hex'); 
+
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 60000 }
+  })
+);
 
 
-
-// app.post("/add_user", (req, res) => {
-//     const sql ="INSERT INTO account_information (`name`,`email`,`password`) VALUES (?, ?, ?)";
-//     const values = [req.body.name, req.body.email, req.body.password];
-//     db.query(sql, values, (err, result) => {
-//       if (err)
-//         return res.json({ message: "Something unexpected has occured" + err });
-//       return res.json({ success: "user added successfully" });
-//     });
-//   });
 
 app.post('/add_user', async (req, res) => {
     const { name, email, password } = req.body;
@@ -43,21 +45,57 @@ app.post('/add_user', async (req, res) => {
       const newUserRef = await db.collection('users').add({
           email,
           name,
-          password
+          password,
+          friends:[],
+          friend_requests:[],
+          balance:0,
       });
         res.status(200).json({ success: 'user added successfully' });
     } catch (err) {
         res.status(500).json({ message: 'Something unexpected has occurred' + err });
     }
-});  
+});
 
-// app.get("/accounts", (req, res) => {
-//   const sql = "SELECT * FROM account_information";
-//   db.query(sql, (err, result) => {
-//     if (err) res.json({ message: "Server error" });
-//     return res.json(result);
-//   });
-// });
+app.get('/current-user', (req, res) => {
+  if (req.session.user) {
+    res.json(req.session.user); // Send the user info stored in the session
+  } else {
+    res.status(401).json({ message: 'Not authenticated' }); // No session found
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Retrieve user data from Firebase (assuming you have a "users" collection)
+    const userSnapshot = await db.collection('users').where('email', '==', email).get();
+    
+    if (userSnapshot.empty) {
+      return res.status(401).send('User not found');
+    }
+
+    const userData = userSnapshot.docs[0].data();
+
+    // Here you would check if the password is correct
+    if (userData.password !== password) {
+      return res.status(401).send('Incorrect password');
+    }
+
+    // Save user details to the session after successful login
+    req.session.user = {
+      id: userSnapshot.docs[0].id,     // Firebase document ID
+      name: userData.name,
+      balance: userData.balance
+    };
+
+    res.send('User logged in and session started');
+  } catch (error) {
+    res.status(500).send('Error logging in');
+  }
+});
+
+
 
 app.get('/accounts', async (req, res) => {
   try {
@@ -72,15 +110,7 @@ app.get('/accounts', async (req, res) => {
   }
 });
 
-// app.get("/get_account/:id", (req, res) => {
-//   console.log("im here")
-//   const id = req.params.id;
-//   const sql = "SELECT * FROM account_information WHERE `id`= ?";
-//   db.query(sql, [id], (err, result) => {
-//     if (err) res.json({ message: "Server error" });
-//     return res.json(result);
-//   });
-// });
+
 
 app.get('/get_user/:userId', async (req, res) => {
   const userId = req.params.userId;
