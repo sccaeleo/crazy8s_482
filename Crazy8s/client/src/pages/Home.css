@@ -216,21 +216,23 @@ h1 {
 }
 
 .suits{
-    
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    right:0;
-    left:0;
     margin-bottom: 10px;
+    top:200px;
 }
-
 
 .icon{
     width:60%;
 }
 
+h2 {
+    text-align: center;
+    text-transform: uppercase;
+    color: White;
+}
 
 .deck:hover, .pile:hover {
     transform: scale(1.05);
@@ -252,6 +254,16 @@ h1 {
 
 .player-hand img:hover {
     transform: scale(1.1);
+}
+
+.leave-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1px;
+    color: black;
+    border: none;
+    border-radius: 5px;
 }
 
 /* Test */

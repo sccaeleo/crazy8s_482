@@ -1,11 +1,12 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
 function CreateGame({ socket }){
 
   const [socketId, setSocketId] = useState('');
+  const navigate = useNavigate();
 
   const [gameMade, setGameMade] = useState(false);
   const [playerList, setPlayerList] = useState(['a','b','c'])
@@ -51,6 +52,14 @@ function CreateGame({ socket }){
       });
     }
   }
+
+  const sendGamePage = () => {
+    socket.emit("gameScreen", room);
+  }
+
+  socket.on("goToGamePage", () => {
+    navigate("/game");
+  })
 
 // The html of the page
   return(
@@ -106,7 +115,7 @@ function CreateGame({ socket }){
       <button class="btn start-buttons" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
-      {gameMade && (<button class="btn start-buttons" >Start Game</button>)}
+      {gameMade && (<button class="btn start-buttons" onClick={sendGamePage}>Start Game</button>)}
       </Link>
 
     </div>

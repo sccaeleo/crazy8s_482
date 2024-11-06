@@ -1,8 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Outlet, Link } from "react-router-dom";
-
-
+import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
 function JoinGame({socket}){
@@ -10,6 +8,7 @@ function JoinGame({socket}){
   var [gameList, setGameList] = useState([]);
   const [passwordPopup, setPasswordPopup] = useState(false);
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   
   useEffect(() => {
@@ -30,14 +29,17 @@ function JoinGame({socket}){
 
 
   // Check if game is private, if it does, prompt for password, else, let join
-  const joinGame = (game) => {
+  const joinGame = (game, index) => {
     if(!game.isPublic){
       setPasswordPopup(true);
     }
     else{
-      socket.emit("joinGame", game)
+      socket.emit("joinGame", index, cb => {
+        if(cb === true) {
+          navigate('/create');
+        }
+      })
     }
-   
   }
 
   // Enter a password for the game
@@ -79,7 +81,7 @@ function JoinGame({socket}){
               <p>{game.players.length + "/4"}</p>
               <p>{game.isPublic ? 'Yes' : 'No'}</p>
               <p>{game.bet}</p>
-              <button class="join-button btn" onClick={() => joinGame(game)}>
+              <button class="join-button btn" onClick={() => joinGame(game, index)}>
                 Join
               </button>
             </div>
