@@ -91,7 +91,7 @@ function JoinGame({socket}){
             <div class = "game-entry">
               <p>{game.room}</p>
               <p>{game.host}</p>
-              <p>{game.players.length + "/4"}</p>
+              <p>{game.players.length + "/5"}</p>
               <p>{game.isPublic ? 'Yes' : 'No'}</p>
               <p>{game.bet}</p>
               <button class="join-button btn" onClick={() => joinGame(game, index)}>

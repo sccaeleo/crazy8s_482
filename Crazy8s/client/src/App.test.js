@@ -1,10 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
+
 import App from './App';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 // Import webpages from the pages folder
 import Home from "./pages/Home"
@@ -26,9 +28,10 @@ const mockSocket = {
   off: jest.fn()
 };
 
+const mockNavigate = jest.fn();
+
 
 jest.mock('axios');
-
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -61,7 +64,6 @@ describe('App Component', () => {
   });
 
   test('renders the CreateAccount page and submits form successfully', async () => {
-    const mockNavigate = jest.fn(); 
     useNavigate.mockReturnValue(mockNavigate); 
     render(<App />); 
 
@@ -90,7 +92,6 @@ describe('App Component', () => {
   });
 
   test('navigates to AccountSettings page and submits form successfully', async () => {
-    const mockNavigate = jest.fn();
     useNavigate.mockReturnValue(mockNavigate);
 
     render(<App />);
@@ -231,6 +232,151 @@ describe('App Component', () => {
       });
     });
 
+
+  });
+
+  /**
+   * Tests for JOIN GAME page
+   */
+  describe('Join Game Page', () => {
+
+    beforeEach(() => {
+      jest.clearAllMocks(); 
+    });
+
+    test('page renders', () => {
+      const gameList = [
+        {
+          room: 'Game 1',
+          host: 'Host 1',
+          players: ['Player 1'],
+          isPublic: true,
+          bet: '$10'
+        },
+        {
+          room: 'Game 2',
+          host: 'Host 2',
+          players: ['Player 1', 'Player 2'],
+          isPublic: false,
+          bet: '$20',
+          password: 'secret'
+        }
+      ];
+
+      mockSocket.emit.mockImplementation((event, cb) => {
+        if (event === 'listGames') {
+          cb(gameList);
+        }
+      });
+
+      render(
+        <MemoryRouter>
+          <JoinGame socket={mockSocket} />
+        </MemoryRouter>
+      )
+  
+      // Check if games are rendered
+      expect(screen.getByText('Game 1')).toBeInTheDocument();
+      expect(screen.getByText('Game 2')).toBeInTheDocument();
+  
+      // Check if the Join button exists for each game
+      expect(screen.getAllByText('Join')).toHaveLength(2);
+    });
+
+    // Join a public game
+    test('clicking join on public game joins game without needing a password', async () => {
+      const gameList = [
+        {
+          room: 'Public Game',
+          host: 'Host 1',
+          players: ['Player 1'],
+          isPublic: true,
+          bet: '$10'
+        }
+      ];
+  
+      mockSocket.emit.mockImplementation((event, cb) => {
+        if (event === 'listGames') {
+          cb(gameList);
+        }
+      });
+  
+      render(
+        <MemoryRouter>
+          <JoinGame socket={mockSocket} />
+        </MemoryRouter>
+      )
+  
+      const joinButton = screen.getByText('Join');
+      fireEvent.click(joinButton);
+  
+      await waitFor(() => expect(mockSocket.emit).toHaveBeenCalledWith('joinGame', 0, expect.any(Function)));
+    });
+
+    // Password prompt appears when joining private game
+    test('clicking join on private game shows password prompt', async () => {
+      const gameList = [
+        {
+          room: 'Private Game',
+          host: 'Host 1',
+          players: ['Player 1'],
+          isPublic: false,
+          bet: '$20',
+          password: 'secret'
+        }
+      ];
+  
+      mockSocket.emit.mockImplementation((event, cb) => {
+        if (event === 'listGames') {
+          cb(gameList);
+        }
+      });
+  
+      render(
+        <MemoryRouter>
+          <JoinGame socket={mockSocket} />
+        </MemoryRouter>
+      )
+  
+      const joinButton = screen.getByText('Join');
+      fireEvent.click(joinButton);
+  
+      await screen.findByText('Enter Game Password');
+    });
+
+    // Password prompt can be closed
+    test('close password popup', async () => {
+      const gameList = [
+        {
+          room: 'Private Game',
+          host: 'Host 1',
+          players: ['Player 1'],
+          isPublic: false,
+          bet: '$20',
+          password: 'secret'
+        }
+      ];
+  
+      mockSocket.emit.mockImplementation((event, cb) => {
+        if (event === 'listGames') {
+          cb(gameList);
+        }
+      });
+  
+      render(
+        <MemoryRouter>
+          <JoinGame socket={mockSocket} />
+        </MemoryRouter>
+      )
+  
+      const joinButton = screen.getByText('Join');
+      fireEvent.click(joinButton);
+  
+      const cancelButton = screen.getByText('Cancel');
+      fireEvent.click(cancelButton);
+  
+      await waitFor(() => expect(screen.queryByText('Enter Game Password')).not.toBeInTheDocument());
+    });
 
   });
 });
