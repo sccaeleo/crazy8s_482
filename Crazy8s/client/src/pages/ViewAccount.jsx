@@ -10,6 +10,9 @@ function ViewAccount() {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [messageText, setMessageText] = useState("");
+  const [messageHistory, setMessageHistory] = useState([]);
+
+  
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -79,7 +82,22 @@ function ViewAccount() {
   function openMessageModal(friend) {
     setSelectedFriend(friend);
     setShowMessageModal(true);
+    fetchMessageHistory(friend.id);
   }
+
+  /**
+   * Fetch message history for the selected friend
+   * @param {*} friendId - ID of the friend
+   */
+  const fetchMessageHistory = async (friendId) => { 
+    try {
+      const conversationId = [id, friendId].sort().join('_');; 
+      const response = await axios.get(`/conversations/${conversationId}/messages`); 
+      setMessageHistory(response.data); 
+    } catch (error) {
+      console.error("Error loading message history:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -176,7 +194,6 @@ function ViewAccount() {
         </div>
       </div>
 
-      {/* Message Modal */}
       {showMessageModal && selectedFriend && (
         <div className="modal-overlay" style={{
           position: 'fixed',
@@ -208,6 +225,7 @@ function ViewAccount() {
                   setShowMessageModal(false);
                   setSelectedFriend(null);
                   setMessageText("");
+                  setMessageHistory([])
                 }}
               >
                 Close
@@ -222,8 +240,16 @@ function ViewAccount() {
                 marginBottom: '10px',
                 overflow: 'auto'
               }}>
-                {/* Message history would go here */}
-                <p>Message history will appear here</p>
+                {messageHistory.length > 0 ? (
+                  messageHistory.map((message) => (
+                    <div key={message.id}>
+                      <strong>{message.senderId}:</strong> {message.content} <br />
+                      <small>{new Date(message.timestamp.seconds * 1000).toLocaleString()}</small> {/* CHANGED HERE */}
+                    </div>
+                  ))
+                ) : (
+                  <p>No messages found.</p>
+                )}
               </div>
               
               <div className="message-input">
