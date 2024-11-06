@@ -29,6 +29,8 @@ function Homepage({socket}){
       }
     };
 
+    fetchUserSession();
+
     // Cleanup on unmount
     return () => {
       socket.off('connect');
@@ -67,6 +69,12 @@ function Homepage({socket}){
         </Link>
     </div>
     <div class="connected-message">{socketId}</div>
+
+    {userName && (
+        <div className="user-info">
+          <p>Welcome, {userName}!</p> {/* Display the user's name if authenticated */}
+        </div>
+      )}
 
     </div>
   )
