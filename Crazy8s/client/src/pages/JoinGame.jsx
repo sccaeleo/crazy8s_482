@@ -20,7 +20,10 @@ function JoinGame({socket}){
 
   },);
 
-  // Updates the game list when called
+  
+  /**
+   * Updates the game list when called
+   */
   const updateGames =() => {
     socket.emit("listGames", cb => {
       setGameList(cb)
@@ -28,7 +31,12 @@ function JoinGame({socket}){
   }
 
 
-  // Check if game is private, if it does, prompt for password, else, let join
+
+  /**
+   * Join a selected game, prompt password if private
+   * @param {*} game - Game to join
+   * @param {number} index - index of the game in the gamesList array
+   */
   const joinGame = (game, index) => {
     if(!game.isPublic){
       setPasswordPopup(true);
@@ -42,7 +50,10 @@ function JoinGame({socket}){
     }
   }
 
-  // Enter a password for the game
+  /**
+   * Enter a password for the game
+   * @param {*} game - Private game that someone is trying to join
+   */
   const enterPassword = (game) => {
     if (password === game.password) {
       socket.emit("joinGame", game);
@@ -53,7 +64,9 @@ function JoinGame({socket}){
     }
   };
   
-  // Close the popup
+  /**
+   * Close the password popup if you change your mind
+   */
   const closePasswordPopup = () => {
     setPasswordPopup(false);
     setPassword('');

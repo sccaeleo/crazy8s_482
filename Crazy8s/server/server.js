@@ -2,8 +2,11 @@
 
 // Import Dependencies
 const express = require('express')
+const crypto = require('crypto');
+const session = require('express-session')
 const app = express()
 const {db} = require('./firebase.js')
+const admin = require('firebase-admin');
 const cors = require("cors");
 var mysql = require('mysql');
 var path = require('path');
@@ -22,20 +25,22 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(express.json());
 
-// Connect to MySql
+// set up permanent secret in .env as long term solution
+const sessionSecret = crypto.randomBytes(32).toString('hex'); 
+
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 60000 }
+  })
+);
 
 
-
-// app.post("/add_user", (req, res) => {
-//     const sql ="INSERT INTO account_information (`name`,`email`,`password`) VALUES (?, ?, ?)";
-//     const values = [req.body.name, req.body.email, req.body.password];
-//     db.query(sql, values, (err, result) => {
-//       if (err)
-//         return res.json({ message: "Something unexpected has occured" + err });
-//       return res.json({ success: "user added successfully" });
-//     });
-//   });
-
+/**
+ * Adds a user
+ */
 app.post('/add_user', async (req, res) => {
     const { name, email, password } = req.body;
     //const usersRef = db.collection('users').doc(name);
@@ -43,22 +48,77 @@ app.post('/add_user', async (req, res) => {
       const newUserRef = await db.collection('users').add({
           email,
           name,
-          password
+          password,
+          friends:[],
+          friend_requests:[],
+          balance:0,
       });
         res.status(200).json({ success: 'user added successfully' });
     } catch (err) {
         res.status(500).json({ message: 'Something unexpected has occurred' + err });
     }
-});  
+});
 
-// app.get("/accounts", (req, res) => {
-//   const sql = "SELECT * FROM account_information";
-//   db.query(sql, (err, result) => {
-//     if (err) res.json({ message: "Server error" });
-//     return res.json(result);
-//   });
-// });
+/**
+ * Gets a user
+ */
+app.get('/current-user', (req, res) => {
+  if (req.session.user) {
+    res.json(req.session.user); // Send the user info stored in the session
+  } else {
+    res.status(401).json({ message: 'Not authenticated' }); // No session found
+  }
+});
 
+/**
+ * Log in to account
+ */
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Retrieve user data from Firebase (assuming you have a "users" collection)
+    const userSnapshot = await db.collection('users').where('email', '==', email).get();
+    
+    if (userSnapshot.empty) {
+      return res.status(401).send('User not found');
+    }
+
+    const userData = userSnapshot.docs[0].data();
+
+    // Here you would check if the password is correct
+    if (userData.password !== password) {
+      return res.status(401).send('Incorrect password');
+    }
+
+    // Save user details to the session after successful login
+    req.session.user = {
+      id: userSnapshot.docs[0].id,     // Firebase document ID
+      name: userData.name,
+      balance: userData.balance
+    };
+
+    res.send('User logged in and session started');
+  } catch (error) {
+    res.status(500).send('Error logging in');
+  }
+});
+
+/**
+ * Log out of account
+ */
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send('Error logging out');
+    }
+    res.send('User logged out');
+  });
+});
+
+/**
+ * Get an account
+ */
 app.get('/accounts', async (req, res) => {
   try {
     const usersSnapshot = await db.collection('users').get();
@@ -72,16 +132,9 @@ app.get('/accounts', async (req, res) => {
   }
 });
 
-// app.get("/get_account/:id", (req, res) => {
-//   console.log("im here")
-//   const id = req.params.id;
-//   const sql = "SELECT * FROM account_information WHERE `id`= ?";
-//   db.query(sql, [id], (err, result) => {
-//     if (err) res.json({ message: "Server error" });
-//     return res.json(result);
-//   });
-// });
-
+/**
+ * Get a user by their ID
+ */
 app.get('/get_user/:userId', async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -96,6 +149,9 @@ app.get('/get_user/:userId', async (req, res) => {
   }
 });
 
+/**
+ * Edit a user
+ */
 app.post('/edit_user/:userId', async (req, res) => {
   const userId = req.params.userId;
   const { name, email, password } = req.body;
@@ -111,6 +167,9 @@ app.post('/edit_user/:userId', async (req, res) => {
   }
 });
 
+/**
+ * Delete a user
+ */
 app.delete('/delete_user/:userId', async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -121,6 +180,117 @@ app.delete('/delete_user/:userId', async (req, res) => {
   }
 });
 
+/**
+ * Send a friend request
+ */
+app.post('/add_friend/:userId', async(req, res) => {
+  const userId = req.params.userId;
+  const { friendId } = req.body;
+
+  try {
+    
+    const [userDoc, friendDoc] = await Promise.all([
+      db.collection('users').doc(userId).get(),
+      db.collection('users').doc(friendId).get()
+    ]);
+
+    // Check if both users exist
+    if (!userDoc.exists || !friendDoc.exists) {
+      return res.status(404).json({ message: 'One or both users not found' });
+    }
+
+    // Check if friend request already exists
+    const friendData = friendDoc.data();
+    if (friendData.friend_requests.some(request => request.id === userId)) {
+      return res.status(400).json({ message: 'Friend request already sent' });
+    }
+
+    // Check if already friends
+    if (friendData.friends.some(friend => friend.id === userId)) {
+      return res.status(400).json({ message: 'Users are already friends' });
+    }
+
+    // Add friend request
+    await db.collection('users').doc(friendId).update({
+      friend_requests: admin.firestore.FieldValue.arrayUnion({
+        id: userId,
+        name: userDoc.data().name,
+        timestamp: admin.firestore.Timestamp.now()
+      })
+    });
+
+    res.status(200).json({ success: 'Friend request sent successfully' });
+
+  } catch (err) {
+    console.error('Error in add_friend:', err);
+    res.status(500).json({ message: 'Server error occurred', error: err.message });
+  }
+});
+
+/**
+ * Accept a friend request
+ */
+app.post('/accept_friend/:userId', async(req, res) => {
+  const userId = req.params.userId;
+  const { friendId } = req.body;
+
+  try {
+    
+    const [userDoc, friendDoc] = await Promise.all([
+      db.collection('users').doc(userId).get(),
+      db.collection('users').doc(friendId).get()
+    ]);
+
+    // Check if users are real
+    if (!userDoc.exists || !friendDoc.exists) {
+      return res.status(404).json({ message: 'One or both users not found' });
+    }
+
+    const userData = userDoc.data();
+    const friendData = friendDoc.data();
+
+    // Verify friend request exists
+    const requestIndex = userData.friend_requests.findIndex(request => request.id === friendId);
+    if (requestIndex === -1) {
+      return res.status(400).json({ message: 'No friend request found' });
+    }
+
+    // Batch add
+    const batch = db.batch();
+
+    // Add each user to the other's friends list
+    const userRef = db.collection('users').doc(userId);
+    const friendRef = db.collection('users').doc(friendId);
+
+    batch.update(userRef, {
+      friends: admin.firestore.FieldValue.arrayUnion({
+        id: friendId,
+        name: friendData.name,
+        timestamp: admin.firestore.Timestamp.now()
+      }),
+      friend_requests: admin.firestore.FieldValue.arrayRemove(userData.friend_requests[requestIndex])
+    });
+
+    batch.update(friendRef, {
+      friends: admin.firestore.FieldValue.arrayUnion({
+        id: userId,
+        name: userData.name,
+        timestamp: admin.firestore.Timestamp.now()
+      })
+    });
+
+    // Commit the batch
+    await batch.commit();
+
+    res.status(200).json({ success: 'Friend added successfully' });
+
+  } catch (err) {
+    console.error('Error in accept_friend:', err);
+    res.status(500).json({ message: 'Server error occurred', error: err.message });
+  }
+});
+
+// DO NOT ACCIDENTALLY DELETE
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
@@ -275,5 +445,6 @@ io.on("connection", socket => {
   socket.on("gameScreen", room => {
     socket.to(room).emit("goToGamePage");
   })
+
 
 })

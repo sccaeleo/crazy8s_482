@@ -19,6 +19,10 @@ function EditAccount() {
         fetchUser();
     }, [id]);
 
+    /**
+     * Update the edited account
+     * @param {*} e - form to be submitted
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

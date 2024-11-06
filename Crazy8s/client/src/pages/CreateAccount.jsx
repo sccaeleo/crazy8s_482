@@ -11,6 +11,10 @@ function CreateAccount() {
 
     const navigate = useNavigate()
 
+    /**
+     * Create an account with filled form
+     * @param {*} e - form data
+     */
     function handleSubmit(e){
         e.preventDefault()
 

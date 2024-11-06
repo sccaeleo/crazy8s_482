@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
-function CreateGame({ socket }){
+function CreateGame({ socket }) {
 
   const [socketId, setSocketId] = useState('');
   const navigate = useNavigate();
@@ -17,6 +17,9 @@ function CreateGame({ socket }){
   const [isPublic, setIsPublic] = useState(true);
 
 
+  /**
+   * Initial Setup
+   */
   useEffect(() => {
     // Set socket ID when the component mounts
     if (socket) {
@@ -37,6 +40,9 @@ function CreateGame({ socket }){
   const host = 'testHost';
 
 
+  /**
+   * Creates the game
+   */
   const createGameObject = () => {
     socket.emit("test", "CREATEGAME");
     if(gameMade === false) {
@@ -68,7 +74,7 @@ function CreateGame({ socket }){
     {/* Left Lobby Settings Box*/}
 
     <div class="lobby-settings">
-      <h1><b>Settings</b></h1>
+      <h1><b>Lobby Settings</b></h1>
       
       <div>
         <label>Room Name:</label>
@@ -112,7 +118,7 @@ function CreateGame({ socket }){
     </div>
 
     <div>
-      <button class="btn start-buttons" onClick={createGameObject}>Start Lobby</button>
+      <button class="btn start-lobby" onClick={createGameObject}>Start Lobby</button>
       
       <Link to="/game">
       {gameMade && (<button class="btn start-buttons" onClick={sendGamePage}>Start Game</button>)}
@@ -122,13 +128,13 @@ function CreateGame({ socket }){
 
     {/* Right Player Lobby Box*/}
     <div class = "lobby-box">
-      <h1><b>Players</b></h1>
+      <h1><b>Lobby</b></h1>
 
     <div class = "lobby-list">
     {playerList.map((player, index) => (
       <div class = "player-entry">
         <p>{player}</p>
-        <button class="btn btn-success">Allow</button>
+        <button class="btn btn-success" >Allow</button>
       </div>
     ))}
     </div>

@@ -26,7 +26,9 @@ function Game({socket}) {
     };
   }, [socket]);
 
-  // tell server to start the game
+  /**
+   * tell server to start the game
+   */
   const startGame = () => {
     setStarted(true)
     socket.emit("startGame", cb => {
@@ -35,6 +37,7 @@ function Game({socket}) {
     })
   }
 
+
   socket.on("requestHand", hand => {
     setStarted(true);
     socket.emit("getHand", cb => {
@@ -42,9 +45,12 @@ function Game({socket}) {
     });
   })
 
-  socket.on("")
+  // socket.on("")
 
-  // tell the server what card you want to play
+  /**
+   * tell the server what card you want to play
+   * @param {*} index - The number corresponding to the position of the card in hand
+   */
   const playCard = (index) => {
     socket.emit("playCard", index, cb => {
       // make sure that it is your turn and the card is playable
@@ -60,8 +66,9 @@ function Game({socket}) {
     })
   }
 
-
-  // tell server to give you a card
+  /**
+   * tell server to give you a card
+   */
   const drawCard = () => {
     socket.emit("drawCard", cb => {
       if(cb === false)
@@ -72,10 +79,17 @@ function Game({socket}) {
     })
   }
 
+  /**
+   * Update the pile
+   */
   socket.on("updatePile", (card) => {
     setPileCard(card);
   })
 
+  /**
+   * Pick a suit when you play an 8
+   * @param {*} suit - The suit you clicked on
+   */
   const pickSuitCall = (suit) => {
     socket.emit("pickSuit", suit);
     setPickSuit(false);
@@ -99,6 +113,7 @@ function Game({socket}) {
           {!started && (<button class="btn btn-lg btn-light" onClick={startGame}>Deal</button>)}
           </div>
           
+          {/* The Deck and Pile*/}
           <div class="game-center">
             <button class="deck card-button" onClick={drawCard} disabled = {pickSuit}>
               <img class="deck" src={require('./Cards/cardBack_red1.png')} alt={'Deck'}></img>

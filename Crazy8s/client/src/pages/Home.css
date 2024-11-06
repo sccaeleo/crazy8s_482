@@ -1,3 +1,9 @@
+/* 
+This is the CSS for all of the pages. Edit as needed.
+Variables are provided for the website's main colors
+Big fan of CSS when it works -Victoria 
+*/
+
 :root {
     --deckpileWidth: 100px;
     --cardWidth: 80px;
@@ -65,7 +71,7 @@ h1 {
 
 /* Lobby Page */
 
-.start-buttons{
+.start-lobby{
     position:absolute;
     bottom:1%;
     left: 3%;
@@ -73,10 +79,18 @@ h1 {
     color: white;
 }
 
+.start-game{
+    position:absolute;
+    bottom:1%;
+    right: 3%;
+    background-color: var(--lighterGreen);
+    color: white;
+}
+
 .lobby-settings{
     width: 45%;
     height: 90%;
-    background-color: rgb(20, 104, 61);
+    background-color: var(--darkGreen);
     display: flex;
     flex-direction: column;
     color: white;
@@ -91,7 +105,7 @@ h1 {
 .lobby-box {
     width: 45%;
     height: 90%;
-    background-color: rgb(20, 104, 61);
+    background-color: var(--darkGreen);
     display: flex;
     flex-direction: column;
     color: white;
@@ -106,7 +120,7 @@ h1 {
 .lobby-list {
     display:grid;
     grid-template-columns: 1fr 2;
-    grid-auto-rows: 23%;
+    grid-auto-rows: 15%;
     gap: 10px;
     margin-top: 10px;
     padding: 10px;
@@ -256,6 +270,7 @@ h2 {
     transform: scale(1.1);
 }
 
+
 .leave-button {
     position: absolute;
     top: 10px;
@@ -265,13 +280,72 @@ h2 {
     border: none;
     border-radius: 5px;
 }
+/* View Account */
+
+.btn-back{
+    position:absolute;
+    bottom:3%;
+    left: 3%;
+    background-color: var(--lighterGreen);
+    color: white;
+}
+
+.account-view{
+    width: 45%;
+    height: 85%;
+    background-color: var(--darkGreen);
+    display: flex;
+    flex-direction: column;
+    color: white;
+    box-sizing: border-box;
+    position: absolute;
+    left: 3%;
+    top: 10%;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.friends{
+    width: 45%;
+    height: 85%;
+    background-color: var(--darkGreen);
+    display: flex;
+    flex-direction: column;
+    color: white;
+    box-sizing: border-box;
+    position: absolute;
+    right: 3%;
+    top: 10%;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.message{
+}
 
 /* Test */
 
 .connected-message {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    top: 10px;
+    left: 10px;
     font-size: 12px;
     color: white;
 }
+
+/* Remove positioning from account buttons */
+.account-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+    margin-right: 3%;
+  }
+  
+  .account-buttons button {
+    height: 70px;
+    width: auto; /* Adjust width based on text content */
+    text-align: center;
+  }
+  
+  

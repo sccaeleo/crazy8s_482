@@ -5,6 +5,7 @@ import { Outlet, Link } from "react-router-dom";
 function AccountSettings() {
   const [data, setData] = useState([])
   const [deleted, setDeleted] = useState(true)
+
   useEffect(()=>{
       if(deleted){
           setDeleted(false)
