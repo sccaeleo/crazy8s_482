@@ -230,12 +230,11 @@ app.post('/add_friend/:userId', async(req, res) => {
 /**
  * Accept a friend request
  */
-app.post('/accept_friend/:userId', async(req, res) => {
+app.post('/accept_friend/:userId', async (req, res) => {
   const userId = req.params.userId;
   const { friendId } = req.body;
 
   try {
-    
     const [userDoc, friendDoc] = await Promise.all([
       db.collection('users').doc(userId).get(),
       db.collection('users').doc(friendId).get()
@@ -279,10 +278,36 @@ app.post('/accept_friend/:userId', async(req, res) => {
       })
     });
 
+    // Step 1: Generate a unique conversation ID
+    const conversationId = [userId, friendId].sort().join('_');
+    const conversationRef = db.collection('conversations').doc(conversationId);
+
+    // Step 2: Check if the conversation already exists
+    const conversationDoc = await conversationRef.get();
+
+    if (!conversationDoc.exists) {
+      // Step 3: Create a new conversation document if it doesn’t exist
+      batch.set(conversationRef, {
+        participants: [
+          db.collection('users').doc(userId),
+          db.collection('users').doc(friendId)
+        ],
+        lastMessage: null // Placeholder for the last message info
+      });
+
+      // Step 4: Optionally add an initial message in the messages subcollection
+      const messagesRef = conversationRef.collection('messages');
+      batch.set(messagesRef.doc(), {
+        senderId: userId,
+        content: "Conversation started!",
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
     // Commit the batch
     await batch.commit();
 
-    res.status(200).json({ success: 'Friend added successfully' });
+    res.status(200).json({ success: 'Friend added and conversation created successfully' });
 
   } catch (err) {
     console.error('Error in accept_friend:', err);
@@ -290,7 +315,29 @@ app.post('/accept_friend/:userId', async(req, res) => {
   }
 });
 
+app.get('/conversations/:conversationId/messages', async (req, res) => {
+  const { conversationId } = req.params;
+
+  try {
+    // Fetch the conversation document
+    const messagesRef = db.collection('conversations').doc(conversationId).collection('messages');
+    const messagesSnapshot = await messagesRef.orderBy('timestamp', 'asc').get();
+
+    const messages = messagesSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    res.status(200).json(messages);
+  } catch (err) {
+    console.error('Error fetching message history:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 // DO NOT ACCIDENTALLY DELETE
+// I didn not listen and paid the price - will
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
