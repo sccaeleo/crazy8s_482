@@ -92,7 +92,6 @@ class Game {
     if(this.currTurn === player) {
       var card = false;
       if(this.tempSuit) {
-        console.log(this.tempSuit);
         card = player.playCard(index, new Card(this.tempSuit, "8"));
         if(card)
           this.tempSuit = false;
@@ -121,7 +120,7 @@ class Game {
   updateSuit(suit) {
     this.tempSuit = suit;
     this.changeTurn();
-    return "card" + suit + "8.png";
+    return "card" + this.tempSuit + "8.png";
   }
 
   /**
