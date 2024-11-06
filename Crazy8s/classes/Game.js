@@ -9,6 +9,8 @@ class Game {
   deck;
   players = [];
   currTurn;
+  currTurnIndex;
+  numPlayers;
   tempSuit = false;
 
   roomName;
@@ -35,7 +37,9 @@ class Game {
   startGame() {
     this.deck.shuffle();
     this.deal();
+    this.numPlayers = this.players.length;
     this.currTurn = this.players[0];
+    this.currTurnIndex = 0;
   }
 
   /**
@@ -67,6 +71,18 @@ class Game {
   }
 
   /**
+   * Changes the turn to the next player
+   */
+  changeTurn() {
+    if(this.currTurnIndex < this.numPlayers-1) {
+      this.currTurnIndex++;
+    }else{
+      this.currTurnIndex = 0;
+    }
+    this.currTurn = this.players[this.currTurnIndex];
+  }
+
+  /**
    * Play a card
    * @param {Player} player - the player playing a card
    * @param {number} index - the index of the card in the players hand
@@ -91,6 +107,7 @@ class Game {
       if(card === 8)
         return 8;
       
+      this.changeTurn();
       return true;
     }
     return false;
@@ -103,6 +120,7 @@ class Game {
    */
   updateSuit(suit) {
     this.tempSuit = suit;
+    this.changeTurn();
     return "card" + suit + "8.png";
   }
 
@@ -125,10 +143,18 @@ class Game {
 
   /**
    * Get the file for the pile card
-   * @returns The png file for the pile card
+   * @returns {string} - The png file for the pile card
    */
   getTopCard() {
-    return this.pile[0].getStringPNG();
+    return this.pile[this.pile.length-1].getStringPNG();
+  }
+
+  /**
+   * Get the room name
+   * @returns {string} - roomName
+   */
+  getRoomName() {
+    return this.roomName;
   }
 }
 

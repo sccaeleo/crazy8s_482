@@ -129,6 +129,15 @@ app.listen(port, () => {
 
 var games = [];
 
+/**
+ * Create a new Game
+ * @param {Player} host 
+ * @param {string} roomName 
+ * @param {number} bet 
+ * @param {string} password 
+ * @param {boolean} isPublic 
+ * @returns {game} - the game created
+ */
 function createNewGame(host, roomName, bet, password, isPublic) {
   const game = new Game(host, roomName, bet, password, isPublic);
   games.push(game);
@@ -151,265 +160,120 @@ const io = require('socket.io')(3030, {
   },
 })
 
+/**
+ * On socket connection, listen for these functions
+ */
 io.on("connection", socket => {
   console.log('Connected ' + socket.id);
 
+  /**
+   * Prints the data passed to it
+   * For Testing Purposes
+   * @param {*} data - value to be printed
+   */
   socket.on("test", data => {
     console.log(data);
   })
 
+  /**
+   * Create a new Game
+   * @param {*} data - game information
+   */
   socket.on("createGame", (data) => {
     socket.player = new Player();
-    const { roomName, bet, password, isPublic } = data;
-    const game = createNewGame(socket.player, roomName, bet, password, isPublic);
+    const { room, bet, password, isPublic } = data;
+    const game = createNewGame(socket.player, room, bet, password, isPublic);
     socket.currGame = game;
+    socket.join(room);
+    socket.gameRoom = room;
   })
 
+  /**
+   * Start your game.
+   * @returns {string[]} - a list of your cards png files as strings
+   */
   socket.on("startGame", (cb) => {
     socket.currGame.startGame();
-    io.emit("updatePile", socket.currGame.getTopCard());
+    io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
+    socket.to(socket.gameRoom).emit("requestHand");
     cb(socket.player.displayCards());
   })
 
+  /**
+   * Asks for players hand.
+   * @returns {string[]} - a list of your cards png files as strings
+   */
+  socket.on("getHand", cb => {
+    console.log("Got Hand");
+    cb(socket.player.displayCards());
+  })
+
+  /**
+   * Play a card.
+   * @param {number} index - the index of the card to play
+   * @returns {boolean} - true if played, false if not
+   */
   socket.on("playCard", (index, cb) => {
     const played = socket.currGame.playCard(socket.player, index);
-    if(played)
-      io.emit("updatePile", socket.currGame.getTopCard());
+    if(played) {
+      console.log(socket.currGame.getTopCard());
+      io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
+      //socket.to(socket.gameRoom).emit("updatePlayerCards", );
+    }
     cb(played);
   })
 
+  /**
+   * Draw a card.
+   * @returns {string} - the png file to your card
+   */
   socket.on("drawCard", (cb) => {
     const card = socket.currGame.drawCard(socket.player);
     cb(card);
   })
 
+  /**
+   * Pick the suit after playing an 8.
+   * @param {string} suit - the new suit
+   */
   socket.on("pickSuit", suit => {
     const suitCard = socket.currGame.updateSuit(suit);
-    io.emit("updatePile", suitCard);
+    io.to(socket.gameRoom).emit("updatePile", suitCard);
   })
 
   socket.on("listGames", (cb) => {
     cb(games);
   })
 
-  socket.on("joinGame", (cb) => {
-    // yeah
+  /**
+   * Join a game.
+   * @param {number} index - the index of the game in the games array
+   * @returns {boolean} - true if joined the game, false if full
+   */
+  socket.on("joinGame", (index, cb) => {
+    socket.player = new Player();
+    const joined = games[index].addPlayer(socket.player);
+    if(joined) {
+      socket.currGame = games[index];
+      socket.gameRoom = socket.currGame.getRoomName();
+      socket.join(socket.gameRoom);
+    }
+    cb(joined);
+  })
+
+  /**
+   * Leave a game.
+   */
+  socket.on("leaveGame", () => {
+    socket.leave(socket.gameRoom);
+  })
+
+  /**
+   * Redirect players to the game page.
+   * @param {string} room - the room name
+   */
+  socket.on("gameScreen", room => {
+    socket.to(room).emit("goToGamePage");
   })
 
 })
-
-
-
-
-// ---------------------------------------- Classes ----------------------------------------
-// For time purposes classes are in this file. Next sprint we will figure out how to import
-
-// class Game {
-
-//   //establish vars
-//   deck;
-//   pile = [];
-//   players = [];
-//   bet;
-//   password;
-//   host;
-//   room;
-//   currTurn;
-//   isPublic;
-
-//   //initialize a deck, add the host and set room settings
-//   constructor(host, room, bet, password, isPublic) {
-//       this.deck = new Deck();
-//       this.host = host;
-//       this.players.push(new Player(1));
-//       this.bet = bet;
-//       this.password = password;
-//       this.room = room;
-//       this.isPublic = isPublic;
-//   }
-
-
-//   //player joins a game
-//   addPlayer(user) {
-//       size = this.players.length;
-
-//       //check if there is room in the lobby
-//       if(size < 4) {
-//           this.players.push(new Player(size+1, user));
-//           return true;
-//       }else{
-//           return false;
-//       }
-//   }
-
-//   //deal, pick the first player and then give first player a turn
-//   startGame() {
-//       this.deal();
-//       // this.currTurn = this.getFirstPlayer();
-//       this.currTurn = 1;
-//       this.pile.push(this.deck.drawCard());
-//   }
-
-//   //get a random integer 0-3 for index of a player
-//   getFirstPlayer() {
-//       var random = Math.random()*4;
-//       return Math.floor(random);
-//   }
-
-//   //give each player 5 cards
-//   deal() {
-//       for(var i = 0; i < 5; i++) {
-//           for(const player of this.players) {
-//               const card = this.deck.drawCard();
-//               player.drawCard(card);
-//           }
-//       }
-//   }
-
-//   getPlayer(gameId) {
-//     return this.players[gameId-1]
-//   }
-
-//   turn(player, index) {
-//     if(this.currTurn == player.playerId) {
-//       console.log("if complete")
-//       // bad practice since low on time will be fixed
-//       const card = player.hand[index]
-//       const played = player.playCard(index, this.pile[this.pile.length-1])
-//       if(played) {
-//         this.pile.push(card)
-//         return true;
-//       }
-//     }
-//     return false;
-//   }
-
-//   drawCard(player) {
-//     const newCard = this.deck.drawCard()
-//     player.drawCard(newCard)
-//     return newCard.getStringPNG()
-//   }
-
-//   endGame(winner) {
-
-//   }
-// }
-
-// class Player {
-
-//   hand = [];
-//   playerId;
-//   user;
-
-//   constructor(id) {
-//       this.playerId = id;
-//       //this.user = user;
-//   }
-
-//   //This will be called Client side, when picking a card
-//   playCard(cardIndex, pileCard) {
-//       const card = this.hand[cardIndex];
-
-//       // is the card playable?
-//       if(this.hand[cardIndex].compare(pileCard)) {
-//         const r1 = this.hand.splice(cardIndex, 1);
-//         return true;
-//       }else{
-//         return false;
-//       }
-//   }
-
-//   //draw a card
-//   drawCard(card) {
-//       this.hand.push(card);
-//   }
-
-//   //check if won
-//   isEmpty() {
-//       return this.hand.length == 0;
-//   }
-
-//   displayCards() {
-//     const pngs = []
-//     for(const card of this.hand) {
-//       const png = card.getStringPNG()
-//       pngs.push(png)
-//     }
-//     return pngs
-//   }
-// }
-
-// class Deck {
-
-//   //suits and ranks to easily create the deck
-//   suits = ['Clubs','Diamonds','Hearts','Spades'];
-//   ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-//   cards = [];
-
-//   constructor() {
-//       //for each suit and rank make a card
-//       for(const suit of this.suits)
-//           for(const rank of this.ranks)
-//               this.cards.push(new Card(suit, rank));
-//   }
-
-//   shuffle()
-//   {
-//       //for each card swap it with a random card in the deck
-//       for(var i = 0; i < 52; i++) {
-//           var newIndex = Math.random()*52;
-          
-//           let temp = this.cards[i];
-//           this.cards[i] = this.cards[newIndex];
-//           this.cards[newIndex] = temp;
-//       }
-//   }
-
-//   drawCard() {
-//     const info = this.cards.pop()
-//     return info
-//   }
-
-//   isEmpty() {
-//       return this.cards.length == 0;
-//   }
-
-//   printCards() {
-//     for(const card of this.cards)
-//       console.log(card.getStringPNG())
-//   }
-// }
-
-// class Card {
-
-//   suit;
-//   rank;
-
-//   constructor(suit, rank)
-//   {
-//       this.suit = suit;
-//       this.rank = rank;
-//   }
-
-//   //check if playable
-//   checkSuitRank(suit, rank)
-//   {
-//       if(this.suit == suit)
-//           return true;
-//       if(this.rank == rank)
-//           return true;
-//       return false;
-//   }
-
-//   //compare to another card to see if playable
-//   compare(other)
-//   {
-//       if(this.rank == '8')
-//         return true
-//       return other.checkSuitRank(this.suit, this.rank);
-//   }
-
-//   getStringPNG() {
-//       return "card" + this.suit + this.rank + ".png";
-//   }
-// }
