@@ -151,6 +151,42 @@ app.delete('/delete_user/:userId', async (req, res) => {
   }
 });
 
+app.post('/add_friend/:userID', async(req, res) => {
+  const userId = req.params.userId;
+  const friend = req.body;
+  try{
+    const userRef = db.collection('users').doc(userId);
+    await userRef.update({
+      friend_requests: firebase.firestore.FieldValue.arrayUnion(
+      db.collection('users').doc(friend)
+    )
+    
+    });
+    res.status(200).json({ success: 'Friend request sent' });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Something unexpected has occurred' + err });
+  }
+});
+
+app.post('/accept_friend/:userID', async(req, res) => {
+  const userId = req.params.userId;
+  const friend = req.body;
+  try{
+    const userRef = db.collection('users').doc(userId);
+    await userRef.update({
+      friends: firebase.firestore.FieldValue.arrayUnion(
+      db.collection('users').doc(friend)
+    )
+    
+    });
+    res.status(200).json({ success: 'Friend added successfully' });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Something unexpected has occurred' + err });
+  }
+});
+
 app.listen(port, () => {
     console.log(`listening on port ${port} `);
 });
