@@ -44,7 +44,6 @@ function CreateGame({ socket }) {
    * Creates the game
    */
   const createGameObject = () => {
-    socket.emit("test", "CREATEGAME");
     if(gameMade === false) {
       setGameMade(true);
       // socket.emit("createGame", roomName)

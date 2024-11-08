@@ -71,6 +71,23 @@ class Game {
   }
 
   /**
+   * Removes a player from the game.
+   * @param {Player} player 
+   */
+  removePlayer(player) {
+    const index = this.players.indexOf(player);
+    if(index > -1) {
+      var hand = player.takeCardsBack();
+      for(const card of hand) {
+        this.pile.unshift(card);
+      }
+      this.changeTurn();
+      this.players.splice(index, 1);
+      this.numPlayers--;
+    }
+  }
+
+  /**
    * Changes the turn to the next player
    */
   changeTurn() {
@@ -102,8 +119,8 @@ class Game {
       if(!card)
         return false;
 
-      this.pile.push(card)
-      if(card === 8)
+      this.pile.push(card.card);
+      if(card.ret === 8)
         return 8;
       
       this.changeTurn();
@@ -154,6 +171,17 @@ class Game {
    */
   getRoomName() {
     return this.roomName;
+  }
+
+  /**
+   * Get other players num cards
+   */
+  playerNumCards(player) {
+    var numOpps = {};
+    for(const p1 of this.players) {
+      numOpps.push(p1.numCards());
+    }
+    return numOpps;
   }
 }
 

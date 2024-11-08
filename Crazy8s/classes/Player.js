@@ -24,10 +24,10 @@ class Player {
     const play = card.compare(pileCard);
     if(play === 8) {
       this.hand.splice(index, 1);
-      return 8
+      return {card: card, ret: 8}
     }else if(play) {
       this.hand.splice(index, 1);
-      return card
+      return {card: card, ret: true}
     }else{
       return false;
     }
@@ -62,6 +62,22 @@ class Player {
       return true;
 
     return false;
+  }
+
+  /**
+   * Get number of cards in hand
+   * @returns - number of cards in hand
+   */
+  numCards() {
+    return this.hand.length;
+  }
+
+  /**
+   * Takes card out of hand and returns them to the deck
+   * @returns - hand
+   */
+  takeCardsBack() {
+    return this.hand;
   }
 }
 

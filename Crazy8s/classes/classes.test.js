@@ -297,3 +297,12 @@ test('Game: draw a card when not turn', () => {
     const game = new Game(new Player(), "test room", 5, "", true);
     expect(game.getRoomName()).toBe("test room");
 })
+
+test('Game: remove a player', () => {
+    const game = new Game(new Player(), "test room", 5, "", true);
+    const p2  = new Player();
+    game.addPlayer(p2);
+    game.startGame();
+    game.removePlayer(p2);
+    expect(game.numPlayers).toBe(1);
+})

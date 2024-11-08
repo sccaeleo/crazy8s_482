@@ -365,7 +365,7 @@ const io = require('socket.io')(3030, {
   cors: {
     // origin: ['http://localhost:3000'],
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http//localhost:3003','http://localhost:3004'];
+      const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003','http://localhost:3004'];
 
       // Check if the origin of the request is allowed
       if (allowedOrigins.includes(origin)) {
@@ -413,6 +413,7 @@ io.on("connection", socket => {
     socket.currGame.startGame();
     io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
     socket.to(socket.gameRoom).emit("requestHand");
+    //io.to(socket.gameRoom).emit("PlayerNumCards", socket.currGame.playerNumCards());
     cb(socket.player.displayCards());
   })
 
@@ -433,8 +434,9 @@ io.on("connection", socket => {
   socket.on("playCard", (index, cb) => {
     const played = socket.currGame.playCard(socket.player, index);
     if(played) {
-      console.log(socket.currGame.getTopCard());
+      console.log("This was called: " + socket.currGame.getTopCard());
       io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
+      console.log("worked");
       //socket.to(socket.gameRoom).emit("updatePlayerCards", );
     }
     cb(played);
@@ -483,6 +485,10 @@ io.on("connection", socket => {
    */
   socket.on("leaveGame", () => {
     socket.leave(socket.gameRoom);
+    socket.currGame.removePlayer(socket.player);
+    socket.currGame = undefined;
+    socket.player = undefined;
+    socket.gameRoom = undefined;
   })
 
   /**
