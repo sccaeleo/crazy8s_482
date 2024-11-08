@@ -71,18 +71,23 @@ h1 {
 
 /* Lobby Page */
 
+.create-game-buttons{
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 10px; 
+}
+
 .start-lobby{
-    position:absolute;
-    bottom:1%;
-    left: 3%;
+
     background-color: var(--lighterGreen);
     color: white;
 }
 
 .start-game{
-    position:absolute;
-    bottom:1%;
-    right: 3%;
+
     background-color: var(--lighterGreen);
     color: white;
 }
