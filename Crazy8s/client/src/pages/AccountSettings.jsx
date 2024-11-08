@@ -2,6 +2,10 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Outlet, Link } from "react-router-dom";
 
+/**
+     * leftover backend from sprint 1, will be the basis for future administrator page
+     */
+
 function AccountSettings() {
   const [data, setData] = useState([])
   const [deleted, setDeleted] = useState(true)
