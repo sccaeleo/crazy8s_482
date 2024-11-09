@@ -6,6 +6,8 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 function JoinGame({socket}){
 
   var [gameList, setGameList] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [passwordPopup, setPasswordPopup] = useState(false);
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -39,6 +41,8 @@ function JoinGame({socket}){
    */
   const joinGame = (game, index) => {
     if(!game.isPublic){
+      setSelectedGame(game);
+      setSelectedIndex(index);
       setPasswordPopup(true);
     }
     else{
@@ -54,9 +58,13 @@ function JoinGame({socket}){
    * Enter a password for the game
    * @param {*} game - Private game that someone is trying to join
    */
-  const enterPassword = (game) => {
+  const enterPassword = (game, index) => {
     if (password === game.password) {
-      socket.emit("joinGame", game);
+      socket.emit("joinGame", index, cb => {
+        if(cb === true) {
+          navigate('/create');
+        }
+      })
       setPasswordPopup(false);
       setPassword('');
     } else {
@@ -89,7 +97,7 @@ function JoinGame({socket}){
             {/* List the games */}
             {gameList.map((game, index) => (
             <div class = "game-entry">
-              <p>{game.room}</p>
+              <p>{game.roomName}</p>
               <p>{game.host}</p>
               <p>{game.players.length + "/5"}</p>
               <p>{game.isPublic ? 'Yes' : 'No'}</p>
@@ -113,7 +121,7 @@ function JoinGame({socket}){
                   onChange={(i) => setPassword(i.target.value)}
                   placeholder="Password"
                 />
-              <button class="btn join-button" onClick={enterPassword}>Submit</button>
+              <button class="btn join-button" onClick={() => enterPassword(selectedGame, selectedIndex)}>Submit</button>
               <button class="btn join-button" onClick={closePasswordPopup}>Cancel</button>
           </div>
         </div>
