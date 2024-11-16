@@ -12,6 +12,7 @@
     "name": ""
   },
   "dependencies": {
+    "browser-sync": "^3.0.3",
     "cors": "^2.8.5",
     "express": "3.x",
     "firebase": "^11.0.1",

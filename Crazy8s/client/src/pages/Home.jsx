@@ -36,7 +36,8 @@ function Homepage({ socket }) {
   }, [socket]);
 
   return (
-    <div data-testid="home-page">
+    <body>
+
       <div className="main-title">
         <h1><b>Crazy 8s</b></h1>
       </div>
@@ -72,10 +73,16 @@ function Homepage({ socket }) {
         <Link to="/login">
           <button className="btn btn-lg btn-light btn-padding">Login</button>
         </Link>
+        <Link to="https://bicyclecards.com/how-to-play/crazy-eights" target="_blank">
+          <button className="btn btn-lg btn-light btn-padding">How To Play</button>
+        </Link>
       </div>
 
       <div className="connected-message">{socketId}</div>
-    </div>
+      
+
+
+      </body>
   );
 }
 
