@@ -7,7 +7,8 @@ Big fan of CSS when it works -Victoria
 :root {
     --deckpileWidth: 100px;
     --cardWidth: 80px;
-    --lighterGreen: rgb(80, 202, 133);
+    --lightestGreen: rgb(79, 212, 145);
+    --lighterGreen: rgb(45, 161, 95);
     --lightGreen: rgb(25, 133, 77);
     --darkGreen: rgb(20, 104, 61);
     --darkerGreen: rgb(14, 73, 43);
@@ -15,7 +16,7 @@ Big fan of CSS when it works -Victoria
 
 body {
     background-color: var(--lightGreen);
-    font-family: Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -38,18 +39,28 @@ h1 {
 
 .main-card {
     position: absolute;
-    top: 20%;
-    width: 100%;
+    top: 1%;
+    left: 30%;
     text-align: center;
 }
 
 .account-button {
+    background-color: var(--lighterGreen);
+    color: white;
+    box-shadow:  5px 5px 5px rgb(0, 0, 0, .5);
+    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkerGreen));
     position: absolute;
-    height: 70px;
+    height: auto;
     width: 70px;
     top: 3%;
     right: 3%;
     text-align: center;
+    border-radius: 50px;
+}
+
+.account-button:hover {
+    background-color: var(--lightGreen);
+    color: white;
 }
 
 .main-buttons {
@@ -65,8 +76,16 @@ h1 {
     margin-left: 10px;
     width: 300px;
     height: 80px;
-    color:white;
-    background-color: var(--lighterGreen);
+    color: white;
+    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkerGreen));
+
+    box-shadow: 5px 5px 5px rgb(0, 0, 0, .5);
+    transition-duration: 0.4s;
+}
+
+.btn-padding:hover {
+    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkGreen));
+    color: white;
 }
 
 /* Lobby Page */

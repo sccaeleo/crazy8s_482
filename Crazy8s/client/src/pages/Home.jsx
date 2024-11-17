@@ -38,45 +38,73 @@ function Homepage({ socket }) {
   return (
     <body>
 
-      <div className="main-title">
-        <h1><b>Crazy 8s</b></h1>
+      {/* Main Logo */}
+      <div>
+        <video class="main-card" width="40%" height="80%" autoPlay>
+          <source src={require('./Cards/logo.mp4')} type="video/mp4" />
+        </video>
       </div>
 
-      <div className="main-card">
-        <img width="15%" src={require('./Cards/cardClubs8.png')} alt="Crazy 8s Card" />
-      </div>
-
-      {/* Flex container for account settings and profile buttons */}
+      {/* Flex container for option buttons*/}
       <div className="account-buttons">
         {/* <Link to="/accountsettings" data-testid="account-settings-link">
           <button className="btn btn-lg btn-light rounded-5 account-button">Account Settings</button>
         </Link> */}
         {userId ?(
         <Link to={`/viewaccount/${userId}`} data-testid="account-view-link">
-          <button className="btn btn-lg btn-light rounded-5 account-button">Profile</button>
+          <button className="btn account-button">Profile</button>
         </Link>
         ) : (
-          <button className="btn btn-lg btn-light rounded-5" disabled>Profile</button>
+          <Link to="/login">
+          <button className="btn account-button">Log in!</button>
+          </Link>
         )}
       </div>
-
       <div className="main-buttons">
         <Link to="/create">
-          <button className="btn btn-lg btn-light btn-padding">Create Game</button>
+          <button className="btn btn-lg btn-padding"><b>Create Game</b></button>
         </Link>
         <Link to="/join">
-          <button className="btn btn-lg btn-light btn-padding">Join Game</button>
-        </Link>
-        <Link to="/createaccount">
-          <button className="btn btn-lg btn-light btn-padding">Create Account</button>
-        </Link>
-        <Link to="/login">
-          <button className="btn btn-lg btn-light btn-padding">Login</button>
+          <button className="btn btn-lg btn-padding"><b>Join Game</b></button>
         </Link>
         <Link to="https://bicyclecards.com/how-to-play/crazy-eights" target="_blank">
-          <button className="btn btn-lg btn-light btn-padding">How To Play</button>
+          <button className="btn btn-lg btn-padding"><b>How To Play</b></button>
         </Link>
       </div>
+
+      {/* Company Logo */}
+      <div
+      style={{
+        padding: '10px',
+        textAlign: 'center',
+        position: 'absolute',
+        top: '10px',
+        left: '2%',
+        color: 'white'
+      }}>
+      <h1><b>XYZ Enterprises</b></h1>
+      </div>
+
+
+      {/* Banner Ad Placeholder */} 
+      <Link to={'https://www.google.com'} target="_blank">
+      <div
+      style={{
+        width: '80%',
+        height: '10%',
+        backgroundColor: 'white',
+        border: '2px solid black',
+        padding: '10px',
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: '10px',
+        right: '10%',
+        color: 'black'
+      }}>
+      Banner Ad Placeholder
+      </div>
+      </Link>
+
 
       <div className="connected-message">{socketId}</div>
       
