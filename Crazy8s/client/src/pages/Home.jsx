@@ -40,7 +40,7 @@ function Homepage({ socket }) {
 
       {/* Main Logo */}
       <div>
-        <video class="main-card" width="40%" height="80%" autoPlay>
+        <video className="main-card" width="40%" height="80%" autoPlay muted playsInline>
           <source src={require('./Cards/logo.mp4')} type="video/mp4" />
         </video>
       </div>
