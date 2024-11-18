@@ -103,6 +103,36 @@ function ViewAccount() {
     }
   };
 
+  async function sendMessage() {
+    if (!messageText.trim()) {
+      alert("Message cannot be empty!");
+      return;
+    }
+  
+    try {
+      const conversationId = [id, selectedFriend.id].sort().join("_"); // Create a unique conversation ID
+      const messageData = {
+        senderId: id,
+        recipientId: selectedFriend.id,
+        content: messageText.trim(),
+      };
+  
+      await axios.post(`/conversations/${conversationId}/messages`, messageData);
+  
+      // Refresh the message history after sending the message
+      fetchMessageHistory(selectedFriend.id);
+  
+      setMessageText("");
+      alert("Message sent successfully!");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again.");
+    }
+  }
+  
+
+  
+
   /**
    * axios to logout function, nav to home after logout
    */
@@ -274,11 +304,7 @@ function ViewAccount() {
                 />
                 <button 
                   className="btn btn-primary"
-                  onClick={() => {
-                    // Message sending logic would go here
-                    console.log(`Sending message to ${selectedFriend.name}: ${messageText}`);
-                    setMessageText("");
-                  }}
+                  onClick={sendMessage}
                 >
                   Send Message
                 </button>

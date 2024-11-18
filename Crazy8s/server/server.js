@@ -337,6 +337,31 @@ app.get('/conversations/:conversationId/messages', async (req, res) => {
   }
 });
 
+app.post("/conversations/:conversationId/messages", async (req, res) => {
+  const { conversationId } = req.params;
+  const { senderId, recipientId, content } = req.body;
+
+  if (!content || !senderId || !recipientId) {
+    return res.status(400).send("Invalid message data");
+  }
+
+  try {
+    const conversationRef = db.collection("conversations").doc(conversationId);
+    await conversationRef.collection("messages").add({
+      senderId,
+      recipientId,
+      content,
+      timestamp: new Date(),
+    });
+
+    res.status(200).send("Message sent successfully");
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).send("Failed to send message");
+  }
+});
+
+
 
 // DO NOT ACCIDENTALLY DELETE
 // I didn not listen and paid the price - will
