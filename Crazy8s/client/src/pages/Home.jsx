@@ -52,23 +52,23 @@ function Homepage({ socket }) {
         </Link> */}
         {userId ?(
         <Link to={`/viewaccount/${userId}`} data-testid="account-view-link">
-          <button className="btn account-button">Profile</button>
+          <button className="btn custom-btn account-button">Profile</button>
         </Link>
         ) : (
           <Link to="/login">
-          <button className="btn account-button">Log in!</button>
+          <button className="btn custom-btn account-button">Log in!</button>
           </Link>
         )}
       </div>
       <div className="main-buttons">
         <Link to="/create">
-          <button className="btn btn-lg btn-padding"><b>Create Game</b></button>
+          <button className="btn main-button custom-btn"><b>Create Game</b></button>
         </Link>
         <Link to="/join">
-          <button className="btn btn-lg btn-padding"><b>Join Game</b></button>
+          <button className="btn main-button custom-btn"><b>Join Game</b></button>
         </Link>
         <Link to="https://bicyclecards.com/how-to-play/crazy-eights" target="_blank">
-          <button className="btn btn-lg btn-padding"><b>How To Play</b></button>
+          <button className="btn main-button custom-btn"><b>How To Play</b></button>
         </Link>
       </div>
 
@@ -115,3 +115,4 @@ function Homepage({ socket }) {
 }
 
 export default Homepage;
+

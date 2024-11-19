@@ -81,9 +81,9 @@ function JoinGame({socket}){
   };
 
   return(
-    <div data-testid = "join-game">
+    <div>
       <h1 class="main-title"><b>Join a Game</b></h1>
-        <div class = "game-list">
+        <div class = "game-list" data-testid="game-list">
 
             {/* Column Headings */}
             <div class = "game-entry">
@@ -102,21 +102,21 @@ function JoinGame({socket}){
               <p>{game.players.length + "/5"}</p>
               <p>{game.isPublic ? 'Yes' : 'No'}</p>
               <p>{game.bet}</p>
-              <button class="join-button btn" onClick={() => joinGame(game, index)}>
-                Join
+              <button class="join-button btn custom-btn" data-testid="join-button" onClick={() => joinGame(game, index)}>
+                <b>Join</b>
               </button>
             </div>
             ))}
-          
         </div>
 
         {/* Password Popup */}
         {passwordPopup && (
-          <div className="password-popup">
+          <div className="password-popup" data-testid = "password-popup">
             <div className="password-enter">
-              <h1>Enter Game Password</h1>
+              <h1 data-testid = "password-enter">Enter Game Password</h1>
                 <input
                   type="password"
+                  data-testid = "password-input"
                   value={password}
                   onChange={(i) => setPassword(i.target.value)}
                   placeholder="Password"
