@@ -47,11 +47,17 @@ function ViewAccount() {
    * Send a friend request
    * @param {*} friendId - Id of user to be added
    */
-  function addFriend(friendId) {
-    friendId.preventDefault();
+  function addFriend(event) {
+    event.preventDefault(); // Literally was just this line being prevent default for friendId LMAO, fixed lol
+
+    if (!friendAdd.trim()) {
+      alert("Please enter a valid friend's name.");
+      return;
+    }
+    console.log('Sending friendName:', friendAdd);
     
     try {
-      axios.post(`/add_friend/${id}`, { friendId: friendAdd })
+      axios.post(`/add_friend/${id}`, { friendName: friendAdd })
         .then(response => {
           alert('Friend request sent successfully');
           setFriendAdd('');
@@ -221,7 +227,7 @@ function ViewAccount() {
             type="text" 
             value={friendAdd}
             onChange={(i) => setFriendAdd(i.target.value)} 
-            placeholder="Enter ID of a Player" 
+            placeholder="Enter Name of Player" 
           />
           <button 
             className="btn btn-success" 
