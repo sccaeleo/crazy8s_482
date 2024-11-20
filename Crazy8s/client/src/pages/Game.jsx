@@ -213,6 +213,8 @@ function Game({socket}) {
             ))}
           </div>
 
+          {/*THIS IS HIP TOO*/}
+          {/* - Jack*/}
           <div class="other-players">
             {playerHands?.length > 0 && playerHands.map((player, index) => {
               let positionClass;
