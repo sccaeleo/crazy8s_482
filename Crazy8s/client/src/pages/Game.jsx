@@ -11,6 +11,8 @@ function Game({socket}) {
   var [pileCard, setPileCard] = useState("cardSpadesQ.png")
   var [started, setStarted] = useState(false);
   var [pickSuit, setPickSuit] = useState(false);
+  var [resultMessage, setResultMessage] = useState("You Lose");
+  var [gameOver, setGameOver] = useState(false);
   const navigate = useNavigate();
   
 
@@ -33,7 +35,6 @@ function Game({socket}) {
     setStarted(true)
     socket.emit("startGame", cb => {
       setHand(cb)
-      // setPileCard("cardSpadesQ.png")
     })
   }
 
@@ -45,7 +46,14 @@ function Game({socket}) {
     });
   })
 
-  // socket.on("")
+  socket.on("lostGame", () =>{
+    setGameOver(true);
+  })
+
+  socket.on("onePlayer", () => {
+    setGameOver(true);
+    setResultMessage("You Win");
+  })
 
   /**
    * tell the server what card you want to play
@@ -63,6 +71,11 @@ function Game({socket}) {
 
       if(cb === 8)
         setPickSuit(true);
+
+      if(cb === "win") {
+        setGameOver(true);
+        setResultMessage("You Win");
+      }
     })
   }
 
@@ -162,6 +175,10 @@ function Game({socket}) {
           </div>
         </div>
 
+        {gameOver && (<div class="game-over">
+          <button class="leave-button" onClick={leaveGame}>Leave Game</button>
+          <h3 className={resultMessage === 'You Win' ? 'win-text' : 'lose-text'}>{resultMessage}</h3>
+        </div>)}
       </div>
     )
   }

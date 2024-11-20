@@ -149,6 +149,18 @@ function ViewAccount() {
            <b>Balance: </b>
            {user.balance}
           </li>
+          <li className="list-group-item">
+           <b>Games Played: </b>
+           {user.games_played}
+          </li>
+          <li className="list-group-item">
+           <b>Wins: </b>
+           {user.wins}
+          </li>
+          <li className="list-group-item">
+           <b>Losses: </b>
+           {user.losses}
+          </li>
         </ul>
       </div>
 

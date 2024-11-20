@@ -32,7 +32,7 @@ function App() {
         <Route path="/createaccount" element={<CreateAccount />} />
         <Route path="/viewaccount/:id" element={<ViewAccount />} />
         <Route path="/editaccount/:id" element={<EditAccount />} />
-        <Route path="/login/" element={<Login />} />
+        <Route path="/login/" element={<Login socket={socket}/>} />
       </Routes>
     </BrowserRouter>
   )

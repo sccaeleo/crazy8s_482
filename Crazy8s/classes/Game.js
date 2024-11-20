@@ -10,8 +10,11 @@ class Game {
   players = [];
   currTurn;
   currTurnIndex;
+  drawCount = 0;
   numPlayers;
   tempSuit = false;
+  started = false;
+  ended = false;
 
   roomName;
   bet;
@@ -24,6 +27,7 @@ class Game {
    */
   constructor(host, roomName, bet, password, isPublic) {
     this.players.push(host);
+    this.numPlayers = 1;
     this.roomName = roomName;
     this.bet = bet;
     this.password = password;
@@ -35,11 +39,15 @@ class Game {
    * Start the Game
    */
   startGame() {
-    this.deck.shuffle();
+    if(this.numPlayers < 2)
+      return false;
+
+    this.started = true;
     this.deal();
-    this.numPlayers = this.players.length;
     this.currTurn = this.players[0];
     this.currTurnIndex = 0;
+
+    return true;
   }
 
   /**
@@ -64,6 +72,7 @@ class Game {
   addPlayer(player) {
     if(this.players.length < 5) {
       this.players.push(player);
+      this.numPlayers++;
       return true;
     }
 
@@ -84,6 +93,8 @@ class Game {
       this.changeTurn();
       this.players.splice(index, 1);
       this.numPlayers--;
+      if(this.started === true && this.currPlayers() < 2)
+        this.ended = true;
     }
   }
 
@@ -97,6 +108,7 @@ class Game {
       this.currTurnIndex = 0;
     }
     this.currTurn = this.players[this.currTurnIndex];
+    this.drawCount = 0;
   }
 
   /**
@@ -120,6 +132,11 @@ class Game {
         return false;
 
       this.pile.push(card.card);
+      if(player.isHandEmpty()) {
+        this.ended = true;
+        return "win";
+      }
+
       if(card.ret === 8)
         return 8;
       
@@ -147,14 +164,33 @@ class Game {
    */
   drawCard(player) {
     if(this.currTurn === player) {
+      if(this.drawCount === 3) {
+        this.changeTurn();
+        return false;
+      }
       const newCard = this.deck.drawCard();
+      // if(!newCard && this.pile.length > 1) {
+      //   this.resetPile();
+      //   newCard = this.deck.drawCard();
+      // }else 
       if(!newCard)
         return false;
       
+      if(this.deck.isEmpty() && this.pile.length > 1)
+        this.resetPile();
+
       player.drawCard(newCard);
+      this.drawCount++;
       return newCard.getStringPNG();
     }
     return false;
+  }
+
+  resetPile() {
+    const cards = this.pile.splice(0, this.pile.length-1);
+    for(const card of cards)
+      console.log(card);
+    this.deck.addCards(cards);
   }
 
   /**
@@ -176,12 +212,21 @@ class Game {
   /**
    * Get other players num cards
    */
-  playerNumCards(player) {
-    var numOpps = {};
-    for(const p1 of this.players) {
-      numOpps.push(p1.numCards());
-    }
-    return numOpps;
+  playerNumCards() {
+    const numPerPlayer = {};
+    for(const p1 of this.players)
+      numPerPlayer.push(p1.numCards());
+    // push username and numCards and then return that to the client
+
+    return numPerPlayer;
+  }
+
+  currPlayers() {
+    return this.numPlayers;
+  }
+
+  isOver() {
+    return this.ended;
   }
 }
 

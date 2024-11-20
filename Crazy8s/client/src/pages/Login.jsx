@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ socket }) => {
+  const [socketId, setSocketId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    // Set socket ID when the component mounts
+    if (socket) {
+      setSocketId(socket.id);
+    }
+    
+    socket.on('connect', () => {
+      console.log('Connected with socket ID:', socket.id);
+      setSocketId(socket.id);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socket.off('connect');
+    };
+  }, [socket]);
+  
   /**
    * Attempt Log in to page
    * @param {*} e - form submitted
@@ -19,7 +38,7 @@ const Login = () => {
     //post request and nav to home
     try {
       
-      const response = await axios.post('/login', { email, password });
+      const response = await axios.post('/login', { email, password, socketId });
 
       if (response.status === 200) {
         setError(null);

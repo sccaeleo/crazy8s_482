@@ -1,4 +1,19 @@
 // Backend Stuff
+const io = require('socket.io')(3030, {
+  cors: {
+    // origin: ['http://localhost:3000'],
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003','http://localhost:3004'];
+
+      // Check if the origin of the request is allowed
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);  // Allow the connection
+      } else {
+        callback(new Error('Not allowed by CORS'));  // Reject the connection
+      }
+    },
+  },
+})
 
 // Import Dependencies
 const express = require('express')
@@ -38,6 +53,8 @@ app.use(
 );
 
 
+app.set('io', io);
+
 /**
  * Adds a user
  */
@@ -51,6 +68,9 @@ app.post('/add_user', async (req, res) => {
           friends:[],
           friend_requests:[],
           balance:0,
+          games_played:0,
+          wins:0,
+          losses:0,
       });
         res.status(200).json({ success: 'user added successfully' });
     } catch (err) {
@@ -73,7 +93,7 @@ app.get('/current-user', (req, res) => {
  * Log in to account
  */
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, socketId } = req.body;
 
   try {
     
@@ -97,7 +117,27 @@ app.post('/login', async (req, res) => {
       balance: userData.balance
     };
 
-    res.send('User logged in and session started');
+
+    const io = req.app.get('io');
+    const socket = io.sockets.sockets.get(socketId);
+
+    if(socket) {
+      socket.user = new Proxy(req.session.user, {
+        get(target, prop) {
+          return target[prop]; // Forward gets to req.session.user
+        },
+        set(target, prop, value) {
+          target[prop] = value; // Forward sets to req.session.user
+          req.session.save((err) => {
+            if (err) console.error('Session save error:', err);
+          });
+          return true;
+        },
+      });
+    }
+      //socket.user = req.session.user;
+
+    res.status(200).send('User logged in and session started');
   } catch (error) {
     res.status(500).send('Error logging in');
   }
@@ -364,27 +404,22 @@ function createNewGame(host, roomName, bet, password, isPublic) {
   return game;
 }
 
-const io = require('socket.io')(3030, {
-  cors: {
-    // origin: ['http://localhost:3000'],
-    origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003','http://localhost:3004'];
+const sharedSession = require("socket.io-express-session");
+const { use } = require('browser-sync');
 
-      // Check if the origin of the request is allowed
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);  // Allow the connection
-      } else {
-        callback(new Error('Not allowed by CORS'));  // Reject the connection
-      }
-    },
-  },
-})
+io.use(sharedSession(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false, maxAge: 60000 }
+})));
 
 /**
  * On socket connection, listen for these functions
  */
 io.on("connection", socket => {
   console.log('Connected ' + socket.id);
+
 
   /**
    * Prints the data passed to it
@@ -413,7 +448,7 @@ io.on("connection", socket => {
    * @returns {string[]} - a list of your cards png files as strings
    */
   socket.on("startGame", (cb) => {
-    socket.currGame.startGame();
+    const started = socket.currGame.startGame();
     io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
     socket.to(socket.gameRoom).emit("requestHand");
     //io.to(socket.gameRoom).emit("PlayerNumCards", socket.currGame.playerNumCards());
@@ -425,7 +460,7 @@ io.on("connection", socket => {
    * @returns {string[]} - a list of your cards png files as strings
    */
   socket.on("getHand", cb => {
-    console.log("Got Hand");
+    //console.log("Got Hand");
     cb(socket.player.displayCards());
   })
 
@@ -436,12 +471,12 @@ io.on("connection", socket => {
    */
   socket.on("playCard", (index, cb) => {
     const played = socket.currGame.playCard(socket.player, index);
-    if(played) {
-      console.log("This was called: " + socket.currGame.getTopCard());
+    if(played)
       io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
-      console.log("worked");
-      //socket.to(socket.gameRoom).emit("updatePlayerCards", );
-    }
+
+    if(played === "win")
+      socket.to(socket.gameRoom).emit("lostGame");
+    
     cb(played);
   })
 
@@ -489,6 +524,14 @@ io.on("connection", socket => {
   socket.on("leaveGame", () => {
     socket.leave(socket.gameRoom);
     socket.currGame.removePlayer(socket.player);
+
+    const numPlayers = socket.currGame.currPlayers();
+    if(numPlayers === 1 && !socket.currGame.isOver())
+      socket.to(socket.gameRoom).emit("onePlayer");
+    if(numPlayers === 0)
+      games = games.filter(game => game !== socket.currGame);
+      // should be in database not games array!!! FIX ME
+
     socket.currGame = undefined;
     socket.player = undefined;
     socket.gameRoom = undefined;
@@ -499,7 +542,8 @@ io.on("connection", socket => {
    * @param {string} room - the room name
    */
   socket.on("gameScreen", room => {
-    socket.to(room).emit("goToGamePage");
+    if(socket.currGame.currPlayers() > 1)
+      io.to(room).emit("goToGamePage");
   })
 
 

@@ -59,6 +59,7 @@ function CreateGame({ socket }) {
   }
 
   const sendGamePage = () => {
+    setGameMade(false);
     socket.emit("gameScreen", room);
   }
 
@@ -117,11 +118,11 @@ function CreateGame({ socket }) {
     </div>
 
     <div class = "create-game-buttons">
-      <button class="btn start-lobby" onClick={createGameObject}>Start Lobby</button>
+      <button class="btn start-lobby" onClick={createGameObject} disabled = {gameMade}>Start Lobby</button>
       
-      <Link to="/game">
-      {gameMade && (<button class="btn start-game" onClick={sendGamePage}>Start Game</button>)}
-      </Link>
+      <div>
+        {gameMade && (<button class="btn start-game" onClick={sendGamePage}>Start Game</button>)}
+      </div>
 
     </div>
 

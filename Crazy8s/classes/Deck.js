@@ -15,20 +15,25 @@ class Deck {
     for(const suit of this.suits)
       for(const rank of this.ranks)
         this.cards.push(new Card(suit, rank))
+    
+    this.cards = this.shuffle(this.cards);
   }
 
   /**
    * Shuffle's the cards in the array
    */
-  shuffle() {
+  shuffle(cards) {
+    const len = cards.length;
     //for each card swap it with a random card in the deck
-    for(var i = 0; i < 52; i++) {
-      var newIndex = Math.floor(Math.random()*52);
+    for(var i = 0; i < len; i++) {
+      var newIndex = Math.floor(Math.random()*len);
       
-      const temp = this.cards[i];
-      this.cards[i] = this.cards[newIndex];
-      this.cards[newIndex] = temp;
+      const temp = cards[i];
+      cards[i] = cards[newIndex];
+      cards[newIndex] = temp;
     }
+
+    return cards;
   }
 
   /**
@@ -39,7 +44,7 @@ class Deck {
     if(this.isEmpty())
       return false;
 
-    return this.cards.pop()
+    return this.cards.pop();
   }
 
   /**
@@ -48,6 +53,11 @@ class Deck {
    */
   isEmpty() {
     return this.cards.length == 0;
+  }
+
+  addCards(pile) {
+    const toAdd = this.shuffle(pile);
+    this.cards = toAdd.concat(this.cards);
   }
 }
 
