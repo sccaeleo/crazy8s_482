@@ -102,13 +102,15 @@ function CreateGame({ socket }) {
         />
       </div>
 
+      <div>
+      <label>{"Private"}</label>
       <input 
         type="checkbox" 
         checked={isPublic === false} 
         onChange={() => setIsPublic(!isPublic)} 
         />
-      <p>{"Private"}</p>
-
+      </div>
+      
       <div>
         <label>Password:</label>
         <input 
@@ -124,10 +126,10 @@ function CreateGame({ socket }) {
     </div>
 
     <div class = "create-game-buttons">
-      <button class="btn start-lobby" onClick={createGameObject} disabled = {gameMade}>Start Lobby</button>
+      <button class="btn start-lobby custom-btn" onClick={createGameObject} disabled = {gameMade}>Start Lobby</button>
       
       <div>
-        {gameMade && (<button class="btn start-game" onClick={sendGamePage}>Start Game</button>)}
+        {gameMade && (<button class="btn start-game custom-btn" onClick={sendGamePage}>Start Game</button>)}
       </div>
 
     </div>
