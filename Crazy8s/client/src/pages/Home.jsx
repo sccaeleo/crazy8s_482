@@ -105,8 +105,6 @@ function Homepage({ socket }) {
       </div>
       </Link>
 
-      <div className="connected-message">{userName}</div>
-
 
       </body>
   );
