@@ -1,12 +1,13 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, cleanup, getByTestId } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BrowserRouter, MemoryRouter, useNavigate } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import App from './App.js';
 import Home from './pages/Home.jsx';
 import CreateGame from './pages/CreateGame.jsx';
 import JoinGame from './pages/JoinGame.jsx';
+import Game from './pages/Game.jsx';
 
 // Mock dependencies
 const mockSocket = {
@@ -23,6 +24,9 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
 }));
+
+afterEach(cleanup)
+
 describe('App Component', () => {
 
   beforeEach(() => {
@@ -95,6 +99,9 @@ describe('App Component', () => {
       expect(screen.getByText('How To Play')).toBeInTheDocument();
     });
   });
+
+  // THIS IS HIP TOO -victoria
+  // Writing tests took the longest time to figure out, but I managed to get ~80% coverage thankfully
   describe('Create Game Page', () => {
 
     beforeEach(() => {
@@ -360,7 +367,7 @@ describe('App Component', () => {
 
     it('joins the game successfully when the correct password is entered', async () => {
       const game = { isPublic: false, password: 'secret' };
-      const { getByText, getByTestId } = render(
+      const { getByText, getByTestId, findByTestId } = render(
         <MemoryRouter>
           <JoinGame socket={mockSocket} />
         </MemoryRouter>
@@ -382,7 +389,7 @@ describe('App Component', () => {
 
       fireEvent.click(joinButton);
 
-      await waitFor(() => expect(getByTestId('password-enter')).toBeInTheDocument());
+      await screen.findByTestId('password-enter');
 
       const passwordInput = getByTestId('password-input');
       fireEvent.change(passwordInput, { target: { value: 'secret' } });
@@ -394,5 +401,94 @@ describe('App Component', () => {
     });
 
   });
+
+  describe('Game Page', () => {
+  let navigate;
+  beforeEach(() => {
+    navigate = jest.fn();
+  });
+  
+
+
+  it('sets started state to true and emit startGame event when startGame is called', async () => {
+    const { queryByTestId, getByTestId, findByTestId } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+
+  
+    fireEvent.click(screen.getByText('Deal'));
+    expect(mockSocket.emit).toHaveBeenCalledTimes(1);
+    expect(mockSocket.emit).toHaveBeenCalledWith('startGame', expect.any(Function));
+
+    expect(screen.queryByTestId('dbutton')).not.toBeInTheDocument();
+
+    
+  });
+  it('updates hand state and emit playCard event when playCard is called', async () => {
+    const { getAllByRole, queryByTestId, getByTestId, findByTestId, getAllByTestId } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+
+
+
+    fireEvent.click(screen.getByText('Deal'));
+    await screen.findByTestId('player-hand');
+
+    const playCardButtons = getAllByRole('button', { class: 'card-button' });
+    fireEvent.click(playCardButtons[1]);
+    expect(playCardButtons.length).toBeGreaterThan(0);
+    expect (mockSocket.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates hand state and emit drawCard event when drawCard is called', async () => {
+    const { getByText, getByTestId, findByTestId } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('Deal'));
+    await screen.findByTestId('player-hand');
+    const drawCardButton = screen.getByAltText('Deck');
+    fireEvent.click(drawCardButton);
+    expect(mockSocket.emit).toHaveBeenCalledTimes(2);
+    expect(mockSocket.emit).toHaveBeenCalledWith('drawCard', expect.any(Function));
+  });
+  it('should emit pickSuit event and set pickSuit state to false when pickSuitCall is called', () => {
+    const { getByText, getByTestId, findByTestId } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+
+    const pickSuitButton = screen.getByText('Pick Suit');
+    fireEvent.click(pickSuitButton);
+    expect(mockSocket.emit).toHaveBeenCalledTimes(1);
+    expect(mockSocket.emit).toHaveBeenCalledWith('pickSuit', 'Clubs');
+    expect(screen.getByText('Pick Suit').closest('button')).toBeDisabled();
+  });
+
+  it('should emit leaveGame event and navigate to root route when leaveGame is called', () => {
+    const navigate = useNavigate();
+    const { getByText, getByTestId, getByRole } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+    
+    const leaveGameButton = screen.getByText('Leave Game');
+    fireEvent.click(leaveGameButton);
+    expect(mockSocket.emit).toHaveBeenCalledTimes(1);
+    expect(mockSocket.emit).toHaveBeenCalledWith('leaveGame');
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledWith('/');
+  });
+
+});
+
 });
 

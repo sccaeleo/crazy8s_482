@@ -126,6 +126,25 @@ function JoinGame({socket}){
           </div>
         </div>
       )}
+
+      {/* Banner Ad Placeholder */} 
+    <Link to={'https://www.google.com'} target="_blank">
+      <div
+      style={{
+        width: '80%',
+        height: '10%',
+        backgroundColor: 'white',
+        border: '2px solid black',
+        padding: '10px',
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: '10px',
+        right: '10%',
+        color: 'black'
+      }}>
+      Banner Ad Placeholder
+      </div>
+      </Link>
     </div>
   )
 }
