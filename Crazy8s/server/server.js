@@ -224,32 +224,47 @@ app.delete('/delete_user/:userId', async (req, res) => {
  */
 app.post('/add_friend/:userId', async(req, res) => {
   const userId = req.params.userId;
-  const { friendId } = req.body;
+  const { friendName } = req.body;
+
+  console.log('Received friendName:', friendName);
 
   try {
-    
-    const [userDoc, friendDoc] = await Promise.all([
+    // First, find the friend by name
+    const friendQuerySnapshot = await db.collection('users')
+      .where('name', '==', friendName)
+      .limit(1)
+      .get();
+
+    // Check if friend exists
+    if (friendQuerySnapshot.empty) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get the friend's document
+    const friendDoc = friendQuerySnapshot.docs[0];
+    const friendId = friendDoc.id;
+
+    // Rest of the existing code remains the same, but now using friendId
+    const [userDoc, fullFriendDoc] = await Promise.all([
       db.collection('users').doc(userId).get(),
       db.collection('users').doc(friendId).get()
     ]);
 
     // Check if both users exist
-    if (!userDoc.exists || !friendDoc.exists) {
+    if (!userDoc.exists || !fullFriendDoc.exists) {
       return res.status(404).json({ message: 'One or both users not found' });
     }
 
-    // Check if friend request already exists
-    const friendData = friendDoc.data();
+    // Continue with existing friend request logic...
+    const friendData = fullFriendDoc.data();
     if (friendData.friend_requests.some(request => request.id === userId)) {
       return res.status(400).json({ message: 'Friend request already sent' });
     }
 
-    // Check if already friends
     if (friendData.friends.some(friend => friend.id === userId)) {
       return res.status(400).json({ message: 'Users are already friends' });
     }
 
-    // Add friend request
     await db.collection('users').doc(friendId).update({
       friend_requests: admin.firestore.FieldValue.arrayUnion({
         id: userId,
@@ -376,6 +391,31 @@ app.get('/conversations/:conversationId/messages', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+app.post("/conversations/:conversationId/messages", async (req, res) => {
+  const { conversationId } = req.params;
+  const { senderId, recipientId, content } = req.body;
+
+  if (!content || !senderId || !recipientId) {
+    return res.status(400).send("Invalid message data");
+  }
+
+  try {
+    const conversationRef = db.collection("conversations").doc(conversationId);
+    await conversationRef.collection("messages").add({
+      senderId,
+      recipientId,
+      content,
+      timestamp: new Date(),
+    });
+
+    res.status(200).send("Message sent successfully");
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).send("Failed to send message");
+  }
+});
+
 
 
 // DO NOT ACCIDENTALLY DELETE

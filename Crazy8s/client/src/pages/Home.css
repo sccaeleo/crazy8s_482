@@ -29,6 +29,17 @@ h1 {
     text-align: center;
 }
 
+.custom-btn{
+    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkerGreen));
+    background-color: var(--lighterGreen);
+    color: white;
+    box-shadow:  5px 5px 5px rgb(0, 0, 0, .5);
+}
+
+.custom-btn:hover{
+    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkGreen));
+    color: white;
+}
 /* Main Page */
 
 .main-title {
@@ -45,10 +56,6 @@ h1 {
 }
 
 .account-button {
-    background-color: var(--lighterGreen);
-    color: white;
-    box-shadow:  5px 5px 5px rgb(0, 0, 0, .5);
-    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkerGreen));
     position: absolute;
     height: auto;
     width: 70px;
@@ -56,11 +63,6 @@ h1 {
     right: 3%;
     text-align: center;
     border-radius: 50px;
-}
-
-.account-button:hover {
-    background-color: var(--lightGreen);
-    color: white;
 }
 
 .main-buttons {
@@ -71,21 +73,11 @@ h1 {
     
 }
 
-.btn-padding {
+.main-button {
     margin-right: 10px;
     margin-left: 10px;
     width: 300px;
     height: 80px;
-    color: white;
-    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkerGreen));
-
-    box-shadow: 5px 5px 5px rgb(0, 0, 0, .5);
-    transition-duration: 0.4s;
-}
-
-.btn-padding:hover {
-    background: linear-gradient(to bottom right, var(--lightestGreen), var(--darkGreen));
-    color: white;
 }
 
 /* Lobby Page */
