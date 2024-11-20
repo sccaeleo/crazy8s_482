@@ -213,11 +213,12 @@ class Game {
    * Get other players num cards
    */
   playerNumCards() {
-    const numPerPlayer = {};
+    const numPerPlayer = [];
     for(const p1 of this.players)
-      numPerPlayer.push(p1.numCards());
+      numPerPlayer.push({username: p1.username, numCards: p1.numCards()});
     // push username and numCards and then return that to the client
 
+    // console.log(numPerPlayer);
     return numPerPlayer;
   }
 

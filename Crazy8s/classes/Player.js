@@ -4,11 +4,14 @@ const Card = require('../classes/Card.js')
 class Player {
   
   hand = [];
+  username;
 
   /**
    * Constructor for a Player
    */
-  constructor() {}
+  constructor(username) {
+    this.username = username;
+  }
 
   /**
    * Checks if the card is playable and removes it from the players hand if it is.
