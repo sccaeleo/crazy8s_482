@@ -5,7 +5,6 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 
 function CreateGame({ socket }) {
 
-  const [socketId, setSocketId] = useState('');
   const navigate = useNavigate();
 
   const [gameMade, setGameMade] = useState(false);
@@ -22,19 +21,29 @@ function CreateGame({ socket }) {
    * Initial Setup
    */
   useEffect(() => {
-    // Set socket ID when the component mounts
-    if (socket) {
-      setSocketId(socket.id);
-    }
-
     // Cleanup on unmount
     return () => {
       socket.off('connect');
     };
   }, [socket]);
 
-  const host = 'Htestost';
+  // ---------------------------------------- Server to Client ----------------------------------------
 
+  /**
+   * Send to Game.jsx
+   */
+  socket.on("goToGamePage", () => {
+    navigate("/game");
+  })
+
+  /**
+   * Update playerList with new players
+   */
+  socket.on("updatePlayers", list => {
+    setPlayerList(list);
+  })
+
+  // ---------------------------------------- Client to Server ----------------------------------------
 
   /**
    * Creates the game
@@ -42,10 +51,8 @@ function CreateGame({ socket }) {
   const createGameObject = () => {
     if(gameMade === false) {
       setGameMade(true);
-      // socket.emit("createGame", roomName)
 
       socket.emit("createGame", {
-        // host: socketId,
         room,
         bet: parseFloat(bet),
         password,
@@ -59,18 +66,13 @@ function CreateGame({ socket }) {
     }
   }
 
+  /**
+   * Go to Game.jsx
+   */
   const sendGamePage = () => {
     setGameMade(false);
     socket.emit("gameScreen", room);
   }
-
-  socket.on("goToGamePage", () => {
-    navigate("/game");
-  })
-
-  socket.on("updatePlayers", list => {
-    setPlayerList(list);
-  })
 // The html of the page
   return(
     <>
@@ -100,13 +102,15 @@ function CreateGame({ socket }) {
         />
       </div>
 
+      <div>
+      <label>{"Private"}</label>
       <input 
         type="checkbox" 
         checked={isPublic === false} 
         onChange={() => setIsPublic(!isPublic)} 
         />
-      <p>{"Private"}</p>
-
+      </div>
+      
       <div>
         <label>Password:</label>
         <input 
@@ -122,10 +126,10 @@ function CreateGame({ socket }) {
     </div>
 
     <div class = "create-game-buttons">
-      <button class="btn start-lobby" onClick={createGameObject} disabled = {gameMade}>Start Lobby</button>
+      <button class="btn start-lobby custom-btn" onClick={createGameObject} disabled = {gameMade}>Start Lobby</button>
       
       <div>
-        {gameMade && (<button class="btn start-game" onClick={sendGamePage}>Start Game</button>)}
+        {gameMade && (<button class="btn start-game custom-btn" onClick={sendGamePage}>Start Game</button>)}
       </div>
 
     </div>
@@ -148,7 +152,7 @@ function CreateGame({ socket }) {
     <Link to={'https://www.google.com'} target="_blank">
       <div
       style={{
-        width: '80%',
+        width: '40%',
         height: '10%',
         backgroundColor: 'white',
         border: '2px solid black',
@@ -156,14 +160,12 @@ function CreateGame({ socket }) {
         textAlign: 'center',
         position: 'absolute',
         bottom: '10px',
-        right: '10%',
+        right: '5%',
         color: 'black'
       }}>
       Banner Ad Placeholder
       </div>
       </Link>
-    
-    <div class="connected-message">{socketId}</div>
     </>
   )
 }

@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 function Game({socket}) {
 
   // useStates in order to update them on the UI
-  const [socketId, setSocketId] = useState('');
   const [hand, setHand] = useState([]);
   const [pileCard, setPileCard] = useState("cardSpadesQ.png")
   const [started, setStarted] = useState(false);
@@ -21,9 +20,7 @@ function Game({socket}) {
   
 
   useEffect(() => {
-    // Set socket ID when the component mounts
     if (socket) {
-      setSocketId(socket.id);
       socket.emit("getUsername", (cb) =>{
         setUsername(cb);
       })
@@ -35,24 +32,21 @@ function Game({socket}) {
     };
   }, [socket]);
 
+  // ---------------------------------------- Server to Client ----------------------------------------
+
   /**
-   * tell server to start the game
+   * Server tells client to ask it for its hand, then player calls for its hand and sets hand useState to the callback
    */
-  const startGame = () => {
-    setStarted(true)
-    socket.emit("startGame", cb => {
-      setHand(cb)
-    })
-  }
-
-
-  socket.on("requestHand", hand => {
+  socket.on("requestHand", () => {
     setStarted(true);
     socket.emit("getHand", cb => {
       setHand(cb);
     });
   })
 
+  /**
+   * Update map of usernames and number of cards for each and set it to playerHands 
+   */
   socket.on("updateHands", hands => {
     const myIndex = hands.findIndex(player => player.username === username);
     if(myIndex === -1)
@@ -64,20 +58,48 @@ function Game({socket}) {
     setPlayerHands(newPlayerHands);
   })
 
+  /**
+   * Update the pile
+   */
+  socket.on("updatePile", (card) => {
+    setPileCard(card);
+  })
+
+  /**
+   * Call to subtract balance when you lose a game
+   */
   socket.on("lostGame", () =>{
     socket.emit("subtractBalance");
     setGameOver(true);
   })
 
+  /**
+   * Server tells client that its the only player in the lobby, show win screen, add bet
+   */
   socket.on("onePlayer", () => {
     socket.emit("winByTechnicality");
     setGameOver(true);
     setResultMessage("You Win");
   })
 
+  /**
+   * Get username of player whos turn it is
+   */
   socket.on("turn", (username) => {
     setTurn(username);
   })
+
+  // ---------------------------------------- Client to Server ----------------------------------------
+
+  /**
+   * tell server to start the game
+   */
+  const startGame = () => {
+    setStarted(true)
+    socket.emit("startGame", cb => {
+      setHand(cb)
+    })
+  }
 
   /**
    * tell the server what card you want to play
@@ -117,13 +139,6 @@ function Game({socket}) {
   }
 
   /**
-   * Update the pile
-   */
-  socket.on("updatePile", (card) => {
-    setPileCard(card);
-  })
-
-  /**
    * Pick a suit when you play an 8
    * @param {*} suit - The suit you clicked on
    */
@@ -132,6 +147,9 @@ function Game({socket}) {
     setPickSuit(false);
   }
 
+  /**
+   * Leave the game
+   */
   const leaveGame = () => {
     socket.emit("leaveGame");
     navigate("/");
@@ -195,6 +213,7 @@ function Game({socket}) {
             ))}
           </div>
 
+          {/*THIS IS HIP TOO - Jack - This is cool because the position of the players change based off the amount of players in the game.*/}
           <div class="other-players">
             {playerHands?.length > 0 && playerHands.map((player, index) => {
               let positionClass;
@@ -237,14 +256,14 @@ function Game({socket}) {
         </div>
 
         {gameOver && (<div class="game-over">
-          <button class="leave-button" onClick={leaveGame}>Leave Game</button>
+          <button class="leave-button btn btn-danger" onClick={leaveGame}>Leave Game</button>
           <h3 className={resultMessage === 'You Win' ? 'win-text' : 'lose-text'}>{resultMessage}</h3>
         </div>)}
         {/* Banner Ad Placeholder */} 
       <Link to={'https://www.google.com'} target="_blank">
       <div
       style={{
-        width: '80%',
+        width: '35%',
         height: '10%',
         backgroundColor: 'white',
         border: '2px solid black',
@@ -252,7 +271,7 @@ function Game({socket}) {
         textAlign: 'center',
         position: 'absolute',
         bottom: '10px',
-        right: '10%',
+        right: '5%',
         color: 'black'
       }}>
       Banner Ad Placeholder

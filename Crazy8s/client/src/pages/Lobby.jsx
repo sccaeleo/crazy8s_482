@@ -11,7 +11,6 @@ function Lobby({ socket }) {
      * Initial Setup
      */
     useEffect(() => {
-        // Set socket ID when the component mounts
         if (socket) {
             socket.emit("updatePlayers", cb => {
                 setPlayerList(cb);
@@ -24,10 +23,16 @@ function Lobby({ socket }) {
         };
     }, [socket]);
 
+    /**
+     * Go to Game.jsx
+     */
     socket.on("goToGamePage", () => {
         navigate("/game");
     })
 
+    /**
+     * Update playerList with new players
+     */
     socket.on("updatePlayers", list => {
         setPlayerList(list);
     })
