@@ -146,9 +146,10 @@ function Game({socket}) {
         </div>
       
         <div class="game">
-          <div>
-          {!started && (<button class="btn btn-lg btn-light" onClick={startGame}>Deal</button>)}
-          </div>
+          
+
+          {!started && (<button data-testid = "dbutton" class="btn btn-lg btn-light" onClick={startGame}>Deal</button>)}
+
           
           {/* The Deck and Pile*/}
           <div class="game-center">
@@ -186,9 +187,9 @@ function Game({socket}) {
           </div>
 
           {/* Creates the player's hand */}
-          <div class="player-hand">
+          <div data-testid = "player-hand" class="player-hand">
             {hand.map((card, index) => (
-              <button class="player-hand card-button" onClick={() => playCard(index)} disabled = {pickSuit}>
+              <button data-testid="play-card" class="player-hand card-button" onClick={() => playCard(index)} disabled = {pickSuit}>
                 <img key={index} src={require(`./Cards/${card}`)} alt={`Card ${card}`} />
               </button>
             ))}
@@ -227,7 +228,7 @@ function Game({socket}) {
           </div>
 
           <div>
-            <button class="leave-button" onClick={leaveGame}>Leave Game</button>
+            <button class="leave-button btn btn-danger" onClick={leaveGame}>Leave Game</button>
           </div>
 
           <div class="turn">
@@ -239,6 +240,25 @@ function Game({socket}) {
           <button class="leave-button" onClick={leaveGame}>Leave Game</button>
           <h3 className={resultMessage === 'You Win' ? 'win-text' : 'lose-text'}>{resultMessage}</h3>
         </div>)}
+        {/* Banner Ad Placeholder */} 
+      <Link to={'https://www.google.com'} target="_blank">
+      <div
+      style={{
+        width: '80%',
+        height: '10%',
+        backgroundColor: 'white',
+        border: '2px solid black',
+        padding: '10px',
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: '10px',
+        right: '10%',
+        color: 'black'
+      }}>
+      Banner Ad Placeholder
+      </div>
+      </Link>
+
       </div>
     )
   }
