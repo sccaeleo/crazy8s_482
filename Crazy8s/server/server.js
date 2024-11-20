@@ -537,15 +537,12 @@ io.on("connection", socket => {
   })
 
   socket.on("getUsername", (cb) => {
-    if(socket.user)
-      cb(socket.user.name);
-    else
-      cb("Guest 1");
+    cb(socket.player.getUsername());
   })
 
   socket.on("updatePlayers", (cb) => {
     const usernames = socket.currGame.playerNumCards();
-    // console.log(usernames);
+
     cb(usernames.map(user => user.username));
   })
 
@@ -557,7 +554,7 @@ io.on("connection", socket => {
     if(socket.user) {
       socket.player = new Player(socket.user.name);
     }else{
-      socket.guestName = "Guest 1"
+      socket.guestName = "Player 1"
       socket.player = new Player(socket.guestName);
     }
 
@@ -576,7 +573,8 @@ io.on("connection", socket => {
     const started = socket.currGame.startGame();
     io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
     socket.to(socket.gameRoom).emit("requestHand");
-    //io.to(socket.gameRoom).emit("PlayerNumCards", socket.currGame.playerNumCards());
+    io.to(socket.gameRoom).emit("updateHands", socket.currGame.playerNumCards());
+    io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
     cb(socket.player.displayCards());
   })
 
@@ -585,7 +583,6 @@ io.on("connection", socket => {
    * @returns {string[]} - a list of your cards png files as strings
    */
   socket.on("getHand", cb => {
-    //console.log("Got Hand");
     cb(socket.player.displayCards());
   })
 
@@ -596,12 +593,22 @@ io.on("connection", socket => {
    */
   socket.on("playCard", (index, cb) => {
     const played = socket.currGame.playCard(socket.player, index);
-    if(played)
+    if(played) {
       io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
+      socket.to(socket.gameRoom).emit("updateHands", socket.currGame.playerNumCards());
+    }
 
-    if(played === "win")
+    if(played === "win") {
       socket.to(socket.gameRoom).emit("lostGame");
+      if(socket.user) {
+        const newBalance = socket.currGame.handleBet(socket.user.balance, true);
+        socket.user.balance = newBalance;
+        socket.user.games++;
+        socket.user.wins++;
+      }
+    }
     
+    io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
     cb(played);
   })
 
@@ -611,6 +618,9 @@ io.on("connection", socket => {
    */
   socket.on("drawCard", (cb) => {
     const card = socket.currGame.drawCard(socket.player);
+    socket.to(socket.gameRoom).emit("updateHands", socket.currGame.playerNumCards());
+    if(!card)
+      socket.emit("turn", socket.currGame.turn());
     cb(card);
   })
 
@@ -633,16 +643,23 @@ io.on("connection", socket => {
    * @returns {boolean} - true if joined the game, false if full
    */
   socket.on("joinGame", (index, cb) => {
-    if(socket.user)
+    if(socket.user) {
       socket.player = new Player(socket.user.name);
-    else
-      socket.player = new Player("Guest 2");
+    }else{
+      const numPlayers = games[index].currPlayers();
+      const guest = "Player " + (numPlayers + 1);
+      socket.player = new Player(guest);
+      console.log("ADDED: " + socket.player.username);
+    }
     const joined = games[index].addPlayer(socket.player);
     if(joined) {
       socket.currGame = games[index];
       socket.gameRoom = socket.currGame.getRoomName();
       socket.join(socket.gameRoom);
     }
+
+    const usernames = socket.currGame.playerNumCards();
+    socket.to(socket.gameRoom).emit("updatePlayers", usernames.map(user => user.username));
     cb(joined);
   })
 
@@ -652,13 +669,18 @@ io.on("connection", socket => {
   socket.on("leaveGame", () => {
     socket.leave(socket.gameRoom);
     socket.currGame.removePlayer(socket.player);
+    if(socket.currGame.started && !(socket.currGame.isOver()) && socket.user) {
+      const newBalance = socket.currGame.handleBet(socket.user.balance, false);
+      socket.user.balance = newBalance;
+      socket.user.games++;
+      socket.user.losses++;
+    }
 
     const numPlayers = socket.currGame.currPlayers();
-    if(numPlayers === 1 && !socket.currGame.isOver())
+    if(numPlayers === 1 && !(socket.currGame.isOver()))
       socket.to(socket.gameRoom).emit("onePlayer");
     if(numPlayers === 0)
       games = games.filter(game => game !== socket.currGame);
-      // should be in database not games array!!! FIX ME
 
     socket.currGame = undefined;
     socket.player = undefined;
@@ -674,5 +696,23 @@ io.on("connection", socket => {
       io.to(room).emit("goToGamePage");
   })
 
+  socket.on("winByTechnicality", () => {
+    if(!socket.user)
+      return;
+    const newBalance = socket.currGame.handleBet(socket.user.balance, true);
+    socket.user.balance = newBalance;
+    socket.currGame.endGame();
+    socket.user.games++;
+    socket.user.wins++;
+  })
+
+  socket.on("subtractBalance", () => {
+    if(!socket.user)
+      return;
+    const newBalance = socket.currGame.handleBet(socket.user.balance, false);
+    socket.user.balance = newBalance;
+    socket.user.games++;
+    socket.user.losses++;
+  })
 
 })

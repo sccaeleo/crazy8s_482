@@ -7,12 +7,16 @@ function Game({socket}) {
 
   // useStates in order to update them on the UI
   const [socketId, setSocketId] = useState('');
-  var [hand, setHand] = useState([]);
-  var [pileCard, setPileCard] = useState("cardSpadesQ.png")
-  var [started, setStarted] = useState(false);
-  var [pickSuit, setPickSuit] = useState(false);
-  var [resultMessage, setResultMessage] = useState("You Lose");
-  var [gameOver, setGameOver] = useState(false);
+  const [hand, setHand] = useState([]);
+  const [pileCard, setPileCard] = useState("cardSpadesQ.png")
+  const [started, setStarted] = useState(false);
+  const [pickSuit, setPickSuit] = useState(false);
+  const [resultMessage, setResultMessage] = useState("You Lose");
+  const [gameOver, setGameOver] = useState(false);
+  const [username, setUsername] = useState();
+  const [playerHands, setPlayerHands] = useState();
+  const [turn, setTurn] = useState('');
+
   const navigate = useNavigate();
   
 
@@ -20,6 +24,9 @@ function Game({socket}) {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
+      socket.emit("getUsername", (cb) =>{
+        setUsername(cb);
+      })
     }
 
     // Cleanup on unmount
@@ -46,13 +53,30 @@ function Game({socket}) {
     });
   })
 
+  socket.on("updateHands", hands => {
+    const myIndex = hands.findIndex(player => player.username === username);
+    if(myIndex === -1)
+      return;
+
+    const filteredList = hands.filter(player => player.username !== username);
+    const startIndex = (myIndex) % hands.length;
+    const newPlayerHands = [...filteredList.slice(startIndex), ...filteredList.slice(0, startIndex)];
+    setPlayerHands(newPlayerHands);
+  })
+
   socket.on("lostGame", () =>{
+    socket.emit("subtractBalance");
     setGameOver(true);
   })
 
   socket.on("onePlayer", () => {
+    socket.emit("winByTechnicality");
     setGameOver(true);
     setResultMessage("You Win");
+  })
+
+  socket.on("turn", (username) => {
+    setTurn(username);
   })
 
   /**
@@ -65,8 +89,8 @@ function Game({socket}) {
       if(cb) {
         var temp = [...hand]
         const topCard = temp.splice(index, 1)
-        setHand(temp)
-        setPileCard(topCard)
+        setHand(temp);
+        setPileCard(topCard);
       }
 
       if(cb === 8)
@@ -171,8 +195,44 @@ function Game({socket}) {
             ))}
           </div>
 
+          <div class="other-players">
+            {playerHands?.length > 0 && playerHands.map((player, index) => {
+              let positionClass;
+              if (playerHands.length < 3) {
+                if (index === 0) {
+                  positionClass = 'opponent-2';
+                } else if (index === 1) {
+                  positionClass = 'opponent-3';
+                } else {
+                  positionClass = `opponent-${index + 1}`;
+                }
+              } else {
+                positionClass = `opponent-${index + 1}`;
+              }
+
+              return (
+                <div key={player.username} className={`player-corner ${positionClass}`}>
+                  {/* White background for username */}
+                  <div className="player-name">
+                    <p>{player.username}</p>
+                  </div>
+        
+                  {/* Card back image with "x numCards" */}
+                  <div className="player-cards">
+                    <img className="card-back" src={require('./Cards/cardBack_red1.png')} alt="Card Back" />
+                    <p>x {player.numCards}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           <div>
             <button class="leave-button btn btn-danger" onClick={leaveGame}>Leave Game</button>
+          </div>
+
+          <div class="turn">
+            <h4>It is {turn}'s turn</h4>
           </div>
         </div>
 

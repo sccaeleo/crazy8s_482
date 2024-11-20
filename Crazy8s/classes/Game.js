@@ -15,6 +15,7 @@ class Game {
   tempSuit = false;
   started = false;
   ended = false;
+  originalNumPlayers;
 
   roomName;
   bet;
@@ -43,11 +44,24 @@ class Game {
       return false;
 
     this.started = true;
+    this.originalNumPlayers = this.numPlayers;
     this.deal();
-    this.currTurn = this.players[0];
-    this.currTurnIndex = 0;
+    this.randomTurn();
+    // this.currTurn = this.players[0];
+    // this.currTurnIndex = 0;
 
     return true;
+  }
+
+  randomTurn() {
+    const rand = Math.floor(Math.random()*this.numPlayers);
+    console.log("NumPlayers: " + this.numPlayers + "Random: " + rand);
+    this.currTurn = this.players[rand];
+    this.currTurnIndex = rand;
+  }
+
+  turn() {
+    return this.currTurn.getUsername();
   }
 
   /**
@@ -70,6 +84,8 @@ class Game {
    * @returns {boolean} - true if player joined, false if full
    */
   addPlayer(player) {
+    if(this.started)
+      return false;
     if(this.players.length < 5) {
       this.players.push(player);
       this.numPlayers++;
@@ -93,8 +109,6 @@ class Game {
       this.changeTurn();
       this.players.splice(index, 1);
       this.numPlayers--;
-      if(this.started === true && this.currPlayers() < 2)
-        this.ended = true;
     }
   }
 
@@ -169,10 +183,6 @@ class Game {
         return false;
       }
       const newCard = this.deck.drawCard();
-      // if(!newCard && this.pile.length > 1) {
-      //   this.resetPile();
-      //   newCard = this.deck.drawCard();
-      // }else 
       if(!newCard)
         return false;
       
@@ -188,8 +198,6 @@ class Game {
 
   resetPile() {
     const cards = this.pile.splice(0, this.pile.length-1);
-    for(const card of cards)
-      console.log(card);
     this.deck.addCards(cards);
   }
 
@@ -228,6 +236,17 @@ class Game {
 
   isOver() {
     return this.ended;
+  }
+
+  endGame() {
+    this.ended = true;
+  }
+
+  handleBet(balance, won) {
+    if(won)
+      return balance + this.bet*(this.originalNumPlayers-1);
+    else
+      return balance - this.bet;
   }
 }
 

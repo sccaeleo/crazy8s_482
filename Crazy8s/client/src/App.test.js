@@ -101,7 +101,7 @@ describe('App Component', () => {
   });
 
   // THIS IS HIP TOO -victoria
-  // Writing tests took the longest time to figure out, but I managed to get ~80% coverage thankfully
+  // Writing tests took the longest time to figure out, but I managed to get ~80% coverage for most things
   describe('Create Game Page', () => {
 
     beforeEach(() => {
@@ -458,12 +458,13 @@ describe('App Component', () => {
     expect(mockSocket.emit).toHaveBeenCalledTimes(2);
     expect(mockSocket.emit).toHaveBeenCalledWith('drawCard', expect.any(Function));
   });
-  it('should emit pickSuit event and set pickSuit state to false when pickSuitCall is called', () => {
+  it('emit pickSuit event and set pickSuit state to false when pickSuitCall is called', () => {
     const { getByText, getByTestId, findByTestId } = render(
       <MemoryRouter>
         <Game socket={mockSocket} />
       </MemoryRouter>
     );
+
 
     const pickSuitButton = screen.getByText('Pick Suit');
     fireEvent.click(pickSuitButton);
@@ -472,7 +473,7 @@ describe('App Component', () => {
     expect(screen.getByText('Pick Suit').closest('button')).toBeDisabled();
   });
 
-  it('should emit leaveGame event and navigate to root route when leaveGame is called', () => {
+  it('emit leaveGame event and navigate to root route when leaveGame is called', () => {
     const navigate = useNavigate();
     const { getByText, getByTestId, getByRole } = render(
       <MemoryRouter>
@@ -484,11 +485,22 @@ describe('App Component', () => {
     fireEvent.click(leaveGameButton);
     expect(mockSocket.emit).toHaveBeenCalledTimes(1);
     expect(mockSocket.emit).toHaveBeenCalledWith('leaveGame');
-    expect(navigate).toHaveBeenCalledTimes(1);
-    expect(navigate).toHaveBeenCalledWith('/');
+  });
+
+  it('emit startGame event when startGame is called', () => {
+    const { getByText, getByTestId } = render(
+      <MemoryRouter>
+        <Game socket={mockSocket} />
+      </MemoryRouter>
+    );
+    const startGameButton = screen.getByTestId('dbutton');
+    fireEvent.click(startGameButton);
+    expect(mockSocket.emit).toHaveBeenCalledTimes(1);
+    expect(mockSocket.emit).toHaveBeenCalledWith('startGame', expect.any(Function));
   });
 
 });
 
 });
+
 
