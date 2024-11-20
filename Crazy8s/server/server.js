@@ -444,16 +444,6 @@ function createNewGame(host, roomName, bet, password, isPublic) {
   return game;
 }
 
-const sharedSession = require("socket.io-express-session");
-const { use } = require('browser-sync');
-
-io.use(sharedSession(session({
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false, maxAge: 60000 }
-})));
-
 /**
  * On socket connection, listen for these functions
  */
@@ -470,12 +460,31 @@ io.on("connection", socket => {
     console.log(data);
   })
 
+  socket.on("getUsername", (cb) => {
+    if(socket.user)
+      cb(socket.user.name);
+    else
+      cb("Guest 1");
+  })
+
+  socket.on("updatePlayers", (cb) => {
+    const usernames = socket.currGame.playerNumCards();
+    // console.log(usernames);
+    cb(usernames.map(user => user.username));
+  })
+
   /**
    * Create a new Game
    * @param {*} data - game information
    */
   socket.on("createGame", (data) => {
-    socket.player = new Player();
+    if(socket.user) {
+      socket.player = new Player(socket.user.name);
+    }else{
+      socket.guestName = "Guest 1"
+      socket.player = new Player(socket.guestName);
+    }
+
     const { room, bet, password, isPublic } = data;
     const game = createNewGame(socket.player, room, bet, password, isPublic);
     socket.currGame = game;
@@ -548,7 +557,10 @@ io.on("connection", socket => {
    * @returns {boolean} - true if joined the game, false if full
    */
   socket.on("joinGame", (index, cb) => {
-    socket.player = new Player();
+    if(socket.user)
+      socket.player = new Player(socket.user.name);
+    else
+      socket.player = new Player("Guest 2");
     const joined = games[index].addPlayer(socket.player);
     if(joined) {
       socket.currGame = games[index];

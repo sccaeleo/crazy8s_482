@@ -15,6 +15,7 @@ import CreateAccount from "./pages/CreateAccount"
 import ViewAccount from "./pages/ViewAccount"
 import EditAccount from "./pages/EditAccount"
 import Login from "./pages/Login"
+import Lobby from "./pages/Lobby"
 
 
 const socket = io('http://localhost:3030')
@@ -33,6 +34,7 @@ function App() {
         <Route path="/viewaccount/:id" element={<ViewAccount />} />
         <Route path="/editaccount/:id" element={<EditAccount />} />
         <Route path="/login/" element={<Login socket={socket}/>} />
+        <Route path="/lobby" element={<Lobby socket={socket}/>}/>
       </Routes>
     </BrowserRouter>
   )

@@ -48,7 +48,7 @@ function JoinGame({socket}){
     else{
       socket.emit("joinGame", index, cb => {
         if(cb === true) {
-          navigate('/create');
+          navigate('/lobby');
         }
       })
     }
@@ -62,7 +62,7 @@ function JoinGame({socket}){
     if (password === game.password) {
       socket.emit("joinGame", index, cb => {
         if(cb === true) {
-          navigate('/create');
+          navigate('/lobby');
         }
       })
       setPasswordPopup(false);

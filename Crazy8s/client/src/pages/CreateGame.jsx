@@ -9,7 +9,8 @@ function CreateGame({ socket }) {
   const navigate = useNavigate();
 
   const [gameMade, setGameMade] = useState(false);
-  const [playerList, setPlayerList] = useState(['a','b','c'])
+  const [playerList, setPlayerList] = useState([]);
+  const [username, setUsername] = useState(false);
 
   const [room, setRoom] = useState('');
   const [bet, setBet] = useState('');
@@ -24,12 +25,11 @@ function CreateGame({ socket }) {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
+      socket.emit("getUsername", cb => {
+        setUsername(cb);
+        setPlayerList([cb]);
+      });
     }
-    
-    socket.on('connect', () => {
-      console.log('Connected with socket ID:', socket.id);
-      setSocketId(socket.id);
-    });
 
     // Cleanup on unmount
     return () => {
