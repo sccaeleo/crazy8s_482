@@ -220,6 +220,10 @@ function ViewAccount() {
       <button className="btn btn-danger" style={{ position: "absolute", top: "10px", right: "10px" }} onClick={handleLogout}>
         Logout
       </button>
+
+      <button className="btn btn-primary" style={{ position: "absolute", top: "10px", right: "290px" }} onClick={() => navigate(`/editaccount/${id}`)}>
+        Change Password
+      </button>
       
       <div className="account-view">
         <ul className="list-group">
