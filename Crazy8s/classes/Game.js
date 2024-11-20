@@ -53,6 +53,9 @@ class Game {
     return true;
   }
 
+  /**
+   * Set the first turn to a random person
+   */
   randomTurn() {
     const rand = Math.floor(Math.random()*this.numPlayers);
     console.log("NumPlayers: " + this.numPlayers + "Random: " + rand);
@@ -60,6 +63,10 @@ class Game {
     this.currTurnIndex = rand;
   }
 
+  /**
+   * Return the username of the player whos turn it is
+   * @returns - the username of the player
+   */
   turn() {
     return this.currTurn.getUsername();
   }
@@ -196,6 +203,9 @@ class Game {
     return false;
   }
 
+  /**
+   * Take all the cards from pile except the top one and add them to the bottom of the deck.
+   */
   resetPile() {
     const cards = this.pile.splice(0, this.pile.length-1);
     this.deck.addCards(cards);
@@ -230,18 +240,35 @@ class Game {
     return numPerPlayer;
   }
 
+  /**
+   * Get the amount of players currently in the game
+   * @returns {number} - current number of players in the game
+   */
   currPlayers() {
     return this.numPlayers;
   }
 
+  /**
+   * Check if the game is over
+   * @returns {boolean} - true if someone won, false if not
+   */
   isOver() {
     return this.ended;
   }
 
+  /**
+   * Set ended to done (used for one corner case)
+   */
   endGame() {
     this.ended = true;
   }
 
+  /**
+   * Adds or Substracts bet to balance
+   * @param {*} balance - the users current balance
+   * @param {*} won - true if won, false if not
+   * @returns {number} - the new balance after the game
+   */
   handleBet(balance, won) {
     if(won)
       return balance + this.bet*(this.originalNumPlayers-1);

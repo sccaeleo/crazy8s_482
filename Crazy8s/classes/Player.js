@@ -83,6 +83,10 @@ class Player {
     return this.hand;
   }
 
+  /**
+   * Get username
+   * @returns {string} - username
+   */
   getUsername() {
     return this.username;
   }

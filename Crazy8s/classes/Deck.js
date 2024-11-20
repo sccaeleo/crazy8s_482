@@ -20,7 +20,9 @@ class Deck {
   }
 
   /**
-   * Shuffle's the cards in the array
+   * Shuffle an array of cards
+   * @param {Card[]} cards - cards to shuffle
+   * @returns {Card[]} - shuffled cards
    */
   shuffle(cards) {
     const len = cards.length;
@@ -55,6 +57,10 @@ class Deck {
     return this.cards.length == 0;
   }
 
+  /**
+   * Shuffle cards and add to the bottom of the deck
+   * @param {Card[]} pile - the cards from the pile to add to the deck
+   */
   addCards(pile) {
     const toAdd = this.shuffle(pile);
     this.cards = toAdd.concat(this.cards);

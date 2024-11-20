@@ -460,10 +460,18 @@ io.on("connection", socket => {
     console.log(data);
   })
 
-  socket.on("getUsername", (cb) => {
+  // ---------------------------------------- CreateGame.jsx and Lobby.jsx Socket Functions ----------------------------------------
+
+  /**
+   * Returns this players username
+   */
+  socket.on("getUsername", (cb) => {  // Also used by Game.jsx
     cb(socket.player.getUsername());
   })
 
+  /**
+   * Returns the list of usernames currently in the game
+   */
   socket.on("updatePlayers", (cb) => {
     const usernames = socket.currGame.playerNumCards();
 
@@ -488,6 +496,52 @@ io.on("connection", socket => {
     socket.join(room);
     socket.gameRoom = room;
   })
+
+  /**
+   * Redirect players to the game page.
+   * @param {string} room - the room name
+   */
+  socket.on("gameScreen", room => {
+    if(socket.currGame.currPlayers() > 1)
+      io.to(room).emit("goToGamePage");
+  })
+
+  // ---------------------------------------- JoinGame.jsx Socket Functions ----------------------------------------
+
+  /**
+   * Returns the list of games
+   */
+  socket.on("listGames", (cb) => {
+    cb(games);
+  })
+
+  /**
+   * Join a game.
+   * @param {number} index - the index of the game in the games array
+   * @returns {boolean} - true if joined the game, false if full
+   */
+  socket.on("joinGame", (index, cb) => {
+    if(socket.user) {
+      socket.player = new Player(socket.user.name);
+    }else{
+      const numPlayers = games[index].currPlayers();
+      const guest = "Player " + (numPlayers + 1);
+      socket.player = new Player(guest);
+      console.log("ADDED: " + socket.player.username);
+    }
+    const joined = games[index].addPlayer(socket.player);
+    if(joined) {
+      socket.currGame = games[index];
+      socket.gameRoom = socket.currGame.getRoomName();
+      socket.join(socket.gameRoom);
+    }
+
+    const usernames = socket.currGame.playerNumCards();
+    socket.to(socket.gameRoom).emit("updatePlayers", usernames.map(user => user.username));
+    cb(joined);
+  })
+
+  // ---------------------------------------- Game.jsx Socket Functions ----------------------------------------
 
   /**
    * Start your game.
@@ -532,7 +586,9 @@ io.on("connection", socket => {
       }
     }
     
-    io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
+    if(played !== 8)
+      io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
+
     cb(played);
   })
 
@@ -544,7 +600,7 @@ io.on("connection", socket => {
     const card = socket.currGame.drawCard(socket.player);
     socket.to(socket.gameRoom).emit("updateHands", socket.currGame.playerNumCards());
     if(!card)
-      socket.emit("turn", socket.currGame.turn());
+      io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
     cb(card);
   })
 
@@ -555,36 +611,7 @@ io.on("connection", socket => {
   socket.on("pickSuit", suit => {
     const suitCard = socket.currGame.updateSuit(suit);
     io.to(socket.gameRoom).emit("updatePile", suitCard);
-  })
-
-  socket.on("listGames", (cb) => {
-    cb(games);
-  })
-
-  /**
-   * Join a game.
-   * @param {number} index - the index of the game in the games array
-   * @returns {boolean} - true if joined the game, false if full
-   */
-  socket.on("joinGame", (index, cb) => {
-    if(socket.user) {
-      socket.player = new Player(socket.user.name);
-    }else{
-      const numPlayers = games[index].currPlayers();
-      const guest = "Player " + (numPlayers + 1);
-      socket.player = new Player(guest);
-      console.log("ADDED: " + socket.player.username);
-    }
-    const joined = games[index].addPlayer(socket.player);
-    if(joined) {
-      socket.currGame = games[index];
-      socket.gameRoom = socket.currGame.getRoomName();
-      socket.join(socket.gameRoom);
-    }
-
-    const usernames = socket.currGame.playerNumCards();
-    socket.to(socket.gameRoom).emit("updatePlayers", usernames.map(user => user.username));
-    cb(joined);
+    io.to(socket.gameRoom).emit("turn", socket.currGame.turn());
   })
 
   /**
@@ -612,14 +639,8 @@ io.on("connection", socket => {
   })
 
   /**
-   * Redirect players to the game page.
-   * @param {string} room - the room name
+   * Update players balance when the player wins by everyone else leaving the game
    */
-  socket.on("gameScreen", room => {
-    if(socket.currGame.currPlayers() > 1)
-      io.to(room).emit("goToGamePage");
-  })
-
   socket.on("winByTechnicality", () => {
     if(!socket.user)
       return;
@@ -630,6 +651,9 @@ io.on("connection", socket => {
     socket.user.wins++;
   })
 
+  /**
+   * Substract bet from players balance for losing the game
+   */
   socket.on("subtractBalance", () => {
     if(!socket.user)
       return;
