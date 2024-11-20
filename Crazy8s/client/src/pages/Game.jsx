@@ -213,8 +213,7 @@ function Game({socket}) {
             ))}
           </div>
 
-          {/*THIS IS HIP TOO*/}
-          {/* - Jack*/}
+          {/*THIS IS HIP TOO - Jack - This is cool because the position of the players change based off the amount of players in the game.*/}
           <div class="other-players">
             {playerHands?.length > 0 && playerHands.map((player, index) => {
               let positionClass;
