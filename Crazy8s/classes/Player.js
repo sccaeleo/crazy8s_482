@@ -82,6 +82,10 @@ class Player {
   takeCardsBack() {
     return this.hand;
   }
+
+  getUsername() {
+    return this.username;
+  }
 }
 
 module.exports = Player;

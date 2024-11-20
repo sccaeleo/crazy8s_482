@@ -14,7 +14,6 @@ function Lobby({ socket }) {
         // Set socket ID when the component mounts
         if (socket) {
             socket.emit("updatePlayers", cb => {
-                socket.emit("test", cb);
                 setPlayerList(cb);
             });
         }

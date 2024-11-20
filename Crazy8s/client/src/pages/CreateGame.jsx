@@ -25,10 +25,6 @@ function CreateGame({ socket }) {
     // Set socket ID when the component mounts
     if (socket) {
       setSocketId(socket.id);
-      socket.emit("getUsername", cb => {
-        setUsername(cb);
-        setPlayerList([cb]);
-      });
     }
 
     // Cleanup on unmount
@@ -37,7 +33,7 @@ function CreateGame({ socket }) {
     };
   }, [socket]);
 
-  const host = 'testHost';
+  const host = 'Htestost';
 
 
   /**
@@ -55,6 +51,11 @@ function CreateGame({ socket }) {
         password,
         isPublic
       });
+
+      socket.emit("getUsername", cb => {
+        setUsername(cb);
+        setPlayerList([cb]);
+      });
     }
   }
 
@@ -67,6 +68,9 @@ function CreateGame({ socket }) {
     navigate("/game");
   })
 
+  socket.on("updatePlayers", list => {
+    setPlayerList(list);
+  })
 // The html of the page
   return(
     <>
