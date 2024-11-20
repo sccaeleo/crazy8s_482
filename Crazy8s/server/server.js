@@ -71,6 +71,7 @@ app.post('/add_user', async (req, res) => {
           games_played:0,
           wins:0,
           losses:0,
+          isAdmin:false
       });
         res.status(200).json({ success: 'user added successfully' });
     } catch (err) {
@@ -156,7 +157,7 @@ app.post('/logout', (req, res) => {
 });
 
 /**
- * Get an account
+ * Gets all accounts
  */
 app.get('/accounts', async (req, res) => {
   try {
@@ -168,6 +169,63 @@ app.get('/accounts', async (req, res) => {
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/**
+ * Get reports
+ */
+app.get('/reports', async (req, res) => {
+  try {
+    const reportsSnapshot = await db.collection('reports').get();
+    const reports = reportsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    res.status(200).json(reports);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/**
+ * send a report
+ */
+app.post('/report', async (req, res) => {
+  try {
+    const { username, issue } = req.body;
+    
+    if (!username || !issue) {
+      return res.status(400).json({ message: 'Username and issue are required' });
+    }
+
+    const reportRef = await db.collection('reports').add({
+      username: username,
+      issue: issue
+    });
+
+    res.status(201).json({ 
+      message: 'Report created successfully',
+      id: reportRef.id 
+    });
+  } catch (err) {
+    console.error('Error creating report:', err);
+    res.status(500).json({ message: 'Error creating report' });
+  }
+});
+
+/**
+ * delete a report
+ */
+
+app.delete('/reports/:reportId', async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    await db.collection('reports').doc(reportId).delete();
+    res.status(200).json({ message: 'Report successfully deleted' });
+  } catch (err) {
+    console.error('Error deleting report:', err);
+    res.status(500).json({ message: 'Error deleting report', error: err.message });
   }
 });
 
@@ -199,6 +257,24 @@ app.post('/edit_user/:userId', async (req, res) => {
           name,
           email,
           password
+      });
+      res.status(200).json({ success: 'User updated successfully' });
+  } catch (err) {
+      res.status(500).json({ message: 'Something unexpected has occurred' + err });
+  }
+});
+
+/**
+ * Edit balance, wins, losses
+ */
+app.post('/edit_user_bwl/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const { balance, wins, losses} = req.body;
+  try {
+      await db.collection('users').doc(userId).update({
+          balance,
+          wins,
+          losses
       });
       res.status(200).json({ success: 'User updated successfully' });
   } catch (err) {

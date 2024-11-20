@@ -31,16 +31,12 @@ function AccountSettings() {
 return (
   <div className='container-fluid bg-success vh-100 vw-100'>
       <h3>Accounts</h3>
-      <div className='d-flex justify-content-end'>
-          <Link className='btn btn-light' to='/CreateAccount'>Add Account</Link>
-      </div>
       <table>
           <thead>
               <tr>
                   <th>ID</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Password</th>
                   <th>Actions</th>
               </tr>
           </thead>
@@ -51,7 +47,6 @@ return (
                           <td>{account.id}</td>
                           <td>{account.name}</td>
                           <td>{account.email}</td>
-                          <td>{account.password}</td>
                           <td>
                               <Link className='btn mx-2 btn-light' to={`/viewaccount/${account.id}`}>View</Link>
                               <Link className='btn mx-2 btn-light' to={`/editaccount/${account.id}`}>Edit</Link>

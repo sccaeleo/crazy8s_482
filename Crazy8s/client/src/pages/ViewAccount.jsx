@@ -11,6 +11,10 @@ function ViewAccount() {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [messageText, setMessageText] = useState("");
   const [messageHistory, setMessageHistory] = useState([]);
+  const [reports, setReports] = useState([]);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportUsername, setReportUsername] = useState('');
+  const [reportIssue, setReportIssue] = useState('');
 
   
   const { id } = useParams();
@@ -39,8 +43,52 @@ function ViewAccount() {
     }
   };
 
+
+  const fetchReports = async () => {
+    try {
+      const response = await axios.get('/reports');
+      setReports(response.data);
+    } catch (err) {
+      console.error("Error fetching reports:", err);
+    }
+  };
+
+  const submitReport = async (e) => {
+    e.preventDefault();
+    if (!reportUsername.trim() || !reportIssue.trim()) {
+      alert('Please fill in both fields');
+      return;
+    }
+  
+    try {
+      await axios.post('/report', {
+        username: reportUsername,
+        issue: reportIssue
+      });
+      alert('Report submitted successfully');
+      setShowReportModal(false);
+      setReportUsername('');
+      setReportIssue('');
+    } catch (err) {
+      console.error("Error submitting report:", err);
+      alert('Error submitting report');
+    }
+  };
+
+  const handleReport = async (reportId) => {
+    try {
+      await axios.delete(`/reports/${reportId}`);
+      fetchReports(); // Refresh the reports list
+      alert('Report handled successfully');
+    } catch (err) {
+      console.error("Error handling report:", err);
+      alert('Error handling report. Please try again.');
+    }
+  };
+
   useEffect(() => {
     fetchUserData();
+    fetchReports();
   }, [id]);
 
   /**
@@ -159,9 +207,15 @@ function ViewAccount() {
   return (
     <div>
       <h1 className="main-title"><b>Your Account</b></h1>
-      <Link to="/accountsettings" className="btn btn-back">
+
+
+      <button className="btn btn-primary" style={{ position: "absolute", top: "10px", left: "10px" }} onClick={() => navigate('/')}>
         Back
-      </Link>
+        </button>
+
+      <button className="btn btn-warning" style={{ position: "absolute", top: "10px", right: "120px" }} onClick={() => setShowReportModal(true)}>
+        Report Player
+        </button>
 
       <button className="btn btn-danger" style={{ position: "absolute", top: "10px", right: "10px" }} onClick={handleLogout}>
         Logout
@@ -198,6 +252,50 @@ function ViewAccount() {
            {user.losses}
           </li>
         </ul>
+        {user.isAdmin && (
+          <div className="admin-panel mt-3">
+            <h4>Admin Panel</h4>
+            <button 
+              className="btn btn-danger"
+              onClick={() => navigate('/accountsettings')}
+            >
+              Player Accounts
+            </button>
+            
+            <h5>Player Reports</h5>
+            <div className="lobby-list">
+              {reports.map((report) => (
+                <div className="player-entry" key={report.id}>
+                  <div>
+                    <strong>Reported Player: </strong> {report.username}
+                  </div>
+                  <div>
+                    <strong>Issue: </strong> {report.issue}
+                  </div>
+                  <button 
+                    className="btn btn-danger" 
+                    onClick={() => {
+                      axios.delete(`/reports/${report.id}`)
+                        .then(() => {
+                          fetchReports(); // Refresh reports after deletion
+                          alert('Report handled and removed');
+                        })
+                        .catch(err => {
+                          console.error("Error deleting report:", err);
+                          alert('Error removing report');
+                        });
+                    }}
+                  >
+                    Mark as Handled
+                  </button>
+                </div>
+              ))}
+              {reports.length === 0 && (
+                <p>No active reports</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="friends">
@@ -331,6 +429,69 @@ function ViewAccount() {
           </div>
         </div>
       )}
+
+{showReportModal && (
+  <div className="modal-overlay" style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000
+  }}>
+    <div className="modal-content" style={{
+      backgroundColor: 'white',
+      padding: '20px',
+      borderRadius: '8px',
+      width: '80%',
+      maxWidth: '500px'
+    }}>
+      <h2>Report Player</h2>
+      <form onSubmit={submitReport}>
+        <div style={{ marginBottom: '15px' }}>
+          <label>Player Username:</label>
+          <input 
+            type="text" 
+            className="form-control"
+            value={reportUsername}
+            onChange={(e) => setReportUsername(e.target.value)}
+            placeholder="Enter player's username"
+          />
+        </div>
+        <div style={{ marginBottom: '15px' }}>
+          <label>Issue:</label>
+          <textarea 
+            className="form-control"
+            value={reportIssue}
+            onChange={(e) => setReportIssue(e.target.value)}
+            placeholder="Describe the issue"
+            rows="3"
+          />
+        </div>
+        <div>
+          <button type="submit" className="btn btn-primary" style={{ marginRight: '10px' }}>
+            Submit Report
+          </button>
+          <button 
+            type="button" 
+            className="btn btn-secondary"
+            onClick={() => {
+              setShowReportModal(false);
+              setReportUsername('');
+              setReportIssue('');
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
 
       <div className="message">
       </div>
