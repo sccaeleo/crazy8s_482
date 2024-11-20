@@ -2,6 +2,8 @@
 \usepackage{graphicx} % Required for inserting images
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
 
 \title{ASN2}
 \author{William Grimmer, Jack Formato, Victoria Shelton}
@@ -83,7 +85,9 @@ The UI for the website should be simple and intuitive. For the main page (see Fi
 
 \section{Sprints}
 
+\begin{tcolorbox}[colback=blue!10, colframe=blue, boxrule=0.5mm, sharp corners=south]
 \subsection{Sprint Statistics}
+\end{tcolorbox}
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|c|c|}
@@ -134,8 +138,10 @@ The summary and graph of the tests done by Jest are shown in figure \ref{fig:tes
 
 \subsection{Sprint 2}
 
+\begin{tcolorbox}[colback=blue!10, colframe=blue, boxrule=0.5mm, sharp corners=south]
 \subsection{Retrospective}
 Sprint 1 was a good learning experience. We should've started earlier, but struggled too with other work. The biggest issue we had was underestimated the time it took for the initial setup. We also had to learn JavaScript and React syntax for the first time. We also realized that there are no free SQL databases. Due to these issues we will address them by starting earlier and refactoring our database to use Firebase.
+\end{tcolorbox}
 
 \subsubsection{Changes and Slices}
 For Sprint 2, we did not make any changes or slices.
@@ -177,6 +183,7 @@ The summary and graph of the tests on the webpages done by Jest are shown in fig
 \caption{\label{fig:testss2_3}The tests for the game functionality classes using Jest.}
 \end{figure}
 
+\begin{tcolorbox}[colback=blue!10, colframe=blue, boxrule=0.5mm, sharp corners=south]
 \subsection{Sprint 3}
 
 \subsubsection{Retrospective}
@@ -187,6 +194,7 @@ For Sprint 3 we made several slices of user stories and a technical task. Firstl
 
 \subsubsection{User Stories Attempted}
 This sprint, we focused on fixing bugs, cleaning up the UI and finishing up the remaining user stories. Victoria took on: Improve UI, Tutorial, and Ads. Will finished some of his previous stories: Send Message, Add Friend, and Change Password. Jack took on: End Game, Connect Users to Game, Report and Read Player Report. Since Will was able to complete his stories quickly, he completed Report and Read Player Report while Jack focused on patching bugs and making the game runs smoothly.
+\end{tcolorbox}
 
 \begin{table}[h]
 \centering
@@ -200,9 +208,11 @@ Team    & 10 & 28 & 2.3 \\ \hline
 \end{tabular}
 \end{table}
 
+\begin{tcolorbox}[colback=blue!10, colframe=blue, boxrule=0.5mm, sharp corners=south]
 \subsubsection{Tests}
 
 For sprint 3, we focused a lot more on testing, though it took a significant amount of time and we encountered a lot of issues with it. Our coverage is shown in \ref{fig:sprint3tests}. Branch coverage was around 40 percent.
+\end{tcolorbox}
 
 \begin{table}[h]
 \centering
@@ -221,8 +231,10 @@ Will      & Account Functions & $\sim$30\%        \\ \hline
 \caption{\label{fig:sprint3tests}The test coverage.}
 \end{figure}
 
+\begin{tcolorbox}[colback=blue!10, colframe=blue, boxrule=0.5mm, sharp corners=south]
 \subsubsection{UML Class Diagram}
 In our original UML we planned to have several more classes. We had a whole class dedicated to Users, UserStats and Admins. We also had a host class. At the time they seemed necessary. As we started to build the game, we realized that many of these classes were either useless or redundant. When it comes to Users, the database and user session handles all of that information. A host class didn't end up being necessary as there weren't any functions that we implemented that would be different. What we learned along the way is that socketio and as previously mentioned, express and firebase user sessions held a large chunk of the data. This led to a more condensed Class Diagram with few classes. The new diagram now only has four classes. These are just the game objects needed: Card, Player, Game, Deck. They interact much easier since socketio holds the persons Player. This way instead of searching for the player, we already have the object stored. Most functions use this by passing player as a parameter.
+\end{tcolorbox}
 
 \begin{figure}[h]
 \centering
