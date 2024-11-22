@@ -75,17 +75,6 @@ function ViewAccount() {
     }
   };
 
-  const handleReport = async (reportId) => {
-    try {
-      await axios.delete(`/reports/${reportId}`);
-      fetchReports(); // Refresh the reports list
-      alert('Report handled successfully');
-    } catch (err) {
-      console.error("Error handling report:", err);
-      alert('Error handling report. Please try again.');
-    }
-  };
-
   useEffect(() => {
     fetchUserData();
     fetchReports();
@@ -281,7 +270,7 @@ function ViewAccount() {
                     onClick={() => {
                       axios.delete(`/reports/${report.id}`)
                         .then(() => {
-                          fetchReports(); // Refresh reports after deletion
+                          fetchReports();
                           alert('Report handled and removed');
                         })
                         .catch(err => {

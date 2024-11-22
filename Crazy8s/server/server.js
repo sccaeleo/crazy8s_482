@@ -303,35 +303,28 @@ app.post('/add_friend/:userId', async(req, res) => {
   const { friendName } = req.body;
 
   console.log('Received friendName:', friendName);
-
+// THIS IS HIP TOO Will, this querySnapshot is what allows us to find a user by name and not their doccument id in the database, was a key fix from last time as he had to use ID numbers to add friends
   try {
-    // First, find the friend by name
     const friendQuerySnapshot = await db.collection('users')
       .where('name', '==', friendName)
       .limit(1)
       .get();
-
-    // Check if friend exists
     if (friendQuerySnapshot.empty) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Get the friend's document
     const friendDoc = friendQuerySnapshot.docs[0];
     const friendId = friendDoc.id;
 
-    // Rest of the existing code remains the same, but now using friendId
     const [userDoc, fullFriendDoc] = await Promise.all([
       db.collection('users').doc(userId).get(),
       db.collection('users').doc(friendId).get()
     ]);
 
-    // Check if both users exist
+  
     if (!userDoc.exists || !fullFriendDoc.exists) {
       return res.status(404).json({ message: 'One or both users not found' });
     }
 
-    // Continue with existing friend request logic...
     const friendData = fullFriendDoc.data();
     if (friendData.friend_requests.some(request => request.id === userId)) {
       return res.status(400).json({ message: 'Friend request already sent' });
