@@ -142,7 +142,6 @@ function CreateGame({ socket }) {
     {playerList.map((player, index) => (
       <div class = "player-entry">
         <p>{player}</p>
-        <button class="btn btn-success" >Allow</button>
       </div>
     ))}
     </div>
