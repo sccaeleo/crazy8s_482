@@ -1,0 +1,192 @@
+\section{Iterations}
+
+[[ The requirements analysis identifies \textbf{what} your client wants.
+With each iteration describe the \textbf{how}.
+Include user stories attempted, data structures introduced, and any key design
+decisions.
+
+Copy this layout for each iteration. ]]
+
+\subsection{Overview}
+
+To complete this project, we split the stories into three two-week sprints. Table \ref{Table 1} illustrates the spread of story points in each sprint. This includes total points, remaining points at the start of the sprint, the points attempted in that sprint, and the points completed in that sprint. If a story was not complete, the points were not included in the completed column and are attempted in a later sprint. In addition, the total points increased in Sprint 3 because we added slices to previous user stories. The table also includes the team's speed (story points per sprint) and cycle time (hours-per-point per story point). The averages for these are included in the final row with averages for attempted points and completed points.
+
+\begin{table}[h]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Sprint} & \textbf{Total Points} & \textbf{Remaining Points} & \textbf{Attempted Points} & \textbf{Completed Points} & \textbf{Speed} & \textbf{Cycle Time} \\ \hline
+1               & 69                    & 69                        & 28                        & 18                        & 18             & 2.71                \\ \hline
+2               & 69                    & 51                        & 38                        & 30                        & 24             & 2.05                \\ \hline
+3               & 73                    & 25                        & 25                        & 25                        & 24.33          & 2.6                 \\ \hline
+Average         & -                     & -                         & 30.33                     & 24.33                     & 22.11          & 2.45                \\ \hline
+\end{tabular}
+}
+\caption{Project overview}
+\label{Table 1}
+\end{table}
+
+
+
+\subsection{Iteration 1}
+
+\subsubsection{Plan}
+The team's plan for Sprint 1 was to get a basic framework for the important aspects of the project. We started by slicing a story, "Create Game". This story was too large, and we had overestimated its story points. To solve this, we split it into three stories: "Create Lobby", "Start Game", and "Leave Game". Originally "Create Game" was 13 points. This was changed to a total of 11 points between the three slices. This change made the task ahead clearer and emphasized that the lobby and game pages were separate. Table \ref{Table 2} breaks down each story attempted in Sprint 1. Each team member took stories related to the layer that they were going to focus on. Victoria worked with the UI, Jack focused on the backend, and Will connected the database. The plan was for each to learn one layer the best so that he or she could help the others when needed.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Story}            & \textbf{Team Member} & \textbf{Points} & \textbf{Status} \\ \hline
+H0.1 & Create Lobby              & Victoria    & 5      & Not Accepted \\ \hline
+H0.2 & Start Game                & Victoria    & 5      & Accepted     \\ \hline
+P1   & Play a card               & Jack        & 5      & Not Accepted \\ \hline
+P2   & Draw a card               & Jack        & 5      & Accepted     \\ \hline
+A1   & Make an account           & Will        & 2      & Accepted     \\ \hline
+A4   & Check account information & Will        & 2      & Accepted     \\ \hline
+A2   & Update my account         & Will        & 2      & Accepted     \\ \hline
+A3   & Delete account            & Will        & 2      & Accepted     \\ \hline
+\end{tabular}
+\caption{Sprint 1 stories}
+\label{Table 2}
+\end{table}
+
+
+\begin{table}[h]
+\begin{tabular}{|ccccc|}
+\hline
+\multicolumn{5}{|c|}{\textbf{Sprint 1}}                                                                                                                                                                  \\ \hline
+\multicolumn{1}{|c|}{\textbf{Team Member}} & \multicolumn{1}{c|}{\textbf{Attempted Points}} & \multicolumn{1}{c|}{\textbf{Completed Points}} & \multicolumn{1}{c|}{\textbf{Speed}} & \textbf{Cycle Time} \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{5}                         & \multicolumn{1}{c|}{5}              & 3                   \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{5}                         & \multicolumn{1}{c|}{5}              & 3                   \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{8}                         & \multicolumn{1}{c|}{8}                         & \multicolumn{1}{c|}{8}              & 2                   \\ \hline
+\multicolumn{5}{|c|}{\textbf{Total}}                                                                                                                                                                     \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{5}                         & \multicolumn{1}{c|}{5}              & 3                   \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{5}                         & \multicolumn{1}{c|}{5}              & 3                   \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{8}                         & \multicolumn{1}{c|}{8}                         & \multicolumn{1}{c|}{8}              & 2                   \\ \hline
+\end{tabular}
+\caption{Team member points for Sprint 1}
+\label{Table 3}
+\end{table}
+
+
+\subsubsection{Activities}
+Victoria started by making React pages and linking them through buttons on the home page. She made pages for the home page, lobby, game, and account. Victoria's user stories are shown in Table \ref{Table 2}. The lobby page contained different fields for setting the name of the room, a bet, whether it was public or private, and a password. The game page was filled with the back of a card for the deck, a face-up card for the pile, and a line of cards as the player's hand. She also worked with Jack to make the game in the backend as well. 
+
+Jack's stories had to do with the player actions. He wrote the classes for Player, Game, Deck, and Card. To connect to the frontend he used SocketIO. This gave the frontend the ability to call functions backend functions, as well as allowing the backend to give the frontend alerts as needed. SocketIO would also keep track of the user's session through different pages, so that we could keep their information consistent. Jack's user stories are shown in Table \ref{Table 2}. Both "Play a card" and "Draw a card" used the socket connection to function.
+
+Will worked on the database. He used MySQL in his implementation. Using express he made post calls to the database to fetch and update information from the database. His stories in Table \ref{Table 2}, were the CRUD for the database. With Victoria, Will helped to write the code for the account. He was able to make, display, update, and delete accounts on this page.
+
+\subsubsection{Retrospective}
+Sprint 1 was a good learning experience. We should’ve started earlier, but struggled too because of other work. The biggest issue we had was that underestimated the time it would take for the initial setup. We also had to learn JavaScript and React syntax for the first time. Table \ref{Table 3} illustrates the progress made in this sprint. Two stories were not accepted. These were "Create Lobby" and "Play a card". We completed most of these two stories, but small parts weren't complete. The lobby page needed to be improved and take in the user's input and playing an eight didn't allow the user to pick the suit. These had to be finished in a later sprint. We also realized that there are no free SQL databases. We decided that it would be better to move to Firebase and use NoSQL for this reason.
+
+
+\subsection{Iteration 2}
+
+\subsubsection{Plan}
+The plan for Sprint 2 was to finish important functionality. We took on the stories that were not accepted in Sprint 1, and worked toward multiplayer. Table \ref{Table 4} contains these stories. We worked to connect players through messages, friends, and multiplayer games. This sprint, we planned to take a large chunk of the stories because we knew that we would be able to complete more with the setup done. Team members took similar stories to Sprint 1. Will will continue to work with the database. He planned to switch to Firebase and worked toward being able to log in and change a user's password. Jack took stories to continue developing the game. His goal was to add multiple players to the same game. Victoria will continue the UI with "View Games", but also interact with the database when making friends.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Story}    & \textbf{Team Member} & \textbf{Points} & \textbf{Status} \\ \hline
+H0.1 & Create Lobby      & Victoria    & 5      & Accepted     \\ \hline
+P6   & View Games        & Victoria    & 5      & Accepted     \\ \hline
+P13  & Add friend        & Victoria    & 3      & Not Accepted \\ \hline
+P14  & Accept friend     & Victoria    & 1      & Accepted     \\ \hline
+P1   & Play a card       & Jack        & 5      & Accepted     \\ \hline
+P7   & Join Game         & Jack        & 8      & Accepted     \\ \hline
+H0.3 & Leave game        & Jack        & 1      & Accepted     \\ \hline
+A0   & Log in to account & Will        & 2      & Accepted     \\ \hline
+M4   & Change password   & Will        & 3      & Not Accepted \\ \hline
+P11  & Read message      & Will        & 5      & Not Accepted \\ \hline
+\end{tabular}
+\caption{Sprint 2 stories}
+\label{Table 4}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{|ccccc|}
+\hline
+\multicolumn{5}{|c|}{\textbf{Sprint 2}}                                                                                                                                                                  \\ \hline
+\multicolumn{1}{|c|}{\textbf{Team Member}} & \multicolumn{1}{c|}{\textbf{Attempted Points}} & \multicolumn{1}{c|}{\textbf{Completed Points}} & \multicolumn{1}{c|}{\textbf{Speed}} & \textbf{Cycle Time} \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{14}                        & \multicolumn{1}{c|}{11}                        & \multicolumn{1}{c|}{11}             & 2.5                 \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{14}                        & \multicolumn{1}{c|}{14}                        & \multicolumn{1}{c|}{14}             & 2                   \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{2}                         & \multicolumn{1}{c|}{2}              & 1.5                 \\ \hline
+\multicolumn{5}{|c|}{\textbf{Total}}                                                                                                                                                                     \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{19}                        & \multicolumn{1}{c|}{16}                        & \multicolumn{1}{c|}{8}              & 3.42                \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{19}                        & \multicolumn{1}{c|}{19}                        & \multicolumn{1}{c|}{9.5}            & 3.05                \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{18}                        & \multicolumn{1}{c|}{10}                        & \multicolumn{1}{c|}{5}              & 2                   \\ \hline
+\end{tabular}
+\caption{Team member points for Sprint 2}
+\label{Table 5}
+\end{table}
+
+\subsubsection{Activities}
+Victoria finished "Create Lobby" this sprint. She passed the game's name, bet, public status, and password through the socket. Table \ref{Table 4} illustrates the stories that Victoria worked on. Other than "Create Lobby", she worked to make a new React page for viewing games. This connected directly with Jack's user stories making it an important addition. She also worked towards adding friends which created connections in the database.
+
+Jack decided to refactor the classes. First, he moved them into their own files and then cut out any unnecessary functions and variables. This was done to be more readable and efficient. His user stories from Table \ref{Table 4} were to join and leave games. This was done through socket rooms. When a game was made, a new room would be created using the game's name. All players would join this room to receive updates during the game. SocketIO allows for alerts to be sent to all socket connections within a specific room. This was used to tell the frontend when someone had played a card.
+
+Will switched the database to Firebase. Firebase was free and allowed everyone to fetch from it, unlike MySQL. He then added new calls to the database to log in and change a password. The plan was for Will to work on send and read messages, but changing databases took too long. This led to "Send Message" not being attempted, and "Read Message" not being accepted. This is shown in Table \ref{Table 4}.
+
+\subsubsection{Retrospective}
+This sprint was successful, but left the team with a few issues. The first being that
+most of the user stories were done very literally. An example of this is "Play a card", which is completed, but didn’t cover ending the game when someone won. In the next sprint we will make some slices to fix these gaps, and make sure the game runs smoothly. Testing was another issue we faced. We found it difficult to mock React and SocketIO in Jest. This hindered our branch coverage. We wish we figured it out sooner. Next sprint, we will put more emphasis on testing and make tests much earlier in the sprint. We realized that Will took on too much this sprint which stopped him from completing all of his stories. We should have made a technical task for converting the database to Firebase. This affected his speed in Table \ref{Table 5}.
+
+
+\subsection{Iteration 3}
+
+\subsubsection{Plan}
+For Sprint 3 we made several slices of user stories and a technical task. Firstly, we made a slice of "Play a card" called "End Game". This slice focused on ending the game when a player plays his or her last card. The second slice we made was from "Join Game". This slice we called "Connect Users to Game". This slice was primarily to track users through their games by adding a reference to the user session in the socket. Lastly, we made a technical task called "Improve UI" which was to make the UI more fluent and visually appealing. The technical task is not included in Table \ref{Table 6} and \ref{Table 7}, but is a part of the sprint. Will's story points are very high this sprint. This is because he is finishing several stories that weren't previously accepted. He also took on "Report" and "Read player report". Jack was originally going to tackle these, but Will was able to finish his stories faster, so he took these himself. Table \ref{Table 6} and \ref{Table 7} both account for this.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Story}    & \textbf{Team Member} & \textbf{Points} & \textbf{Status} \\ \hline
+P5   & Tutorial              & Victoria    & 1      & Accepted \\ \hline
+P9   & Ads                   & Victoria    & 3      & Accepted \\ \hline
+P1.1 & End Game              & Jack        & 2      & Accepted \\ \hline
+P7.1 & Connect Users to Game & Jack        & 2      & Accepted \\ \hline
+P6   & Add friend            & Will        & 3      & Accepted \\ \hline
+M4   & Change password       & Will        & 3      & Accepted \\ \hline
+P12  & Report                & Will        & 3      & Accepted \\ \hline
+M2   & Read player report    & Will        & 1      & Accepted \\ \hline
+P10  & Send message          & Will        & 5      & Accepted \\ \hline
+P11  & Read message          & Will        & 5      & Accepted \\ \hline
+\end{tabular}
+\caption{Sprint 3 stories}
+\label{Table 6}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|ccccc|}
+\hline
+\multicolumn{5}{|c|}{\textbf{Sprint 3}}                                                                                                                                                                  \\ \hline
+\multicolumn{1}{|c|}{\textbf{Team Member}} & \multicolumn{1}{c|}{\textbf{Attempted Points}} & \multicolumn{1}{c|}{\textbf{Completed Points}} & \multicolumn{1}{c|}{\textbf{Speed}} & \textbf{Cycle Time} \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{4}                         & \multicolumn{1}{c|}{4}                         & \multicolumn{1}{c|}{4}              & 3                   \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{4}                         & \multicolumn{1}{c|}{4}                         & \multicolumn{1}{c|}{4}              & 2                   \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{20}                        & \multicolumn{1}{c|}{20}                        & \multicolumn{1}{c|}{20}             & 2                   \\ \hline
+\multicolumn{5}{|c|}{\textbf{Total}}                                                                                                                                                                     \\ \hline
+\multicolumn{1}{|c|}{Victoria}             & \multicolumn{1}{c|}{23}                        & \multicolumn{1}{c|}{20}                        & \multicolumn{1}{c|}{6.67}           & 3.35                \\ \hline
+\multicolumn{1}{|c|}{Jack}                 & \multicolumn{1}{c|}{23}                        & \multicolumn{1}{c|}{23}                        & \multicolumn{1}{c|}{7.67}           & 2.87                \\ \hline
+\multicolumn{1}{|c|}{Will}                 & \multicolumn{1}{c|}{30}                        & \multicolumn{1}{c|}{30}                        & \multicolumn{1}{c|}{10}             & 2.36                \\ \hline
+\end{tabular}
+\caption{Team member points for Sprint 3}
+\label{Table 7}
+\end{table}
+\subsubsection{Activities}
+Victoria even more than other sprints worked on the UI. The home page's buttons were changed to a green and given more detail. The lobby page was also given an upgrade. The buttons were changed to be like the home page and the inputs were aligned properly. Ads placeholders were added to the bottom of different pages to satisfy the "Ads" story. Victoria spent a lot of time testing our programs. She made tests for the React pages, mocking React in order to do so.
+
+Jack made the game run smoothly. He made the functionality for games to end. If a player plays their last card, every other player's screen shows "You Lose", and the winner gets to celebrate with "You Win". This uses HTML to disable all other buttons on the screen except for the "Leave Game" button. When leaving a game, it removes the player from the socket room. If the game isn't finished and there is only one player remaining, the backend alerts the player that they won. With the help of Will, Jack fetched user data and stored it in the socket for future use. The game will display usernames, and players can now see the number of cards each of their opponents has. Jack also updated the lobby page. It now displays the users currently in the game.
+
+Will was able to complete several unfinished stories. Adding a friend can now be done with username. This uses a call to the database which satisfies the previous issue with the story. He also made reports and admins to read those reports. This was done by making a variable for users to distinguish admins from non-admins. He made minor fixes to "Change password" finishing that story as well.
+
+\subsubsection{Retrospective}
+Sprint 3 was successful in tying the project together. We were able to complete all of our user stories and they were accepted. The thing that held us back the most was testing. Victoria worked towards this, but it wasn't enough. Table \ref{Table 7} illustrates our team members' final speed and completed points. Will's points are much higher than the other team members because he finished several unaccepted stories this sprint. Also, his cycle time was the least. On the other hand, Victoria had the longest cycle time and the least completed points. Jack was closer to Victoria in speed, but was in between the two for cycle time. Although different, everyone was able to complete their goals.
+
+\subsection{Future Iterations}
+Our team finished all of our user stories, so future iterations wouldn't involve stories. But there are things to improve and fix. Firstly, a future iteration would make the website public. Currently, it is only able to be run locally. This could be done in a iteration 4. Testing would be another focus in an iteration 4. Our testing is lacking and could be improved.
+
