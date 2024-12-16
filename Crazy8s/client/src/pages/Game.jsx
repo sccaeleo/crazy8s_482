@@ -29,6 +29,9 @@ function Game({socket}) {
     // Cleanup on unmount
     return () => {
       socket.off('connect');
+      // socket.off("requestHand");
+      // socket.off("lostGame");
+      // socket.off("onePlayer");
     };
   }, [socket]);
 

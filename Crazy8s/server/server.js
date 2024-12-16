@@ -25,6 +25,7 @@ const admin = require('firebase-admin');
 const cors = require("cors");
 var mysql = require('mysql');
 var path = require('path');
+const { FieldValue } = require('firebase-admin/firestore')
 
 // Import Classes
 const Game = require('../classes/Game.js')
@@ -67,7 +68,7 @@ app.post('/add_user', async (req, res) => {
           password,
           friends:[],
           friend_requests:[],
-          balance:0,
+          balance:100,
           games_played:0,
           wins:0,
           losses:0,
@@ -638,7 +639,7 @@ io.on("connection", socket => {
    * @param {number} index - the index of the card to play
    * @returns {boolean} - true if played, false if not
    */
-  socket.on("playCard", (index, cb) => {
+  socket.on("playCard", async (index, cb) => {
     const played = socket.currGame.playCard(socket.player, index);
     if(played) {
       io.to(socket.gameRoom).emit("updatePile", socket.currGame.getTopCard());
@@ -652,6 +653,16 @@ io.on("connection", socket => {
         socket.user.balance = newBalance;
         socket.user.games++;
         socket.user.wins++;
+
+        try {
+          await db.collection('users').doc(socket.user.id).update({
+            games_played: FieldValue.increment(1),
+            wins: FieldValue.increment(1),
+            balance: newBalance
+          });
+      } catch (err) {
+          console.error('Failed to update wins in the database:', err);
+      }
       }
     }
     
@@ -686,7 +697,7 @@ io.on("connection", socket => {
   /**
    * Leave a game.
    */
-  socket.on("leaveGame", () => {
+  socket.on("leaveGame", async () => {
     socket.leave(socket.gameRoom);
     socket.currGame.removePlayer(socket.player);
     if(socket.currGame.started && !(socket.currGame.isOver()) && socket.user) {
@@ -694,6 +705,14 @@ io.on("connection", socket => {
       socket.user.balance = newBalance;
       socket.user.games++;
       socket.user.losses++;
+      try {
+        await db.collection('users').doc(socket.user.id).update({
+          games_played: FieldValue.increment(1),
+          losses: FieldValue.increment(1)
+        });
+    } catch (err) {
+        console.error('Failed to update wins in the database:', err);
+    }
     }
 
     const numPlayers = socket.currGame.currPlayers();
@@ -710,7 +729,7 @@ io.on("connection", socket => {
   /**
    * Update players balance when the player wins by everyone else leaving the game
    */
-  socket.on("winByTechnicality", () => {
+  socket.on("winByTechnicality", async () => {
     if(!socket.user)
       return;
     const newBalance = socket.currGame.handleBet(socket.user.balance, true);
@@ -718,18 +737,34 @@ io.on("connection", socket => {
     socket.currGame.endGame();
     socket.user.games++;
     socket.user.wins++;
+    try {
+      await db.collection('users').doc(socket.user.id).update({
+        games_played: FieldValue.increment(1),
+        wins: FieldValue.increment(1)
+      });
+  } catch (err) {
+      console.error('Failed to update wins in the database:', err);
+  }
   })
 
   /**
    * Substract bet from players balance for losing the game
    */
-  socket.on("subtractBalance", () => {
+  socket.on("subtractBalance",async () => {
     if(!socket.user)
       return;
     const newBalance = socket.currGame.handleBet(socket.user.balance, false);
     socket.user.balance = newBalance;
     socket.user.games++;
     socket.user.losses++;
+    try {
+      await db.collection('users').doc(socket.user.id).update({
+        games_played: FieldValue.increment(1),
+        losses: FieldValue.increment(1)
+      });
+  } catch (err) {
+      console.error('Failed to update wins in the database:', err);
+  }
   })
 
 })

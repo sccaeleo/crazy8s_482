@@ -388,16 +388,27 @@ function ViewAccount() {
                 overflow: 'auto'
               }}>
                 {messageHistory.length > 0 ? (
-                  messageHistory.map((message) => (
-                    <div key={message.id}>
-                      <strong>{message.senderId}:</strong> {message.content} <br />
-                      <small>{new Date(message.timestamp.seconds * 1000).toLocaleString()}</small> {/* CHANGED HERE */}
-                    </div>
-                  ))
-                ) : (
-                  <p>No messages found.</p>
-                )}
-              </div>
+    messageHistory.map((message) => (
+      <div 
+        key={message.id} 
+        style={{
+          textAlign: message.senderId === id ? 'right' : 'left', // Adjust alignment
+          margin: message.senderId === id ? '0 0 0 auto' : '0 auto 0 0', // Optional for better styling
+          maxWidth: '70%', // Limit message width for better appearance
+          padding: '10px', // Padding for better readability
+          borderRadius: '10px', // Rounded corners
+          backgroundColor: message.senderId === id ? '#d1f7d1' : '#f1f1f1', // Different background colors
+        }}
+      >
+        <strong>{message.senderId === id ? 'You' : message.senderId}:</strong> {message.content} <br />
+        {/* Uncomment and modify timestamp display if needed */}
+        {/* <small>{new Date(message.timestamp.seconds * 1000).toLocaleString()}</small> */}
+      </div>
+    ))
+  ) : (
+    <p>No messages found.</p>
+  )}
+</div>
               
               <div className="message-input">
                 <textarea
