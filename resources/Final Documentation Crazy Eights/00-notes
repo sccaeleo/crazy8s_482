@@ -1,0 +1,37 @@
+
+
+# stuff that might get added later???
+
+
+
+\subsection{Risk Analysis} % we discussed risk analysis tables in week 2.
+
+%If you cannot determine any risks, comment out the below and replace with the statement "There are no anticipated risks to this project being completed on time."
+
+
+The following risks have been determined may affect this software's completion can be seen in Table \ref{tab:risks}.
+
+
+
+
+
+\subsection{User Classes}
+
+Replace this text with a description of the types of users of your App?
+What is their technical expertise, how often will they use it, what security
+level access should they have, what experience do they have in the processses
+the software will be used for, etc.
+Remember that the purpose of this list is to help you ensure you are meeting
+their needs in your requirements.
+
+The names you use here to describe classes should match what you use in your
+user stories and reflect the slients vocabulary.
+
+\subsubsection{User type}
+
+Copy this subsubsection for each user type. Replace ``User type'' with the name
+of that user type, such as ``admin'', etc.
+
+Answer the above questions for this user type. Format each user type the same way.
+
+

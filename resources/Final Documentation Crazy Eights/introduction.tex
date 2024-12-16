@@ -1,0 +1,20 @@
+\section{Introduction}
+
+%[[ No more than one page that provides a short project description and then sets the stage for the rest of the document. ]]
+
+%This sentence has an example citation~\cite{DBLP:journals/infsof/BinkleyMI22}
+
+
+%Introduce your project to your reader by describing your client’s needs, providing a high-level overview of your software solution, and presenting an outline of the rest of your document. Your Introduction should be about a single spaced page
+
+This project is a website that allows users to play the Crazy Eights card game with other users. It was completed for the client Eric Ebert. The client requested that the website have account functionality such as creating accounts, signing in, befriending other users, and messaging other users. The website should also have admins that can assist users with resetting their passwords and changing other account information. Users should be able to create reports to request assistance from admins if they encounter a user who is misbehaving. Users can play as a guest, but an account is needed if they wish to collect virtual currency and review their statistics.
+
+To play a game, users should be able to host a game or join a game. Hosts should be able to specify the settings for their games, as well as choosing if their game should be public or private through setting a password. Those who wish to join a game must provide the correct password to be allowed access. The client also specified that the website should contain the company's name. The website should also have ads for monetary purposes, but not to the point where it would drive a potential user away. The client also requested that the game should have a virtual currency and a betting component.
+
+Our solution to the client's requests was to build a website using three-tiered architecture. The server would be built using Nodejs, the client would be created with React, and the database would be hosted on Firebase. Our original plan was to use SQL to host the database, but Firebase became the easier alternative because it had free hosting options. In addition, we used existing frameworks and libraries like Expressjs for backend setup, Socketio for multiplayer functionality, and Bootstrap for template UI elements. This stack allowed us to build our website efficiently, and assign each of the three layers to one person.
+
+We implemented the client's requests with several different webpages. The main page allowed users to host a game, join a game, and access account options. The account pages allowed users to create an account, log in to an account, and view their account. On the view account page, users could view their statistics, send/accept friend requests, send/read messages, and create reports. The create game page allowed users to specify the settings for their game, and start the game once enough players joined the lobby. The join game page showed users the list of currently active lobbies that they could join, as well as if they required a password to join. Lastly, the game page held the functionality for the Crazy Eights card game, allowing users to play against others and win or lose.
+
+Some of the clients requests were not able to be implemented due to compatibility or time constraints. For example, the client requested that betting with virtual currency should be an option. However, Crazy Eights is not a gambling game, and is not formatted for gambling. So, we decided that each game would have a buy-in determined by the host. Additionally, the client requested that hosts should determine the amount of bots when creating a game. We were not able to implement bots with the amount of time we had.
+
+This document will provide an overview of our process and work during the semester. It will include the user stories and requirements specified by the client, data on each of the three sprints, the architecture and design decisions, testing process, database persistence, and a reflection on the project.

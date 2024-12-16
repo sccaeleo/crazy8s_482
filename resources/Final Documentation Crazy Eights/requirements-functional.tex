@@ -1,0 +1,407 @@
+\section{Requirements}
+
+\subsection{User Roles}
+
+
+\subsubsection{Player}
+A player is a user who has created an account and has access to view their own profile. A player can create games, join games, change their own password, add friends, message their friends and report other players. This user has no technical expertise and has standard level access.
+
+\subsubsection{Admin}
+An admin is a user who has an account created for them, granting them special permissions on sign in. In addition to having the same functionality as a player, the admin can, view reports, resolve reports and delete player accounts. An admin needs to be familiar with the technical no how of dealing with reports and has a high level of access.
+
+
+
+\subsection{Functional Requirement User Stories and Tasks}
+
+We chose to organize our user stories by user type and Story ID. Story ID's were organized alphabetically to easily find related user stories as well as improve readability.
+
+
+\subsubsection{Player}
+
+\textbf{A0: Log in to account (2)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to log into my account
+    \item \textbf{So that} I can use my account
+    \item \textbf{Definition of Done:} When the player can access their account
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ A0.1: login form. Create login form page.]]
+        \item Task [[ A0.2: connect to database. authenticate credentials against backend credentials.]]
+        \item Task [[ A0.3: Session management. create persistence for session that continues as user navigates the website.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{A1: Make an account (2)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to make an account
+    \item \textbf{So that} I can keep track of my stats
+    \item \textbf{Definition of Done:} when the account is added to the database
+    \item \textbf{Depends On:} Nothing
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ A1.1: Create registration form. Create page to make an account.]]
+        \item Task [[ A1.2: Propogate account in database. make sure account generates in the DB.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{A2: Update my account (2)}
+\begin{enumerate}
+    \item Priority: Medium
+    \item \textbf{I want} to update my account
+    \item \textbf{So that} I can change my information
+    \item \textbf{Definition of Done:} the database gets the update
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ A2.1: create update page. create form to update the users data.]]
+        \item Task [[ A2.2: Modify database correctly. make sure the correct user is changed and data is updated in real time.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{A3: Delete account (2)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to delete my account
+    \item \textbf{So that} I can remove an account
+    \item \textbf{Definition of Done:} When the account is removed from the database
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ A3.1: Admin panel to delete account. create the panel from which accounts can be deleted.]]
+        \item Task [[ A3.2: Remove from database. ensure that user has been removed from database .]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{A4: Check account information (2)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to view account info/balance
+    \item \textbf{So that} I know my balance
+    \item \textbf{Definition of Done:} The player can see their account information
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ A4.1: create users page. Allow users to view their own profile]]
+        \item Task [[ A0.1: Load session information. load correct information from user logged in, update from DB as it changes.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{H0.1: Create Lobby (5)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to make a lobby
+    \item \textbf{So that} other people can join
+    \item \textbf{Definition of Done:} When the lobby is created and available to join
+    \item \textbf{Depends On:} Nothing
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ H0.1.1: Create Lobby Form. Build a form to configure and create a lobby.]]
+        \item Task [[ H0.1.2: Connect players. make sure players are connected to lobby so they can interact with each other.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{H0.2: Start Game (5)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to start the game
+    \item \textbf{So that} we can play the game
+    \item \textbf{Definition of Done:} The game starts
+    \item \textbf{Depends On:} H0.1: Create Lobby
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ H0.2.1: Create start game button. Button available to host of game to start]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{H0.3: Leave Game (1)}
+\begin{enumerate}
+    \item Priority: Medium
+    \item \textbf{I want} to leave the game
+    \item \textbf{So that} I can get back to the home page
+    \item \textbf{Definition of Done:} When I can go back to the home page and leave the game room
+    \item \textbf{Depends On:} H0.1: Create Lobby, H0.2: Start Game, P7: Join Game
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ H0.3.1: Create button to leave game. Button to leave game]]
+        \item Task [[ H0.3.2: Remove user from the lobby. Kick the user from the game and return them to the home screen.]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P1: Play a card (5)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to place a card
+    \item \textbf{So that} the game can progress
+    \item \textbf{Definition of Done:} When a card leaves my hand
+    \item \textbf{Depends On:} H0.2: Start Game
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P1.1: Allow user to select card. Select card so it can be placed o top of deck]]
+        \item Task [[ P1.2: Check if card can be placed on deck. Logic to define if card place is valid]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P1.1: End Game (2)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to end the game
+    \item \textbf{So that} I can get a win/loss
+    \item \textbf{Definition of Done:} When the game ends and player stats are updated
+    \item \textbf{Depends On:} H0.2: Start Game, P1: Play Card
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P1.2: If user has no cards end game. Checks if cards are empty and ends game if so]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P2: Draw a card (5)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to draw a card
+    \item \textbf{So that} the game can progress
+    \item \textbf{Definition of Done:} I get a new card in my hand
+    \item \textbf{Depends On:} H0.2: Start Game
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P2.1: User click on deck. Click on deck so they can draw card]]
+        \item Task [[ P2.2: If deck is clicked, update users hand. adds card to users hand if deck is clicked]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P5: Tutorial (1)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to learn the game
+    \item \textbf{So that} I can understand the game
+    \item \textbf{Definition of Done:} I am sent to the rules page
+    \item \textbf{Depends On:} Nothing
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P5.1: Create button to link of rules. Button is hyperlinked to external site that includes rules of the game ]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P6: View Games (5)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to view all joinable games
+    \item \textbf{So that} I can join a game
+    \item \textbf{Definition of Done:} I can see all the joinable games
+    \item \textbf{Depends On:} H0.1: Create Lobby
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P6.1: Create games page. Create page to show games ]]
+        \item Task [[ H6.2: Load games. Load list of all available games]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P7: Join Game (8)}
+\begin{enumerate}
+    \item Priority: High
+    \item \textbf{I want} to join a game
+    \item \textbf{So that} to play with other users
+    \item \textbf{Definition of Done:} When I join a lobby
+    \item \textbf{Depends On:} H0.1: Create Lobby
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P7.1: Create join game button. Button that joins game]]
+        \item Task [[ P7.2: Check password. check to make sure game password is correct]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P7.1: Connect Users to Game (2)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to join a game through my account
+    \item \textbf{So that} I can keep track of my stats
+    \item \textbf{Definition of Done:} When users are tracked by games
+    \item \textbf{Depends On:} A1: Make an account, A0: Log in to account, H0.1: Create Lobby
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P7.1.1: Connect to game. If password is correct, connect to lobby]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P9: Ads (3)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to click on an ad
+    \item \textbf{So that} I can go to the link
+    \item \textbf{Definition of Done:} When I can go to the link for an ad by clicking it
+    \item \textbf{Depends On:} Nothing
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P9.1: Show ads on home page. display ads with hyperlink on homepage]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P10: Send Message (5)}
+\begin{enumerate}
+    \item Priority: Medium
+    \item \textbf{I want} to send a message
+    \item \textbf{So that} I can communicate with others
+    \item \textbf{Definition of Done:} When user can DM other players
+    \item \textbf{Depends On:} P13: Add friend
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P10.1: View message modal. Display the message modal between friends]]
+        \item Task [[ P10.2: Send content to DB. Send content entered in form to the database]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P11: Read Message (5)}
+\begin{enumerate}
+    \item Priority: Medium
+    \item \textbf{I want} to read my messages
+    \item \textbf{So that} I can see what other players have DMed ne
+    \item \textbf{Definition of Done:} When user can view all messages sent to them
+    \item \textbf{Depends On:} A1: Make an account, P10: Send Message, P13: Add friend
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P11.1: View message modal. Display the message modal between friends]]
+        \item Task [[ P11.2: Load messages. Pull existing messages from the database]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P12: Report (3)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to report another player
+    \item \textbf{So that} bad accounts are seen by admins
+    \item \textbf{Definition of Done:} When the report is sent
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P12.1: Create report button. Button that opens form to report]]
+        \item Task [[ P12.2: Send report form. Send form to database containing user and issue]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P13: Add friend (3)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to add a friend
+    \item \textbf{So that} I can ask someone to be a friend
+    \item \textbf{Definition of Done:} When a friend request is sent
+    \item \textbf{Depends On:} A0: Log in to account, A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P13.1: Create add friend button. Button that adds friend by username]]
+        \item Task [[ P13.2: Logic to find friend in DB. Search database for username given]]
+        \item Task [[ P13.3: Make friend request if friend found. If the username exists, create a friend request in that users friend request array in the database]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{P14: Accept friend (1)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to accept a friend request
+    \item \textbf{So that} I can have a friend
+    \item \textbf{Definition of Done:} Friends are saved in database and displayed on page
+    \item \textbf{Depends On:} P13: Add friend
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ P14.1: Load friend requests. Form that shows and loads users friend requests]]
+        \item Task [[ P14.2: Accept friend. button to accept and create friend relationship]]
+        \item Task [[ P14.3: Remove friend request. Delete the friend request from DB now that it has been accepted]]
+    \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Admin}
+
+\textbf{M2: Read player report (1)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to read a report
+    \item \textbf{So that} I can check if a player is misbehaving
+    \item \textbf{Definition of Done:} Report is read
+    \item \textbf{Depends On:} P12: Report
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ M2.1: View reports. Load active reports into form]]
+        \item Task [[ M2.2: Resolve report. Button that removes report from database once resolved]]
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2em}
+
+\textbf{M4: Change password (3)}
+\begin{enumerate}
+    \item Priority: Low
+    \item \textbf{I want} to change my password
+    \item \textbf{So that} my account stays safe
+    \item \textbf{Definition of Done:} When password is changed in the database
+    \item \textbf{Depends On:} A1: Make an account
+    \item Tasks:
+    \begin{enumerate}
+    % For each task write the ID, :, then title. Then describe the task.
+        \item Task [[ M4.1: View users button. Shows all active users and their ids]]
+        \item Task [[ M4.2: Button to change password on each user. Button that opens form to change password of said user]]
+        \item Task [[ M4.3: Save changes. Saves changed password to the DB]]
+    \end{enumerate}
+\end{enumerate}
