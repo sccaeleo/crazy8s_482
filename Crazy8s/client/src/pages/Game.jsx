@@ -28,10 +28,13 @@ function Game({socket}) {
 
     // Cleanup on unmount
     return () => {
-      socket.off('connect');
-      // socket.off("requestHand");
-      // socket.off("lostGame");
-      // socket.off("onePlayer");
+      socket.off('getUsername');
+      socket.off("requestHand");
+      socket.off("lostGame");
+      socket.off("onePlayer");
+      socket.off("updateHands");
+      socket.off("updatePile");
+      socket.off("turn");
     };
   }, [socket]);
 
@@ -71,7 +74,8 @@ function Game({socket}) {
   /**
    * Call to subtract balance when you lose a game
    */
-  socket.on("lostGame", () =>{
+  socket.off('lostGame').on("lostGame", () =>{
+    socket.emit("test", "how many times")
     socket.emit("subtractBalance");
     setGameOver(true);
   })
@@ -79,10 +83,10 @@ function Game({socket}) {
   /**
    * Server tells client that its the only player in the lobby, show win screen, add bet
    */
-  socket.on("onePlayer", () => {
-    socket.emit("winByTechnicality");
-    setGameOver(true);
-    setResultMessage("You Win");
+  socket.off('onePlayer').on("onePlayer", () => {
+      socket.emit("winByTechnicality");
+      setGameOver(true);
+      setResultMessage("You Win");
   })
 
   /**

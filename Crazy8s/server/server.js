@@ -708,11 +708,12 @@ io.on("connection", socket => {
       try {
         await db.collection('users').doc(socket.user.id).update({
           games_played: FieldValue.increment(1),
-          losses: FieldValue.increment(1)
+          losses: FieldValue.increment(1),
+          balance: newBalance
         });
-    } catch (err) {
+      } catch (err) {
         console.error('Failed to update wins in the database:', err);
-    }
+      }
     }
 
     const numPlayers = socket.currGame.currPlayers();
@@ -740,7 +741,8 @@ io.on("connection", socket => {
     try {
       await db.collection('users').doc(socket.user.id).update({
         games_played: FieldValue.increment(1),
-        wins: FieldValue.increment(1)
+        wins: FieldValue.increment(1),
+        balance: newBalance
       });
   } catch (err) {
       console.error('Failed to update wins in the database:', err);
@@ -751,6 +753,7 @@ io.on("connection", socket => {
    * Substract bet from players balance for losing the game
    */
   socket.on("subtractBalance",async () => {
+    console.log("this happened");
     if(!socket.user)
       return;
     const newBalance = socket.currGame.handleBet(socket.user.balance, false);
@@ -760,7 +763,8 @@ io.on("connection", socket => {
     try {
       await db.collection('users').doc(socket.user.id).update({
         games_played: FieldValue.increment(1),
-        losses: FieldValue.increment(1)
+        losses: FieldValue.increment(1),
+        balance: newBalance
       });
   } catch (err) {
       console.error('Failed to update wins in the database:', err);

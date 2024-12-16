@@ -19,7 +19,8 @@ function Lobby({ socket }) {
 
         // Cleanup on unmount
         return () => {
-        socket.off('connect');
+            socket.off('goToGamePage');
+            socket.off('updatePlayers');
         };
     }, [socket]);
 
